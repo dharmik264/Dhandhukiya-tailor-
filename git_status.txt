@@ -1,0 +1,91 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   MyApplication/.idea/inspectionProfiles/Project_Default.xml
+	modified:   MyApplication/.idea/misc.xml
+	modified:   MyApplication/app/src/main/AndroidManifest.xml
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/AddCustomerActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/AddMeasurementsActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/ApiService.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/CheckOrderActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/CheckOrderAdapter.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/CustomerAdapter.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/CustomerListActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/CustomerProfileActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/DashboardActivity.kt
+	deleted:    MyApplication/app/src/main/java/com/example/myapplication/DatabaseHelper.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/HomeActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/LoginActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/MainActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/NavigationUtils.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/RegisterActivity.kt
+	modified:   MyApplication/app/src/main/java/com/example/myapplication/RetrofitClient.kt
+	deleted:    MyApplication/app/src/main/res/drawable/ic_pending_orders.xml
+	modified:   MyApplication/app/src/main/res/layout-sw600dp/activity_home.xml
+	modified:   MyApplication/app/src/main/res/layout/activity_check_order.xml
+	modified:   MyApplication/app/src/main/res/layout/activity_dashboard.xml
+	modified:   MyApplication/app/src/main/res/layout/activity_home.xml
+	modified:   MyApplication/app/src/main/res/layout/activity_login.xml
+	deleted:    MyApplication/app/src/main/res/layout/activity_profile.xml
+	modified:   MyApplication/app/src/main/res/layout/activity_register.xml
+	modified:   MyApplication/app/src/main/res/layout/add_customer.xml
+	modified:   MyApplication/app/src/main/res/layout/add_measurements.xml
+	modified:   MyApplication/app/src/main/res/layout/customer_profile.xml
+	modified:   MyApplication/app/src/main/res/layout/item_check_order.xml
+	modified:   MyApplication/app/src/main/res/layout/item_customer.xml
+	modified:   MyApplication/app/src/main/res/layout/reusable_bottom_navigation.xml
+	modified:   MyApplication/app/src/main/res/values/colors.xml
+	modified:   MyApplication/app/src/main/res/values/strings.xml
+	modified:   MyApplication/app/src/main/res/values/themes.xml
+	modified:   tailorhub_backend_1 (new commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gradle/
+	.idea/
+	MyApplication/.idea/vcs.xml
+	MyApplication/.kotlin/errors/errors-1772190302090.log
+	MyApplication/README.md
+	MyApplication/app/src/main/java/com/example/myapplication/AddCustomerFragment.kt
+	MyApplication/app/src/main/java/com/example/myapplication/AdminProfileActivity.kt
+	MyApplication/app/src/main/java/com/example/myapplication/HomeFragment.kt
+	MyApplication/app/src/main/java/com/example/myapplication/ReportsFragment.kt
+	MyApplication/app/src/main/java/com/example/myapplication/TailorApp.kt
+	MyApplication/app/src/main/res/drawable-night/
+	MyApplication/app/src/main/res/drawable/bg_badge_rounded.xml
+	MyApplication/app/src/main/res/drawable/bg_circle_light_gray.xml
+	MyApplication/app/src/main/res/drawable/bg_circle_phone_badge.xml
+	MyApplication/app/src/main/res/drawable/bg_circle_red.xml
+	MyApplication/app/src/main/res/drawable/bg_header_rounded.xml
+	MyApplication/app/src/main/res/drawable/bg_input_gray.xml
+	MyApplication/app/src/main/res/drawable/bg_splash_gradient.xml
+	MyApplication/app/src/main/res/drawable/bg_white_rounded_top.xml
+	MyApplication/app/src/main/res/drawable/dt.png
+	MyApplication/app/src/main/res/drawable/file.png
+	MyApplication/app/src/main/res/drawable/ic_admin_default.png
+	MyApplication/app/src/main/res/drawable/ic_drawer_menu.xml
+	MyApplication/app/src/main/res/drawable/ic_phone.xml
+	MyApplication/app/src/main/res/drawable/ic_tick_arrow.xml
+	MyApplication/app/src/main/res/layout/activity_main.xml
+	MyApplication/app/src/main/res/layout/admin_profile.xml
+	MyApplication/app/src/main/res/layout/dialog_garment_picker.xml
+	MyApplication/app/src/main/res/layout/dialog_measurement_input.xml
+	MyApplication/app/src/main/res/values-night/
+	MyApplication/app/src/main/res/values/dimens.xml
+	MyApplication/app/src/main/res/values/styles.xml
+	MyApplication/build_output.log
+	MyApplication/build_output.txt
+	MyApplication/build_output2.log
+	MyApplication/build_output3.log
+	MyApplication/build_output4.log
+	MyApplication/build_output_utf8.txt
+	MyApplication/gradle_error.txt
+	Procfile
+	build.sh
+	build/
+	git_status.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")

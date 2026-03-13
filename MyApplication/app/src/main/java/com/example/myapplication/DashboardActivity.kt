@@ -41,9 +41,8 @@ class DashboardActivity : AppCompatActivity() {
         rvRecentOrders.adapter = recentOrdersAdapter
 
         // Dashboard Stat Card Clicks
-        findViewById<android.view.View>(R.id.cardPendingOrders)?.setOnClickListener {
+        findViewById<android.view.View>(R.id.statsCard)?.setOnClickListener {
             val intent = Intent(this, CheckOrderActivity::class.java)
-            intent.putExtra("ORDER_STATUS", "Pending")
             startActivity(intent)
         }
 
