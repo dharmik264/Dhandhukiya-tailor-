@@ -38,6 +38,7 @@
             app:layout_constraintTop_toTopOf="@id/ivAppLogo" />
 
         <FrameLayout
+            android:id="@+id/ivProfileBtn"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
