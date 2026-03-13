@@ -182,8 +182,11 @@ class HomeFragment : Fragment() {
                         "1.0"
                     }
 
-                    if (forceUpdate && currentVersion != latestVersion) {
-                        showUpdateDialog(apkUrl)
+                    val prefs = context?.getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+                    val dismissedVersion = prefs?.getString("DISMISSED_VERSION", "")
+
+                    if (currentVersion != latestVersion && dismissedVersion != latestVersion) {
+                        showUpdateDialog(apkUrl, latestVersion, forceUpdate)
                     }
                 }
             }
@@ -191,19 +194,26 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun showUpdateDialog(apkUrl: String?) {
+    private fun showUpdateDialog(apkUrl: String?, latestVersion: String, forceUpdate: Boolean) {
         val ctx = context ?: return
-        AlertDialog.Builder(ctx)
+        val builder = AlertDialog.Builder(ctx)
             .setTitle("New Update Available")
-            .setMessage("Please update the app to the latest version to continue using all features.")
+            .setMessage("Please update the app to version $latestVersion to continue using all features.")
             .setPositiveButton("Update Now") { _, _ ->
                 apkUrl?.let {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
                     startActivity(intent)
                 }
             }
-            .setNegativeButton("Later", null)
-            .setCancelable(true)
-            .show()
+            .setCancelable(false)
+
+        if (!forceUpdate) {
+            builder.setNegativeButton("Later") { _, _ ->
+                val prefs = ctx.getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+                prefs.edit().putString("DISMISSED_VERSION", latestVersion).apply()
+            }
+        }
+        
+        builder.show()
     }
 }
