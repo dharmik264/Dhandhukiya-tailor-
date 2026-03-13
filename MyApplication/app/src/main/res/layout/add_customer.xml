@@ -227,12 +227,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation (Simplified Overlay) -->
-    <include
-        android:id="@+id/bottomNavigation"
-        layout="@layout/reusable_bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
