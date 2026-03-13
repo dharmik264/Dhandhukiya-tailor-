@@ -26,7 +26,6 @@ class CustomerAdapter(
 ) : RecyclerView.Adapter<CustomerAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvId: TextView? = view.findViewById(R.id.tvId)
         val tvName: TextView = view.findViewById(R.id.tvName)
         val tvMobile: TextView = view.findViewById(R.id.tvMobile)
         val chipStatus: Chip = view.findViewById(R.id.chipStatus)
@@ -41,13 +40,13 @@ class CustomerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val customer = customers[position]
-        holder.tvId?.text = "#" + customer.id.padStart(3, '0')
-        holder.tvName.text = customer.name
-        holder.tvMobile.text = customer.mobile
+        holder.tvName.text = customer.name.ifEmpty { "Unknown Customer" }
+        holder.tvMobile.text = customer.mobile.ifEmpty { "No Number" }
         
         // Status Binding logic
-        holder.chipStatus.text = customer.status
-        val statusColor = when (customer.status.lowercase()) {
+        val status = customer.status.ifEmpty { "Pending" }
+        holder.chipStatus.text = status
+        val statusColor = when (status.lowercase()) {
             "pending" -> Color.parseColor("#FFA500")      // Orange
             "in progress" -> Color.parseColor("#2196F3") // Blue
             "ready" -> Color.parseColor("#4CAF50")       // Green

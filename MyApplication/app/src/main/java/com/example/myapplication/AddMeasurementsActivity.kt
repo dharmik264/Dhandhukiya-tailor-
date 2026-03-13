@@ -4,9 +4,11 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,23 +32,31 @@ class AddMeasurementsActivity : AppCompatActivity() {
     private lateinit var etCollar: EditText
     private lateinit var etShoulder: EditText
     private lateinit var etSleeve: EditText
+    private lateinit var etHip: EditText
+    private lateinit var etRise: EditText
     private lateinit var etNotes: EditText
+
+    private lateinit var tilLength: TextInputLayout
+    private lateinit var tilChest: TextInputLayout
+    private lateinit var tilWaist: TextInputLayout
+    private lateinit var tilCollar: TextInputLayout
+    private lateinit var tilShoulder: TextInputLayout
+    private lateinit var tilSleeve: TextInputLayout
+    private lateinit var tilHip: TextInputLayout
+    private lateinit var tilRise: TextInputLayout
+
     private lateinit var btnSaveMeasurements: Button
     
-    private lateinit var dbHelper: DatabaseHelper
     private var selectedGarment = "Shirt"
     private var customerMobile = ""
     private var customerId: Int = -1
     private var isEditMode: Boolean = false
-    private var lastMeasurementId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_measurements)
 
-        dbHelper = DatabaseHelper(this)
-
-        // Initialize views with the new Profile-suffixed IDs from layout
+        // Initialize buttons
         btnShirt = findViewById(R.id.btnShirtProfile)
         btnPant = findViewById(R.id.btnPantProfile)
         btnKoti = findViewById(R.id.btnKotiProfile)
@@ -59,13 +69,27 @@ class AddMeasurementsActivity : AppCompatActivity() {
         tvMeasurementTitle = findViewById(R.id.tvMeasurementTitle)
         tvCustomerName = findViewById(R.id.tvCustomerName)
 
+        // Initialize EditTexts
         etLength = findViewById(R.id.etLength)
         etChest = findViewById(R.id.etChest)
         etWaist = findViewById(R.id.etWaist)
         etCollar = findViewById(R.id.etCollar)
         etShoulder = findViewById(R.id.etShoulder)
         etSleeve = findViewById(R.id.etSleeve)
+        etHip = findViewById(R.id.etHip)
+        etRise = findViewById(R.id.etRise)
         etNotes = findViewById(R.id.etNotes)
+
+        // Initialize TextInputLayouts
+        tilLength = findViewById(R.id.tilLength)
+        tilChest = findViewById(R.id.tilChest)
+        tilWaist = findViewById(R.id.tilWaist)
+        tilCollar = findViewById(R.id.tilCollar)
+        tilShoulder = findViewById(R.id.tilShoulder)
+        tilSleeve = findViewById(R.id.tilSleeve)
+        tilHip = findViewById(R.id.tilHip)
+        tilRise = findViewById(R.id.tilRise)
+
         btnSaveMeasurements = findViewById(R.id.btnSaveMeasurements)
 
         // Get info from intent
@@ -80,20 +104,25 @@ class AddMeasurementsActivity : AppCompatActivity() {
         }
 
         findViewById<ImageView>(R.id.btnDeleteMeasurement)?.setOnClickListener {
-            // Delete logic can be added here
             Toast.makeText(this, "Delete feature coming soon", Toast.LENGTH_SHORT).show()
         }
-
-        if (isEditMode) loadLatestMeasurement()
 
         val buttons = listOf(btnShirt, btnPant, btnKoti, btnSuit, btnJabbho, btnLehngho, btnSafari, btnJodhpuri)
         buttons.forEach { button ->
             button.setOnClickListener {
                 selectedGarment = button.text.toString()
                 selectButton(button, buttons)
-                updateTitle(selectedGarment)
-                if (isEditMode) loadLatestMeasurement()
+                updateMeasurementUI(selectedGarment)
+                if (isEditMode) {
+                    fetchMeasurementsForEdit(selectedGarment)
+                }
             }
+        }
+
+        // Initial UI state
+        updateMeasurementUI("Shirt")
+        if (isEditMode) {
+            fetchMeasurementsForEdit("Shirt")
         }
 
         btnSaveMeasurements.setOnClickListener {
@@ -101,33 +130,128 @@ class AddMeasurementsActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadLatestMeasurement() {
-        Thread {
-            val cursor = dbHelper.getLatestMeasurement(customerId, selectedGarment)
-            if (cursor.moveToFirst()) {
-                val lId = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-                val length = cursor.getString(cursor.getColumnIndexOrThrow("length"))
-                val chest = cursor.getString(cursor.getColumnIndexOrThrow("chest"))
-                val waist = cursor.getString(cursor.getColumnIndexOrThrow("waist"))
-                val collar = cursor.getString(cursor.getColumnIndexOrThrow("collar"))
-                val shoulder = cursor.getString(cursor.getColumnIndexOrThrow("shoulder"))
-                val sleeve = cursor.getString(cursor.getColumnIndexOrThrow("sleeve"))
-                val notes = cursor.getString(cursor.getColumnIndexOrThrow("notes"))
-                
-                runOnUiThread {
-                    lastMeasurementId = lId
-                    etLength.setText(length)
-                    etChest.setText(chest)
-                    etWaist.setText(waist)
-                    etCollar.setText(collar)
-                    etShoulder.setText(shoulder)
-                    etSleeve.setText(sleeve)
-                    etNotes.setText(notes)
+    private fun fetchMeasurementsForEdit(type: String) {
+        RetrofitClient.instance.getCustomerMeasurements(customerMobile, type).enqueue(object : Callback<MeasurementResponse> {
+            override fun onResponse(call: Call<MeasurementResponse>, response: Response<MeasurementResponse>) {
+                if (response.isSuccessful) {
+                    val m = response.body()
+                    if (m != null) {
+                        etLength.setText(m.length)
+                        etChest.setText(m.chest)
+                        etWaist.setText(m.waist)
+                        etCollar.setText(m.collar)
+                        etShoulder.setText(m.shoulder)
+                        etSleeve.setText(m.sleeve)
+                        etHip.setText(m.hip)
+                        etRise.setText(m.rise)
+                        etNotes.setText(m.notes)
+                    }
                 }
             }
-            cursor.close()
-        }.start()
+            override fun onFailure(call: Call<MeasurementResponse>, t: Throwable) {
+                Log.e("EDIT_FETCH", "Failed to fetch for edit: ${t.message}")
+            }
+        })
     }
+
+    private fun updateMeasurementUI(garmentType: String) {
+        tvMeasurementTitle.text = "$garmentType Measurements"
+        
+        val allTils = listOf(tilLength, tilChest, tilWaist, tilCollar, tilShoulder, tilSleeve, tilHip, tilRise)
+        allTils.forEach { it.visibility = View.VISIBLE }
+
+        when (garmentType) {
+            "Pant" -> {
+                tilWaist.hint = "Waist (Natural Line)"
+                tilHip.hint = "Hip (Widest Part)"
+                tilCollar.hint = "Inseam (Crotch to Ankle)"
+                tilLength.hint = "Outseam (Waist to Floor)"
+                tilRise.hint = "Rise (Crotch Depth)"
+                
+                tilChest.visibility = View.GONE
+                tilShoulder.visibility = View.GONE
+                tilSleeve.visibility = View.GONE
+            }
+            "Koti" -> {
+                tilChest.hint = "Chest (Fullest Part)"
+                tilWaist.hint = "Waist / Stomach"
+                tilShoulder.hint = "Shoulder (Across Back)"
+                tilLength.hint = "Length of Koti"
+                tilSleeve.hint = "Armhole"
+                tilCollar.hint = "Neckline (Collar)"
+                
+                tilHip.visibility = View.GONE
+                tilRise.visibility = View.GONE
+            }
+            "Suit" -> {
+                tilChest.hint = "Chest"
+                tilShoulder.hint = "Shoulder Width"
+                tilSleeve.hint = "Sleeve Length"
+                tilLength.hint = "Jacket Length"
+                tilWaist.hint = "Waist"
+                tilCollar.hint = "Inseam"
+                
+                tilHip.visibility = View.GONE
+                tilRise.visibility = View.GONE
+            }
+            "Jabbho" -> {
+                tilLength.hint = "Length"
+                tilChest.hint = "Chest (Bust)"
+                tilShoulder.hint = "Shoulder Width"
+                tilSleeve.hint = "Sleeve Length"
+                tilCollar.hint = "Neck Circumference"
+                
+                tilWaist.visibility = View.GONE
+                tilHip.visibility = View.GONE
+                tilRise.visibility = View.GONE
+            }
+            "Lehngho" -> {
+                tilWaist.hint = "Waist"
+                tilHip.hint = "Hip"
+                tilCollar.hint = "Inseam"
+                tilLength.hint = "Outseam"
+                tilRise.hint = "Rise"
+                
+                tilChest.visibility = View.GONE
+                tilShoulder.visibility = View.GONE
+                tilSleeve.visibility = View.GONE
+            }
+            "Safari" -> {
+                tilCollar.hint = "Neck"
+                tilShoulder.hint = "Shoulder Width"
+                tilChest.hint = "Chest"
+                tilSleeve.hint = "Arm Length"
+                tilWaist.hint = "Waist"
+                tilHip.hint = "Hips / Seat"
+                tilRise.hint = "Inside Leg (Inseam)"
+                tilLength.hint = "Total Length"
+            }
+            "Jodhpuri" -> {
+                tilShoulder.hint = "Shoulder Width"
+                tilChest.hint = "Chest"
+                tilCollar.hint = "Neck"
+                tilSleeve.hint = "Sleeve Length"
+                tilLength.hint = "Jacket Length"
+                tilWaist.hint = "Stomach / Waist"
+                tilHip.hint = "Hip"
+                
+                tilRise.visibility = View.GONE
+            }
+            "Shirt" -> {
+                tilLength.hint = "Length"
+                tilChest.hint = "Chest"
+                tilWaist.hint = "Waist"
+                tilCollar.hint = "Collar"
+                tilShoulder.hint = "Shoulder"
+                tilSleeve.hint = "Sleeve"
+                
+                tilHip.visibility = View.GONE
+                tilRise.visibility = View.GONE
+            }
+        }
+    }
+
+
 
     private fun saveAndSyncData() {
         val length = etLength.text.toString().trim()
@@ -136,35 +260,23 @@ class AddMeasurementsActivity : AppCompatActivity() {
         val collar = etCollar.text.toString().trim()
         val shoulder = etShoulder.text.toString().trim()
         val sleeve = etSleeve.text.toString().trim()
+        val hip = etHip.text.toString().trim()
+        val rise = etRise.text.toString().trim()
         val notes = etNotes.text.toString().trim()
         val status = "Pending" 
 
-        if (length.isEmpty() || chest.isEmpty()) {
-            Toast.makeText(this, "Required fields missing", Toast.LENGTH_SHORT).show()
+        if (length.isEmpty() && chest.isEmpty() && waist.isEmpty() && collar.isEmpty() && 
+            shoulder.isEmpty() && sleeve.isEmpty() && hip.isEmpty() && rise.isEmpty()) {
+            Toast.makeText(this, "Please enter at least one measurement", Toast.LENGTH_SHORT).show()
             return
         }
 
         btnSaveMeasurements.isEnabled = false
 
-        Thread {
-            try {
-                if (isEditMode && lastMeasurementId != -1) {
-                    dbHelper.updateMeasurement(lastMeasurementId, length, chest, waist, collar, shoulder, sleeve, notes, status)
-                } else {
-                    dbHelper.addMeasurement(customerId, selectedGarment, length, chest, waist, collar, shoulder, sleeve, notes, status)
-                }
-
-                runOnUiThread {
-                    syncWithBackend(length, chest, waist, collar, shoulder, sleeve, notes, status)
-                }
-            } catch (e: Exception) {
-                Log.e("SAVE_ERROR", "Error: ${e.message}")
-                runOnUiThread { btnSaveMeasurements.isEnabled = true }
-            }
-        }.start()
+        syncWithBackend(length, chest, waist, collar, shoulder, sleeve, hip, rise, notes, status)
     }
 
-    private fun syncWithBackend(length: String, chest: String, waist: String, collar: String, shoulder: String, sleeve: String, notes: String, status: String) {
+    private fun syncWithBackend(length: String, chest: String, waist: String, collar: String, shoulder: String, sleeve: String, hip: String, rise: String, notes: String, status: String) {
         val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val userId = sharedPref.getInt("USER_ID", 1).toString()
         
@@ -178,6 +290,8 @@ class AddMeasurementsActivity : AppCompatActivity() {
             "collar" to collar,
             "shoulder" to shoulder,
             "sleeve" to sleeve,
+            "hip" to hip,
+            "rise" to rise,
             "notes" to notes,
             "status" to status,
             "is_update" to isEditMode.toString()
@@ -197,7 +311,7 @@ class AddMeasurementsActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 btnSaveMeasurements.isEnabled = true
-                Toast.makeText(this@AddMeasurementsActivity, "Saved locally (Offline)", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AddMeasurementsActivity, "Network Connection Failed", Toast.LENGTH_SHORT).show()
                 finish()
             }
         })
@@ -213,9 +327,5 @@ class AddMeasurementsActivity : AppCompatActivity() {
                 button.setTextColor(Color.parseColor("#333333"))
             }
         }
-    }
-
-    private fun updateTitle(garmentType: String) {
-        tvMeasurementTitle.text = "$garmentType Measurements"
     }
 }

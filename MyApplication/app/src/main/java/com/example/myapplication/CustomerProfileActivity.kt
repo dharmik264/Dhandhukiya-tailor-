@@ -4,178 +4,806 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlin.concurrent.thread
 
 class CustomerProfileActivity : AppCompatActivity() {
 
-    private lateinit var dbHelper: DatabaseHelper
     private var customerId: Int = -1
+    private var currentMobile: String = ""
+    private var currentCustomerName: String = ""
+    private var selectedGarment: String = "Shirt"
     
-    // UI References
-    private var tvCustomerId: TextView? = null
-    private var tvStatus: TextView? = null
-    private var tvName: TextView? = null
-    private var tvMobile: TextView? = null
-    private var tvInitials: TextView? = null
+    // UI References - Display
+    private lateinit var tvStatus: TextView
+    private lateinit var tvName: TextView
+    private lateinit var tvMobile: TextView
+    private lateinit var tvAddress: TextView
+    private lateinit var tvInitials: TextView
     
-    private var tvLengthValue: TextView? = null
-    private var tvChestValue: TextView? = null
-    private var tvWaistValue: TextView? = null
-    private var tvCollarValue: TextView? = null
-    private var tvShoulderValue: TextView? = null
-    private var tvSleeveValue: TextView? = null
-    private var tvNotesValue: TextView? = null
-    private var tvMeasurementTitle: TextView? = null
+    private lateinit var tvValue1: TextView
+    private lateinit var tvValue2: TextView
+    private lateinit var tvValue3: TextView
+    private lateinit var tvValue4: TextView
+    private lateinit var tvValue5: TextView
+    private lateinit var tvValue6: TextView
+    private lateinit var tvValue7: TextView
+    private lateinit var tvValue8: TextView
+    
+    private lateinit var tvLabel1: TextView
+    private lateinit var tvLabel2: TextView
+    private lateinit var tvLabel3: TextView
+    private lateinit var tvLabel4: TextView
+    private lateinit var tvLabel5: TextView
+    private lateinit var tvLabel6: TextView
+    private lateinit var tvLabel7: TextView
+    private lateinit var tvLabel8: TextView
+    
+    private lateinit var container1: View
+    private lateinit var container2: View
+    private lateinit var container3: View
+    private lateinit var container4: View
+    private lateinit var container5: View
+    private lateinit var container6: View
+    private lateinit var container7: View
+    private lateinit var container8: View
+    
+    private lateinit var tvNotesValue: TextView
+    private lateinit var tvUnifiedTitle: TextView
+    private lateinit var btnEditUnified: TextView
+    
+    private lateinit var cardGarmentMain: View
+    private lateinit var cardMeasurementDisplay: View
+    private lateinit var cardGarmentInput: View
+    private lateinit var btnInProgress: MaterialButton
+    private lateinit var btnCompleted: MaterialButton
+    private lateinit var layoutOrderActions: View
+
+    // UI References - Input Fields
+    private lateinit var et1: TextInputEditText
+    private lateinit var et2: TextInputEditText
+    private lateinit var et3: TextInputEditText
+    private lateinit var et4: TextInputEditText
+    private lateinit var et5: TextInputEditText
+    private lateinit var et6: TextInputEditText
+    private lateinit var et7: TextInputEditText
+    private lateinit var et8: TextInputEditText
+    
+    private lateinit var til1: TextInputLayout
+    private lateinit var til2: TextInputLayout
+    private lateinit var til3: TextInputLayout
+    private lateinit var til4: TextInputLayout
+    private lateinit var til5: TextInputLayout
+    private lateinit var til6: TextInputLayout
+    private lateinit var til7: TextInputLayout
+    private lateinit var til8: TextInputLayout
+    
+    private lateinit var btnSaveGarment: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.customer_profile)
 
-        dbHelper = DatabaseHelper(this)
 
-        // Initialize views
+        // Initialize Display Views
         tvName = findViewById(R.id.tvName)
         tvMobile = findViewById(R.id.tvMobile)
-        tvCustomerId = findViewById(R.id.tvCustomerId)
+        tvAddress = findViewById(R.id.tvAddress)
         tvStatus = findViewById(R.id.tvStatus)
         tvInitials = findViewById(R.id.tvInitials)
         
-        val btnBack = findViewById<ImageView>(R.id.btnBack)
-        val btnEditSize = findViewById<TextView>(R.id.btnEditSize)
-        val btnNewOrder = findViewById<Button>(R.id.btnNewOrder)
+        tvValue1 = findViewById(R.id.tvValue1)
+        tvValue2 = findViewById(R.id.tvValue2)
+        tvValue3 = findViewById(R.id.tvValue3)
+        tvValue4 = findViewById(R.id.tvValue4)
+        tvValue5 = findViewById(R.id.tvValue5)
+        tvValue6 = findViewById(R.id.tvValue6)
+        tvValue7 = findViewById(R.id.tvValue7)
+        tvValue8 = findViewById(R.id.tvValue8)
         
-        tvLengthValue = findViewById(R.id.tvLengthValue)
-        tvChestValue = findViewById(R.id.tvChestValue)
-        tvWaistValue = findViewById(R.id.tvWaistValue)
-        tvCollarValue = findViewById(R.id.tvCollarValue)
-        tvShoulderValue = findViewById(R.id.tvShoulderValue)
-        tvSleeveValue = findViewById(R.id.tvSleeveValue)
+        tvLabel1 = findViewById(R.id.tvLabel1)
+        tvLabel2 = findViewById(R.id.tvLabel2)
+        tvLabel3 = findViewById(R.id.tvLabel3)
+        tvLabel4 = findViewById(R.id.tvLabel4)
+        tvLabel5 = findViewById(R.id.tvLabel5)
+        tvLabel6 = findViewById(R.id.tvLabel6)
+        tvLabel7 = findViewById(R.id.tvLabel7)
+        tvLabel8 = findViewById(R.id.tvLabel8)
+        
+        container1 = findViewById(R.id.container1)
+        container2 = findViewById(R.id.container2)
+        container3 = findViewById(R.id.container3)
+        container4 = findViewById(R.id.container4)
+        container5 = findViewById(R.id.container5)
+        container6 = findViewById(R.id.container6)
+        container7 = findViewById(R.id.container7)
+        container8 = findViewById(R.id.container8)
+
         tvNotesValue = findViewById(R.id.tvNotesValue)
-        tvMeasurementTitle = findViewById(R.id.tvMeasurementTitle)
+        tvUnifiedTitle = findViewById(R.id.tvUnifiedGarmentTitle)
+        btnEditUnified = findViewById(R.id.btnEditUnified)
 
-        // Retrieve data
-        val name = intent.getStringExtra("CUSTOMER_NAME") ?: "Unknown"
-        val mobile = intent.getStringExtra("CUSTOMER_MOBILE") ?: ""
+        cardGarmentMain = findViewById(R.id.cardGarmentMain)
+        cardMeasurementDisplay = findViewById(R.id.cardMeasurementDisplay)
+        cardGarmentInput = findViewById(R.id.cardGarmentInput)
 
-        tvName?.text = name
-        tvMobile?.text = mobile
+        // Initialize Input Fields
+        et1 = findViewById(R.id.et1)
+        et2 = findViewById(R.id.et2)
+        et3 = findViewById(R.id.et3)
+        et4 = findViewById(R.id.et4)
+        et5 = findViewById(R.id.et5)
+        et6 = findViewById(R.id.et6)
+        et7 = findViewById(R.id.et7)
+        et8 = findViewById(R.id.et8)
         
-        val initials = name.split(" ").mapNotNull { it.firstOrNull()?.toString() }.joinToString("").take(2).uppercase()
-        tvInitials?.text = if (initials.isNotEmpty()) initials else "C"
+        til1 = findViewById(R.id.til1)
+        til2 = findViewById(R.id.til2)
+        til3 = findViewById(R.id.til3)
+        til4 = findViewById(R.id.til4)
+        til5 = findViewById(R.id.til5)
+        til6 = findViewById(R.id.til6)
+        til7 = findViewById(R.id.til7)
+        til8 = findViewById(R.id.til8)
+        
+        btnSaveGarment = findViewById(R.id.btnSaveGarment)
+        layoutOrderActions = findViewById(R.id.layoutOrderActions)
+        btnInProgress = findViewById(R.id.btnInProgress)
+        btnCompleted = findViewById(R.id.btnCompleted)
 
-        fetchCustomerData(mobile)
+        // Data from intent
+        currentCustomerName = intent.getStringExtra("CUSTOMER_NAME") ?: "Unknown"
+        currentMobile = intent.getStringExtra("CUSTOMER_MOBILE") ?: ""
+        selectedGarment = intent.getStringExtra("SELECTED_GARMENT") ?: "Shirt"
 
-        btnBack?.setOnClickListener { finish() }
+        tvName.text = currentCustomerName
+        tvMobile.text = if (currentMobile.isNotEmpty()) currentMobile else "—"
 
-        val navigateToMeasurements: (Boolean) -> Unit = { isEdit ->
-            val nextIntent = Intent(this, AddMeasurementsActivity::class.java)
-            nextIntent.putExtra("CUSTOMER_NAME", name)
-            nextIntent.putExtra("CUSTOMER_MOBILE", mobile)
-            nextIntent.putExtra("CUSTOMER_ID", customerId)
-            nextIntent.putExtra("IS_EDIT_MODE", isEdit)
-            startActivity(nextIntent)
+        val initials = currentCustomerName.split(" ").mapNotNull { it.firstOrNull()?.toString() }.joinToString("").take(2).uppercase()
+        tvInitials.text = if (initials.isNotEmpty()) initials else "C"
+
+        if (currentMobile.isNotEmpty()) {
+            fetchCustomerData(currentMobile)
+        } else {
+            // Mobile missing — show empty state
+            tvAddress.text = "No Address"
+            checkAndShowUI(selectedGarment)
         }
 
-        btnEditSize?.setOnClickListener { navigateToMeasurements(true) }
-        btnNewOrder?.setOnClickListener { navigateToMeasurements(false) }
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener { finish() }
+
+        // Setup All Garment Buttons
+        val garmentButtons = mapOf(
+            R.id.btnShirtProfile to "Shirt",
+            R.id.btnPantProfile to "Pant",
+            R.id.btnKotiProfile to "Koti",
+            R.id.btnSuitProfile to "Suit",
+            R.id.btnJabbhoProfile to "Jabbho",
+            R.id.btnLehnghoProfile to "Lehngho",
+            R.id.btnSafariProfile to "Safari",
+            R.id.btnJodhpuriProfile to "Jodhpuri"
+        )
+
+        garmentButtons.forEach { (id, type) ->
+            findViewById<MaterialButton>(id).setOnClickListener {
+                selectedGarment = type
+                checkAndShowUI(type)
+            }
+        }
+
+        btnSaveGarment.setOnClickListener { saveMeasurements() }
         
-        setupGarmentButtons()
+
+
+        findViewById<Button>(R.id.btnNewOrder).setOnClickListener {
+            showGarmentPickerBottomSheet()
+        }
+
+
+        btnEditUnified.setOnClickListener {
+            selectedGarment = tvUnifiedTitle.text.toString().split(" ")[0]
+            showMeasurementInputBottomSheet(true)
+        }
+
+        btnInProgress.setOnClickListener { updateOrderStatus("In Progress") }
+        btnCompleted.setOnClickListener { updateOrderStatus("Completed") }
+
+        fetchGarmentCounts()
+    }
+
+    private fun showGarmentPickerBottomSheet() {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.dialog_garment_picker, null)
+        
+        val buttonMap = mapOf(
+            R.id.btnPickShirt to "Shirt",
+            R.id.btnPickPant to "Pant",
+            R.id.btnPickKoti to "Koti",
+            R.id.btnPickSuit to "Suit",
+            R.id.btnPickJabbho to "Jabbho",
+            R.id.btnPickLehngho to "Lehngho",
+            R.id.btnPickSafari to "Safari",
+            R.id.btnPickJodhpuri to "Jodhpuri"
+        )
+
+        buttonMap.forEach { (id, garment) ->
+            view.findViewById<Button>(id)?.setOnClickListener {
+                selectedGarment = garment
+                dialog.dismiss()
+                showMeasurementInputBottomSheet(false)
+            }
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun openAddMeasurements(isEditMode: Boolean) {
+        val intent = Intent(this, AddMeasurementsActivity::class.java)
+        intent.putExtra("CUSTOMER_NAME", currentCustomerName)
+        intent.putExtra("CUSTOMER_MOBILE", currentMobile)
+        intent.putExtra("CUSTOMER_ID", customerId)
+        intent.putExtra("IS_EDIT_MODE", isEditMode)
+        intent.putExtra("SELECTED_GARMENT", selectedGarment)
+        startActivity(intent)
     }
 
     override fun onResume() {
         super.onResume()
-        val mobile = tvMobile?.text.toString()
-        if (mobile.isNotEmpty()) fetchCustomerData(mobile)
+        if (currentMobile.isNotEmpty()) {
+            checkAndShowUI(selectedGarment)
+        }
+    }
+
+    private fun checkAndShowUI(type: String) {
+        RetrofitClient.instance.getCustomerMeasurements(currentMobile, type).enqueue(object : retrofit2.Callback<MeasurementResponse> {
+            override fun onResponse(call: retrofit2.Call<MeasurementResponse>, response: retrofit2.Response<MeasurementResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    showMeasurementDisplay(type)
+                } else {
+                    showInputForm(type)
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<MeasurementResponse>, t: Throwable) {
+                showInputForm(type)
+            }
+        })
+    }
+
+    private fun showInputForm(type: String) {
+        cardMeasurementDisplay.visibility = View.GONE
+        cardGarmentInput.visibility = View.VISIBLE
+        
+        val tils = listOf(til1, til2, til3, til4, til5, til6, til7, til8)
+        tils.forEach { it.visibility = View.GONE }
+        
+        et1.text = null; et2.text = null; et3.text = null; et4.text = null
+        et5.text = null; et6.text = null; et7.text = null; et8.text = null
+
+        when (type) {
+            "Pant" -> {
+                setupInputField(til1, "Waist (Natural Line)")
+                setupInputField(til2, "Hip (Widest Part)")
+                setupInputField(til3, "Inseam (Crotch to Ankle)")
+                setupInputField(til4, "Outseam (Waist to Floor)")
+                setupInputField(til5, "Rise (Crotch Depth)")
+            }
+            "Shirt" -> {
+                setupInputField(til1, "Length")
+                setupInputField(til2, "Chest")
+                setupInputField(til3, "Waist")
+                setupInputField(til4, "Collar")
+                setupInputField(til5, "Shoulder")
+                setupInputField(til6, "Sleeve")
+            }
+            "Koti" -> {
+                setupInputField(til1, "Length of Koti")
+                setupInputField(til2, "Chest (Fullest Part)")
+                setupInputField(til3, "Waist / Stomach")
+                setupInputField(til4, "Shoulder (Across Back)")
+                setupInputField(til5, "Armhole")
+                setupInputField(til6, "Neckline (Collar)")
+            }
+            "Suit" -> {
+                setupInputField(til1, "Jacket Length")
+                setupInputField(til2, "Chest")
+                setupInputField(til3, "Waist")
+                setupInputField(til4, "Shoulder Width")
+                setupInputField(til5, "Sleeve Length")
+                setupInputField(til6, "Inseam")
+            }
+            "Jabbho" -> {
+                setupInputField(til1, "Length")
+                setupInputField(til2, "Chest (Bust)")
+                setupInputField(til3, "Shoulder Width")
+                setupInputField(til4, "Sleeve Length")
+                setupInputField(til5, "Neck Circumference")
+            }
+            "Lehngho" -> {
+                setupInputField(til1, "Waist")
+                setupInputField(til2, "Hip")
+                setupInputField(til3, "Inseam")
+                setupInputField(til4, "Outseam")
+                setupInputField(til5, "Rise")
+            }
+            "Safari" -> {
+                setupInputField(til1, "Total Length")
+                setupInputField(til2, "Chest")
+                setupInputField(til3, "Waist")
+                setupInputField(til4, "Shoulder Width")
+                setupInputField(til5, "Arm Length")
+                setupInputField(til6, "Neck")
+                setupInputField(til7, "Hips / Seat")
+                setupInputField(til8, "Inside Leg (Inseam)")
+            }
+            "Jodhpuri" -> {
+                setupInputField(til1, "Jacket Length")
+                setupInputField(til2, "Chest")
+                setupInputField(til3, "Stomach / Waist")
+                setupInputField(til4, "Shoulder Width")
+                setupInputField(til5, "Sleeve Length")
+                setupInputField(til6, "Neck")
+                setupInputField(til7, "Hip")
+            }
+        }
+
+        btnSaveGarment.text = "Save $type Measurements"
+    }
+
+    private fun setupInputField(til: TextInputLayout, hint: String) {
+        til.visibility = View.VISIBLE
+        til.hint = hint
+    }
+
+    private fun showMeasurementDisplay(type: String) {
+        cardGarmentInput.visibility = View.GONE
+        cardMeasurementDisplay.visibility = View.VISIBLE
+        loadLatestMeasurements(type)
+    }
+
+    private fun saveMeasurements() {
+        val v1 = et1.text.toString().trim()
+        val v2 = et2.text.toString().trim()
+        val v3 = et3.text.toString().trim()
+        val v4 = et4.text.toString().trim()
+        val v5 = et5.text.toString().trim()
+        val v6 = et6.text.toString().trim()
+        val v7 = et7.text.toString().trim()
+        val v8 = et8.text.toString().trim()
+
+        if (v1.isEmpty() && v2.isEmpty() && v3.isEmpty()) {
+            Toast.makeText(this, "Please enter measurements", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        btnSaveGarment.isEnabled = false
+
+        val sharedPref = getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+        val userId = sharedPref.getInt("USER_ID", 1).toString()
+
+        val data = mutableMapOf(
+            "user_id" to userId,
+            "mobile_number" to currentMobile,
+            "garment_type" to selectedGarment,
+            "is_update" to "false"
+        )
+
+        // Mapping et1-et8 to backend fields for each type
+        when (selectedGarment) {
+            "Shirt" -> {
+                data["length"] = v1; data["chest"] = v2; data["waist"] = v3
+                data["collar"] = v4; data["shoulder"] = v5; data["sleeve"] = v6
+            }
+            "Pant" -> {
+                data["waist"] = v1; data["hip"] = v2; data["collar"] = v3 // Inseam
+                data["length"] = v4; data["rise"] = v5
+            }
+            "Koti" -> {
+                data["length"] = v1; data["chest"] = v2; data["waist"] = v3
+                data["shoulder"] = v4; data["sleeve"] = v5; data["collar"] = v6
+            }
+            "Suit" -> {
+                data["length"] = v1; data["chest"] = v2; data["waist"] = v3
+                data["shoulder"] = v4; data["sleeve"] = v5; data["collar"] = v6
+            }
+            "Jabbho" -> {
+                data["length"] = v1; data["chest"] = v2; data["shoulder"] = v3
+                data["sleeve"] = v4; data["collar"] = v5
+            }
+            "Lehngho" -> {
+                data["waist"] = v1; data["hip"] = v2; data["collar"] = v3
+                data["length"] = v4; data["rise"] = v5
+            }
+            "Safari" -> {
+                data["length"] = v1; data["chest"] = v2; data["waist"] = v3
+                data["shoulder"] = v4; data["sleeve"] = v5; data["collar"] = v6
+                data["hip"] = v7; data["collar"] = v8 // Inside leg
+            }
+            "Jodhpuri" -> {
+                data["length"] = v1; data["chest"] = v2; data["waist"] = v3
+                data["shoulder"] = v4; data["sleeve"] = v5; data["collar"] = v6
+                data["hip"] = v7
+            }
+        }
+
+        RetrofitClient.instance.addMeasurement(data).enqueue(object : retrofit2.Callback<Void> {
+            override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
+                btnSaveGarment.isEnabled = true
+                if (response.isSuccessful) {
+                    Toast.makeText(this@CustomerProfileActivity, "Saved Successfully!", Toast.LENGTH_SHORT).show()
+                    checkAndShowUI(selectedGarment)
+                } else {
+                    Toast.makeText(this@CustomerProfileActivity, "Failed to save: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                btnSaveGarment.isEnabled = true
+                Toast.makeText(this@CustomerProfileActivity, "Network Error", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun fetchCustomerData(mobile: String) {
-        thread {
-            try {
-                val cursor = dbHelper.getAllCustomers()
-                if (cursor.moveToFirst()) {
-                    do {
-                        val mobileCol = cursor.getColumnIndex("mobile_number")
-                        if (mobileCol != -1 && cursor.getString(mobileCol) == mobile) {
-                            customerId = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-                            runOnUiThread {
-                                tvCustomerId?.text = "Customer ID: #%03d".format(customerId)
-                                loadLatestMeasurements("Shirt")
-                            }
-                            break
-                        }
-                    } while (cursor.moveToNext())
+        RetrofitClient.instance.getCustomerDetails(mobile).enqueue(object : retrofit2.Callback<CustomerResponse> {
+            override fun onResponse(call: retrofit2.Call<CustomerResponse>, response: retrofit2.Response<CustomerResponse>) {
+                if (response.isSuccessful) {
+                    val customer = response.body()
+                    if (customer != null) {
+                        customerId = customer.id ?: -1
+                        val name = customer.name ?: "Unknown"
+                        val mobile = customer.mobileNumber ?: "No Number"
+                        tvName.text = name
+                        tvMobile.text = mobile
+                        tvAddress.text = if (customer.address.isNullOrEmpty()) "No Address Provided" else customer.address
+                        
+                        val initials = name.split(" ").mapNotNull { it.firstOrNull()?.toString() }.joinToString("").take(2).uppercase()
+                        tvInitials.text = if (initials.isNotEmpty()) initials else "C"
+                    }
                 }
-                cursor.close()
-            } catch (e: Exception) { Log.e("PROFILE_DEBUG", "Error", e) }
-        }
+            }
+
+            override fun onFailure(call: retrofit2.Call<CustomerResponse>, t: Throwable) {
+                Log.e("CUSTOMER_PROFILE", "Error fetching customer details: ${t.message}")
+            }
+        })
+        checkAndShowUI(selectedGarment)
     }
 
     private fun loadLatestMeasurements(type: String) {
-        if (customerId == -1) return
-        thread {
-            try {
-                val cursor = dbHelper.getLatestMeasurement(customerId, type)
-                if (cursor.moveToFirst()) {
-                    val len = cursor.getString(cursor.getColumnIndexOrThrow("length"))
-                    val ch = cursor.getString(cursor.getColumnIndexOrThrow("chest"))
-                    val wa = cursor.getString(cursor.getColumnIndexOrThrow("waist"))
-                    val col = cursor.getString(cursor.getColumnIndexOrThrow("collar"))
-                    val sh = cursor.getString(cursor.getColumnIndexOrThrow("shoulder"))
-                    val sl = cursor.getString(cursor.getColumnIndexOrThrow("sleeve"))
-                    val notes = cursor.getString(cursor.getColumnIndexOrThrow("notes"))
-                    val st = cursor.getString(cursor.getColumnIndexOrThrow("status"))
-
-                    runOnUiThread {
-                        tvMeasurementTitle?.text = "$type Measurements"
-                        tvLengthValue?.text = "$len in"
-                        tvChestValue?.text = "$ch in"
-                        tvWaistValue?.text = "$wa in"
-                        tvCollarValue?.text = "$col in"
-                        tvShoulderValue?.text = "$sh in"
-                        tvSleeveValue?.text = "$sl in"
-                        tvNotesValue?.text = if (notes.isNullOrEmpty()) "None" else notes
-                        tvStatus?.text = st
+        RetrofitClient.instance.getCustomerMeasurements(currentMobile, type).enqueue(object : retrofit2.Callback<MeasurementResponse> {
+            override fun onResponse(call: retrofit2.Call<MeasurementResponse>, response: retrofit2.Response<MeasurementResponse>) {
+                if (response.isSuccessful) {
+                    val measurement = response.body()
+                    if (measurement != null) {
+                        val count = measurement.count ?: 0
+                        tvUnifiedTitle.text = "$type ($count)"
+                        btnEditUnified.visibility = View.VISIBLE
+                        tvStatus.text = measurement.status ?: "Pending"
+                        tvNotesValue.text = if (measurement.notes.isNullOrEmpty()) "None" else measurement.notes
+                        updateDisplayLabelsAndValues(type, 
+                            measurement.length ?: "", 
+                            measurement.chest ?: "", 
+                            measurement.waist ?: "", 
+                            measurement.collar ?: "", 
+                            measurement.shoulder ?: "", 
+                            measurement.sleeve ?: "", 
+                            measurement.hip ?: "", 
+                            measurement.rise ?: "")
+                        
+                        // Update buttons based on status
+                        val currentStatus = measurement.status ?: "Pending"
+                        when (currentStatus.lowercase()) {
+                            "pending" -> {
+                                btnInProgress.isEnabled = true
+                                btnCompleted.isEnabled = false
+                                layoutOrderActions.visibility = View.VISIBLE
+                            }
+                            "in progress" -> {
+                                btnInProgress.isEnabled = false
+                                btnCompleted.isEnabled = true
+                                layoutOrderActions.visibility = View.VISIBLE
+                            }
+                            "completed" -> {
+                                btnInProgress.isEnabled = false
+                                btnCompleted.isEnabled = false
+                                layoutOrderActions.visibility = View.GONE
+                            }
+                            else -> {
+                                layoutOrderActions.visibility = View.GONE
+                            }
+                        }
                     }
                 } else {
-                    runOnUiThread {
-                        tvMeasurementTitle?.text = "$type (No Data)"
-                        listOf(tvLengthValue, tvChestValue, tvWaistValue, tvCollarValue, tvShoulderValue, tvSleeveValue).forEach { it?.text = "-" }
-                        tvNotesValue?.text = "None"
-                        tvStatus?.text = "None"
-                    }
+                    tvUnifiedTitle.text = "$type (0)"
+                    btnEditUnified.visibility = View.GONE
+                    hideAllContainers()
+                    tvNotesValue.text = "None"
+                    tvStatus.text = "None"
+                    layoutOrderActions.visibility = View.GONE
                 }
-                cursor.close()
-            } catch (e: Exception) { Log.e("PROFILE_DEBUG", "Error", e) }
-        }
+            }
+
+            override fun onFailure(call: retrofit2.Call<MeasurementResponse>, t: Throwable) {
+                tvUnifiedTitle.text = "$type (Network Issue)"
+                hideAllContainers()
+                layoutOrderActions.visibility = View.GONE
+            }
+        })
     }
 
-    private fun setupGarmentButtons() {
-        val garmentTypes = listOf("Shirt", "Pant", "Koti", "Suit", "Jabbho", "Lehngho", "Safari", "Jodhpuri")
-        thread {
-            val root = findViewById<ViewGroup>(android.R.id.content)
-            val buttons = mutableListOf<Button>()
-            findAllButtons(root, buttons)
-            
-            runOnUiThread {
-                buttons.forEach { btn ->
-                    val txt = btn.text.toString()
-                    if (garmentTypes.any { it.equals(txt, ignoreCase = true) }) {
-                        btn.setOnClickListener { loadLatestMeasurements(txt) }
-                    }
+    private fun updateOrderStatus(newStatus: String) {
+        val data = mapOf(
+            "mobile_number" to currentMobile,
+            "garment_type" to selectedGarment,
+            "status" to newStatus
+        )
+
+        RetrofitClient.instance.updateOrderStatus(data).enqueue(object : retrofit2.Callback<Void> {
+            override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@CustomerProfileActivity, "Order is now $newStatus", Toast.LENGTH_SHORT).show()
+                    loadLatestMeasurements(selectedGarment)
+                } else {
+                    Toast.makeText(this@CustomerProfileActivity, "Failed to update status", Toast.LENGTH_SHORT).show()
                 }
+            }
+
+            override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                Toast.makeText(this@CustomerProfileActivity, "Network Error", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updateDisplayLabelsAndValues(type: String, m1: String, m2: String, m3: String, m4: String, m5: String, m6: String, m7: String, m8: String) {
+        hideAllContainers()
+        when (type) {
+            "Pant" -> {
+                setDisplayField(1, "Waist", m3); setDisplayField(2, "Hip", m7)
+                setDisplayField(3, "Inseam", m4); setDisplayField(4, "Outseam", m1)
+                setDisplayField(5, "Rise", m8)
+            }
+            "Shirt" -> {
+                setDisplayField(1, "Length", m1); setDisplayField(2, "Chest", m2)
+                setDisplayField(3, "Waist", m3); setDisplayField(4, "Collar", m4)
+                setDisplayField(5, "Shoulder", m5); setDisplayField(6, "Sleeve", m6)
+            }
+            "Koti" -> {
+                setDisplayField(1, "Length", m1); setDisplayField(2, "Chest", m2)
+                setDisplayField(3, "Waist", m3); setDisplayField(4, "Shoulder", m5)
+                setDisplayField(5, "Armhole", m6); setDisplayField(6, "Neckline", m4)
+            }
+            "Suit" -> {
+                setDisplayField(1, "Length", m1); setDisplayField(2, "Chest", m2)
+                setDisplayField(3, "Waist", m3); setDisplayField(4, "Shoulder", m5)
+                setDisplayField(5, "Sleeve", m6); setDisplayField(6, "Inseam", m4)
+            }
+            "Jabbho" -> {
+                setDisplayField(1, "Length", m1); setDisplayField(2, "Chest", m2)
+                setDisplayField(3, "Shoulder", m5); setDisplayField(4, "Sleeve", m6)
+                setDisplayField(5, "Neck", m4)
+            }
+            "Lehngho" -> {
+                setDisplayField(1, "Waist", m3); setDisplayField(2, "Hip", m7)
+                setDisplayField(3, "Inseam", m4); setDisplayField(4, "Outseam", m1)
+                setDisplayField(5, "Rise", m8)
+            }
+            "Safari" -> {
+                setDisplayField(1, "Length", m1); setDisplayField(2, "Chest", m2)
+                setDisplayField(3, "Waist", m3); setDisplayField(4, "Shoulder", m5)
+                setDisplayField(5, "Sleeve", m6); setDisplayField(6, "Neck", m4)
+                setDisplayField(7, "Hip", m7); setDisplayField(8, "Inseam", m8)
+            }
+            "Jodhpuri" -> {
+                setDisplayField(1, "Length", m1); setDisplayField(2, "Chest", m2)
+                setDisplayField(3, "Waist", m3); setDisplayField(4, "Shoulder", m5)
+                setDisplayField(5, "Sleeve", m6); setDisplayField(6, "Neck", m4)
+                setDisplayField(7, "Hip", m7)
             }
         }
     }
 
-    private fun findAllButtons(view: View, list: MutableList<Button>) {
-        if (view is Button) list.add(view)
-        else if (view is ViewGroup) {
-            for (i in 0 until view.childCount) findAllButtons(view.getChildAt(i), list)
+    private fun showMeasurementInputBottomSheet(isEditMode: Boolean) {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.dialog_measurement_input, null)
+        
+        val tvSheetTitle = view.findViewById<TextView>(R.id.tvSheetTitle)
+        tvSheetTitle.text = "$selectedGarment Size"
+        
+        val etSheet1 = view.findViewById<TextInputEditText>(R.id.etSheet1)
+        val etSheet2 = view.findViewById<TextInputEditText>(R.id.etSheet2)
+        val etSheet3 = view.findViewById<TextInputEditText>(R.id.etSheet3)
+        val etSheet4 = view.findViewById<TextInputEditText>(R.id.etSheet4)
+        val etSheet5 = view.findViewById<TextInputEditText>(R.id.etSheet5)
+        val etSheet6 = view.findViewById<TextInputEditText>(R.id.etSheet6)
+        val etSheet7 = view.findViewById<TextInputEditText>(R.id.etSheet7)
+        val etSheet8 = view.findViewById<TextInputEditText>(R.id.etSheet8)
+        val etSheetNotes = view.findViewById<TextInputEditText>(R.id.etSheetNotes)
+        
+        val tilSheet1 = view.findViewById<TextInputLayout>(R.id.tilSheet1)
+        val tilSheet2 = view.findViewById<TextInputLayout>(R.id.tilSheet2)
+        val tilSheet3 = view.findViewById<TextInputLayout>(R.id.tilSheet3)
+        val tilSheet4 = view.findViewById<TextInputLayout>(R.id.tilSheet4)
+        val tilSheet5 = view.findViewById<TextInputLayout>(R.id.tilSheet5)
+        val tilSheet6 = view.findViewById<TextInputLayout>(R.id.tilSheet6)
+        val tilSheet7 = view.findViewById<TextInputLayout>(R.id.tilSheet7)
+        val tilSheet8 = view.findViewById<TextInputLayout>(R.id.tilSheet8)
+
+        // Setup Hints and Visibility based on garment
+        val allTils = listOf(tilSheet1, tilSheet2, tilSheet3, tilSheet4, tilSheet5, tilSheet6, tilSheet7, tilSheet8)
+        allTils.forEach { it.visibility = View.GONE }
+
+        when (selectedGarment) {
+            "Shirt" -> {
+                setSheetField(tilSheet1, "Length", true); setSheetField(tilSheet2, "Chest", true)
+                setSheetField(tilSheet3, "Waist", true); setSheetField(tilSheet4, "Collar", true)
+                setSheetField(tilSheet5, "Shoulder", true); setSheetField(tilSheet6, "Sleeve", true)
+            }
+            "Pant" -> {
+                setSheetField(tilSheet1, "Outseam", true); setSheetField(tilSheet2, "Hip", true)
+                setSheetField(tilSheet3, "Waist", true); setSheetField(tilSheet4, "Inseam", true)
+                setSheetField(tilSheet5, "Rise", true)
+            }
+            "Koti", "Suit", "Safari", "Jodhpuri" -> {
+                setSheetField(tilSheet1, "Length", true); setSheetField(tilSheet2, "Chest", true)
+                setSheetField(tilSheet3, "Waist", true); setSheetField(tilSheet4, "Shoulder", true)
+                setSheetField(tilSheet5, "Sleeve", true); setSheetField(tilSheet6, "Collar", true)
+                if (selectedGarment == "Safari" || selectedGarment == "Jodhpuri") {
+                    setSheetField(tilSheet7, "Hip", true)
+                    if (selectedGarment == "Safari") setSheetField(tilSheet8, "Inseam", true)
+                }
+            }
+            "Jabbho" -> {
+                setSheetField(tilSheet1, "Length", true); setSheetField(tilSheet2, "Chest", true)
+                setSheetField(tilSheet3, "Shoulder", true); setSheetField(tilSheet4, "Sleeve", true)
+                setSheetField(tilSheet5, "Collar", true)
+            }
+            "Lehngho" -> {
+                setSheetField(tilSheet1, "Outseam", true); setSheetField(tilSheet2, "Hip", true)
+                setSheetField(tilSheet3, "Waist", true); setSheetField(tilSheet4, "Inseam", true)
+                setSheetField(tilSheet5, "Rise", true)
+            }
         }
+
+        // If Edit Mode, fill values
+        if (isEditMode) {
+             RetrofitClient.instance.getCustomerMeasurements(currentMobile, selectedGarment).enqueue(object : retrofit2.Callback<MeasurementResponse> {
+                override fun onResponse(call: retrofit2.Call<MeasurementResponse>, response: retrofit2.Response<MeasurementResponse>) {
+                    if (response.isSuccessful) {
+                        val m = response.body()
+                        if (m != null) {
+                            etSheet1.setText(m.length ?: "")
+                            etSheet2.setText(m.chest ?: "")
+                            etSheet3.setText(m.waist ?: "")
+                            etSheet4.setText(m.collar ?: "")
+                            etSheet5.setText(m.shoulder ?: "")
+                            etSheet6.setText(m.sleeve ?: "")
+                            etSheet7.setText(m.hip ?: "")
+                            etSheet8.setText(m.rise ?: "")
+                            etSheetNotes.setText(m.notes ?: "")
+                        }
+                    }
+                }
+                override fun onFailure(call: retrofit2.Call<MeasurementResponse>, t: Throwable) {}
+            })
+        }
+
+        view.findViewById<Button>(R.id.btnSheetSave).setOnClickListener {
+            val v1 = etSheet1.text.toString().trim()
+            val v2 = etSheet2.text.toString().trim()
+            val v3 = etSheet3.text.toString().trim()
+            val v4 = etSheet4.text.toString().trim()
+            val v5 = etSheet5.text.toString().trim()
+            val v6 = etSheet6.text.toString().trim()
+            val v7 = etSheet7.text.toString().trim()
+            val v8 = etSheet8.text.toString().trim()
+            val notes = etSheetNotes.text.toString().trim()
+
+            val sharedPref = getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+            val userIdString = sharedPref.getInt("USER_ID", 1).toString()
+
+            val data = mutableMapOf(
+                "user_id" to userIdString,
+                "mobile_number" to currentMobile,
+                "garment_type" to selectedGarment,
+                "length" to v1, "chest" to v2, "waist" to v3,
+                "collar" to v4, "shoulder" to v5, "sleeve" to v6,
+                "hip" to v7, "rise" to v8,
+                "notes" to notes,
+                "is_update" to isEditMode.toString()
+            )
+
+            RetrofitClient.instance.addMeasurement(data).enqueue(object : retrofit2.Callback<Void> {
+                override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@CustomerProfileActivity, "Saved Successfully!", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                        checkAndShowUI(selectedGarment)
+                        fetchGarmentCounts()
+                    } else {
+                        Toast.makeText(this@CustomerProfileActivity, "Error saving", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: retrofit2.Call<Void>, t: Throwable) {
+                    Toast.makeText(this@CustomerProfileActivity, "Network Error", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun setSheetField(til: TextInputLayout, hint: String, visible: Boolean) {
+        til.hint = hint
+        til.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun fetchGarmentCounts() {
+        val garmentTypes = listOf("Shirt", "Pant", "Koti", "Suit", "Jabbho", "Lehngho", "Safari", "Jodhpuri")
+        garmentTypes.forEach { type ->
+            RetrofitClient.instance.getCustomerMeasurements(currentMobile, type).enqueue(object : retrofit2.Callback<MeasurementResponse> {
+                override fun onResponse(call: retrofit2.Call<MeasurementResponse>, response: retrofit2.Response<MeasurementResponse>) {
+                    if (response.isSuccessful) {
+                        val count = response.body()?.count ?: 0
+                        updateButtonCount(type, count)
+                    } else {
+                        updateButtonCount(type, 0)
+                    }
+                }
+                override fun onFailure(call: retrofit2.Call<MeasurementResponse>, t: Throwable) {
+                    updateButtonCount(type, 0)
+                }
+            })
+        }
+    }
+
+    private fun updateButtonCount(type: String, count: Int) {
+        val buttonId = when(type) {
+            "Shirt" -> R.id.btnShirtProfile
+            "Pant" -> R.id.btnPantProfile
+            "Koti" -> R.id.btnKotiProfile
+            "Suit" -> R.id.btnSuitProfile
+            "Jabbho" -> R.id.btnJabbhoProfile
+            "Lehngho" -> R.id.btnLehnghoProfile
+            "Safari" -> R.id.btnSafariProfile
+            "Jodhpuri" -> R.id.btnJodhpuriProfile
+            else -> null
+        }
+        buttonId?.let {
+            findViewById<MaterialButton>(it).text = "$type ($count)"
+        }
+    }
+
+    private fun setDisplayField(index: Int, label: String, value: String) {
+        val container = when(index) {
+            1 -> container1; 2 -> container2; 3 -> container3; 4 -> container4
+            5 -> container5; 6 -> container6; 7 -> container7; 8 -> container8
+            else -> container1
+        }
+        val labelTv = when(index) {
+            1 -> tvLabel1; 2 -> tvLabel2; 3 -> tvLabel3; 4 -> tvLabel4
+            5 -> tvLabel5; 6 -> tvLabel6; 7 -> tvLabel7; 8 -> tvLabel8
+            else -> tvLabel1
+        }
+        val valueTv = when(index) {
+            1 -> tvValue1; 2 -> tvValue2; 3 -> tvValue3; 4 -> tvValue4
+            5 -> tvValue5; 6 -> tvValue6; 7 -> tvValue7; 8 -> tvValue8
+            else -> tvValue1
+        }
+        container.visibility = View.VISIBLE
+        labelTv.text = label
+        valueTv.text = if (value.isEmpty()) "-" else "$value in"
+    }
+
+    private fun hideAllContainers() {
+        val containers = listOf(container1, container2, container3, container4, container5, container6, container7, container8)
+        containers.forEach { it.visibility = View.GONE }
     }
 }

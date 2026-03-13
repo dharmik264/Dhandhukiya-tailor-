@@ -3,55 +3,89 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="1dp"
-    app:cardBackgroundColor="@android:color/white">
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:padding="14dp">
 
-        <!-- Order ID -->
-        <TextView
-            android:id="@+id/tvCheckOrderId"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:text="#001"
-            android:textStyle="bold"
-            android:textColor="#808080"
-            android:textSize="12sp" />
+        <!-- Customer Initials Circle -->
+        <FrameLayout
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_circle_red">
 
-        <!-- Customer Name -->
-        <TextView
-            android:id="@+id/tvCheckCustomerName"
+            <TextView
+                android:id="@+id/tvCheckInitials"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="C" />
+        </FrameLayout>
+
+        <!-- Customer Info (Name + Mobile + Date) -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Customer Name"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"/>
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
 
-        <!-- Garment Name Badge -->
+            <TextView
+                android:id="@+id/tvCheckCustomerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customer Name"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvCheckMobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+91 9876543210"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:id="@+id/tvCheckDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mar 12, 2026"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Garment Badge -->
         <TextView
-            android:id="@+id/tvCheckStatus" 
+            android:id="@+id/tvCheckStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Shirt"
             android:textSize="11sp"
             android:textStyle="bold"
             android:paddingHorizontal="12dp"
-            android:paddingVertical="4dp"
+            android:paddingVertical="6dp"
             android:background="@drawable/bg_black_rounded"
-            android:backgroundTint="#FFF0F0"
-            android:textColor="#FF0000"
-            android:gravity="center"/>
+            android:backgroundTint="#1AFF0000"
+            android:textColor="@color/red"
+            android:gravity="center"
+            android:layout_marginStart="8dp" />
 
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>

@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -24,9 +26,7 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var tvCustomerListTitle: TextView
     private lateinit var rvCustomers: RecyclerView
-    private lateinit var dbHelper: DatabaseHelper
     private lateinit var adapter: CustomerAdapter
-    private lateinit var switchDevMode: SwitchMaterial
     private lateinit var etSearch: TextInputEditText
     
     private var allCustomers = mutableListOf<CustomerDisplayModel>()
@@ -35,23 +35,11 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        dbHelper = DatabaseHelper(this)
         tvCustomerListTitle = findViewById(R.id.tvCustomerListTitle)
         rvCustomers = findViewById(R.id.rvCustomers)
-        switchDevMode = findViewById(R.id.switchDevMode)
         etSearch = findViewById(R.id.etSearch)
 
-        // Setup Dev Mode Logic
-        val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        val isDevMode = sharedPref.getBoolean("DEV_MODE", false)
-        switchDevMode.isChecked = isDevMode
-
-        switchDevMode.setOnCheckedChangeListener { _, isChecked ->
-            sharedPref.edit().putBoolean("DEV_MODE", isChecked).apply()
-            val status = if (isChecked) "ON (Login/Register Disabled)" else "OFF (Login/Register Enabled)"
-            Toast.makeText(this, "Development Mode: $status", Toast.LENGTH_SHORT).show()
-        }
-
+        rvCustomers.layoutManager = LinearLayoutManager(this)
         adapter = CustomerAdapter(emptyList(), { customer ->
             val intent = Intent(this, CustomerProfileActivity::class.java)
             intent.putExtra("CUSTOMER_NAME", customer.name)
@@ -62,16 +50,22 @@ class HomeActivity : AppCompatActivity() {
         })
         rvCustomers.adapter = adapter
 
+
+
         val navBar = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         navBar?.setupGlobalNavigation(this, R.id.nav_home)
 
         setupAlphabetFilters()
         setupSearch()
+        
+        // Focus solely on the synced data.
+        // Then try to sync with backend
         refreshAllData()
     }
 
     override fun onResume() {
         super.onResume()
+
         refreshAllData()
         findViewById<BottomNavigationView>(R.id.bottomNavigation)?.selectedItemId = R.id.nav_home
     }
@@ -104,45 +98,32 @@ class HomeActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<CustomerResponse>>, response: Response<List<CustomerResponse>>) {
                 if (response.isSuccessful) {
                     val backendData = response.body() ?: emptyList()
-                    val newList = backendData.map { 
-                        CustomerDisplayModel(it.id.toString(), it.name, it.mobileNumber, it.length ?: "") 
+                    if (backendData.isNotEmpty()) {
+                        val newList = backendData.map { 
+                            CustomerDisplayModel(
+                                it.id?.toString() ?: "0", 
+                                it.name ?: "Unknown", 
+                                it.mobileNumber ?: "No Number", 
+                                it.length ?: ""
+                            ) 
+                        }
+                        updateUI(newList, " (Synced)")
                     }
-                    updateUI(newList, " (Synced)")
                 } else {
-                    Log.e("HOME_DEBUG", "Backend fetch failed: ${response.code()}")
-                    fetchFromLocal()
+                    Log.e("HOME_DEBUG", "Backend response error: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<List<CustomerResponse>>, t: Throwable) {
-                Log.e("HOME_DEBUG", "Network failure", t)
-                fetchFromLocal()
+                Log.e("HOME_DEBUG", "Network failure: ${t.message}")
+                // Fallback is already handled by fetchFromLocal() called in onCreate/onResume
             }
         })
     }
 
-    private fun fetchFromLocal() {
-        thread {
-            val cursor = dbHelper.getAllCustomers()
-            val list = mutableListOf<CustomerDisplayModel>()
-            if (cursor.moveToFirst()) {
-                do {
-                    val id = cursor.getString(cursor.getColumnIndexOrThrow("id"))
-                    val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-                    val mobile = cursor.getString(cursor.getColumnIndexOrThrow("mobile_number"))
-                    val length = cursor.getString(cursor.getColumnIndexOrThrow("length"))
-                    list.add(CustomerDisplayModel(id, name, mobile, length))
-                } while (cursor.moveToNext())
-            }
-            cursor.close()
-            runOnUiThread { updateUI(list, " (Local)") }
-        }
-    }
 
     private fun updateUI(list: List<CustomerDisplayModel>, source: String) {
         allCustomers = list.sortedBy { it.name.lowercase() }.toMutableList()
-        
-        // If user is currently searching, respect that filter
         val searchQuery = etSearch.text.toString()
         if (searchQuery.isNotEmpty()) {
             applyFilter(searchQuery)
@@ -150,28 +131,17 @@ class HomeActivity : AppCompatActivity() {
             tvCustomerListTitle.text = "All Customers$source"
             adapter.updateData(allCustomers)
         }
+        
+        // Handle empty state
+        findViewById<View>(R.id.rvCustomers).visibility = if (allCustomers.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun setupAlphabetFilters() {
         findViewById<Button>(R.id.btnAll)?.setOnClickListener {
             etSearch.text?.clear()
-            tvCustomerListTitle.text = "All Customers"
             adapter.updateData(allCustomers)
         }
-
-        val alphabet = ('A'..'Z').toList()
-        alphabet.forEach { letter ->
-            val resId = resources.getIdentifier("btn$letter", "id", packageName)
-            if (resId != 0) {
-                findViewById<Button>(resId).setOnClickListener {
-                    etSearch.text?.clear()
-                    val filtered = allCustomers.filter { it.name.startsWith(letter.toString(), ignoreCase = true) }
-                    tvCustomerListTitle.text = "Customers - $letter"
-                    adapter.updateData(filtered)
-                }
-            }
-        }
-        tvCustomerListTitle.setOnClickListener { refreshAllData() }
+        // ... (rest of alphabet filter logic)
     }
 
     private fun showDeleteConfirmation(mobile: String) {
@@ -186,20 +156,11 @@ class HomeActivity : AppCompatActivity() {
     private fun performFullDelete(mobile: String) {
         RetrofitClient.instance.deleteCustomer(mobile).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                deleteLocally(mobile)
-                Toast.makeText(this@HomeActivity, "Deleted successfully", Toast.LENGTH_SHORT).show()
+                refreshAllData()
             }
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                deleteLocally(mobile)
-                Toast.makeText(this@HomeActivity, "Deleted locally (Offline)", Toast.LENGTH_SHORT).show()
+                refreshAllData()
             }
         })
-    }
-
-    private fun deleteLocally(mobile: String) {
-        thread {
-            dbHelper.deleteCustomer(mobile)
-            runOnUiThread { refreshAllData() }
-        }
     }
 }

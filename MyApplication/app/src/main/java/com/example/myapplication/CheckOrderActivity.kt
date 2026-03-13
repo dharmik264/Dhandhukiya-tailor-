@@ -1,27 +1,64 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlin.concurrent.thread
 
 class CheckOrderActivity : AppCompatActivity() {
 
-    private lateinit var dbHelper: DatabaseHelper
     private lateinit var rvCheckOrders: RecyclerView
     private lateinit var adapter: CheckOrderAdapter
+    private var filterStatus: String? = null
+    private lateinit var tvTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_order)
 
-        dbHelper = DatabaseHelper(this)
         rvCheckOrders = findViewById(R.id.rvCheckOrders)
+        rvCheckOrders.layoutManager = LinearLayoutManager(this)
+        tvTitle = findViewById(R.id.tvCheckOrderTitle)
 
-        adapter = CheckOrderAdapter(emptyList())
+        filterStatus = intent.getStringExtra("ORDER_STATUS")
+        val chipGroup = findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupFilters)
+
+        // Set initial chip based on intent
+        when (filterStatus) {
+            "Pending" -> chipGroup.check(R.id.chipPending)
+            "In Progress" -> chipGroup.check(R.id.chipInProgress)
+            "Completed" -> chipGroup.check(R.id.chipCompleted)
+            else -> chipGroup.check(R.id.chipAll)
+        }
+
+        if (filterStatus != null) {
+            tvTitle.text = "$filterStatus Orders"
+        }
+
+        chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            val id = checkedIds.firstOrNull()
+            filterStatus = when (id) {
+                R.id.chipPending -> "Pending"
+                R.id.chipInProgress -> "In Progress"
+                R.id.chipCompleted -> "Completed"
+                else -> null
+            }
+            tvTitle.text = if (filterStatus == null) "Check Orders" else "$filterStatus Orders"
+            loadAllOrders()
+        }
+
+        adapter = CheckOrderAdapter(emptyList()) { order ->
+            val intent = Intent(this, CustomerProfileActivity::class.java)
+            intent.putExtra("CUSTOMER_NAME", order.customerName)
+            intent.putExtra("CUSTOMER_MOBILE", order.mobile)
+            intent.putExtra("SELECTED_GARMENT", order.garmentType)
+            startActivity(intent)
+        }
         rvCheckOrders.adapter = adapter
 
         val navBar = findViewById<BottomNavigationView>(R.id.bottomNavigation)
@@ -41,33 +78,32 @@ class CheckOrderActivity : AppCompatActivity() {
     }
 
     private fun loadAllOrders() {
-        thread {
-            try {
-                // Warning fixed: Removed redundant null check as this method returns non-null Cursor
-                val cursor = dbHelper.getAllOrdersWithDetails()
-                val list = mutableListOf<CheckOrderModel>()
-                
-                if (cursor.moveToFirst()) {
-                    val idCol = cursor.getColumnIndex("order_id")
-                    val nameCol = cursor.getColumnIndex("cust_name")
-                    val statusCol = cursor.getColumnIndex("garment_type")
-
-                    do {
-                        val id = if (idCol != -1) cursor.getString(idCol) else "0"
-                        val name = if (nameCol != -1) cursor.getString(nameCol) else "Unknown"
-                        val status = if (statusCol != -1) cursor.getString(statusCol) else "Pending"
-                        
-                        list.add(CheckOrderModel(id, name, status))
-                    } while (cursor.moveToNext())
-                }
-                cursor.close()
-                
-                runOnUiThread {
+        RetrofitClient.instance.getRecentOrders(1000, filterStatus).enqueue(object : retrofit2.Callback<List<RecentOrderResponse>> {
+            override fun onResponse(
+                call: retrofit2.Call<List<RecentOrderResponse>>,
+                response: retrofit2.Response<List<RecentOrderResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    val backendData = response.body() ?: emptyList()
+                    val list = backendData.map {
+                        CheckOrderModel(
+                            id = it.id ?: "0",
+                            customerName = it.customerName ?: "Unknown",
+                            mobile = it.mobileNumber ?: "",
+                            garmentType = it.garmentType ?: "Shirt",
+                            orderDate = it.orderDate ?: "",
+                            status = it.status ?: ""
+                        )
+                    }
                     adapter.updateData(list)
+                } else {
+                    Log.e("CHECK_ORDER_ERROR", "Backend orders error: ${response.code()}")
                 }
-            } catch (e: Exception) {
-                Log.e("CHECK_ORDER_ERROR", "Failed to load orders", e)
             }
-        }
+
+            override fun onFailure(call: retrofit2.Call<List<RecentOrderResponse>>, t: Throwable) {
+                Log.e("CHECK_ORDER_ERROR", "Network failure: ${t.message}")
+            }
+        })
     }
 }

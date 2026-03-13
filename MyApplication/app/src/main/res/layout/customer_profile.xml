@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/background">
 
     <!-- Top Bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/white"
+        android:background="#D32F2F"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -19,30 +19,24 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
-            android:contentDescription="@string/back"
+            android:contentDescription="Back"
             android:src="@drawable/ic_back_arrow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@android:color/black" />
+            app:tint="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Customer Details"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#EEEEEE"
-            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -60,23 +54,23 @@
             android:padding="16dp">
 
             <!-- Profile Info Card -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="@android:color/white">
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="?attr/colorSurface">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp"
+                    android:padding="20dp"
                     android:gravity="center_vertical">
 
-                    <!-- Initials View -->
                     <FrameLayout
-                        android:layout_width="60dp"
-                        android:layout_height="60dp">
+                        android:layout_width="70dp"
+                        android:layout_height="70dp">
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -88,114 +82,225 @@
                             android:layout_gravity="center"
                             android:text="AX"
                             android:textColor="@android:color/white"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
                     </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="20dp"
                         android:orientation="vertical">
-                        <TextView android:id="@+id/tvName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Customer Name" android:textColor="@android:color/black" android:textSize="20sp" android:textStyle="bold" />
-                        <TextView android:id="@+id/tvCustomerId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="#000" android:textColor="#808080" />
-                        <TextView android:id="@+id/tvMobile" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mobile" android:textColor="#808080" />
+                        <TextView android:id="@+id/tvName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Customer Name" android:textColor="?attr/colorOnSurface" android:textSize="20sp" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvMobile" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mobile" android:textColor="@color/on_surface_variant" android:layout_marginTop="2dp" />
+                        <TextView android:id="@+id/tvAddress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Address" android:textColor="@color/on_surface_variant" android:textSize="13sp" android:layout_marginTop="2dp" />
                         
-                        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F5F5F5" android:layout_marginVertical="8dp"/>
-                        
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Status" android:textSize="12sp" android:textStyle="bold"/>
-                            <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending" android:textColor="#E65100" android:textSize="12sp" android:textStyle="bold" />
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Status" android:textSize="13sp" android:textStyle="bold" android:textColor="#999999"/>
+                            <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending" android:textColor="#D32F2F" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Garment Selector -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Select Garment" android:layout_marginTop="20dp" android:textColor="@android:color/black" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Garment Type" android:layout_marginTop="24dp" android:textColor="?attr/colorOnSurface" android:textStyle="bold" android:textSize="14sp" android:textAllCaps="true" android:letterSpacing="0.05"/>
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:columnCount="4">
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnPantProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Pant" android:textAllCaps="false" android:textSize="10sp" app:cornerRadius="8dp" android:layout_margin="2dp" android:backgroundTint="#FF0000" android:textColor="#FFFFFF"/>
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnShirtProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Shirt" android:textAllCaps="false" android:textSize="10sp" app:cornerRadius="8dp" android:layout_margin="2dp" android:backgroundTint="#FF0000" android:textColor="#FFFFFF"/>
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnKotiProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Koti" android:textAllCaps="false" android:textSize="10sp" app:cornerRadius="8dp" android:layout_margin="2dp" android:backgroundTint="#FF0000" android:textColor="#FFFFFF"/>
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnSuitProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Suit" android:textAllCaps="false" android:textSize="10sp" app:cornerRadius="8dp" android:layout_margin="2dp" android:backgroundTint="#FF0000" android:textColor="#FFFFFF"/>
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnJabbhoProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Jabbho" android:textAllCaps="false" android:textSize="10sp" app:cornerRadius="8dp" android:layout_margin="2dp" android:backgroundTint="#FF0000" android:textColor="#FFFFFF"/>
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnLehnghoProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Lehngho" android:textAllCaps="false" android:textSize="10sp" app:cornerRadius="8dp" android:layout_margin="2dp" android:backgroundTint="#FF0000" android:textColor="#FFFFFF"/>
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnSafariProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Safari" android:textAllCaps="false" android:textSize="10sp" app:cornerRadius="8dp" android:layout_margin="2dp" android:backgroundTint="#FF0000" android:textColor="#FFFFFF"/>
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnJodhpuriProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Jodhpuri" android:textAllCaps="false" android:textSize="10sp" app:cornerRadius="8dp" android:layout_margin="2dp" android:backgroundTint="#FF0000" android:textColor="#FFFFFF"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnShirtProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Shirt" android:textAllCaps="false" android:textSize="11sp" app:cornerRadius="10dp" android:layout_margin="4dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnPantProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Pant" android:textAllCaps="false" android:textSize="11sp" app:cornerRadius="10dp" android:layout_margin="4dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnKotiProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Koti" android:textAllCaps="false" android:textSize="11sp" app:cornerRadius="10dp" android:layout_margin="4dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnSuitProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Suit" android:textAllCaps="false" android:textSize="11sp" app:cornerRadius="10dp" android:layout_margin="4dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnJabbhoProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Jabbho" android:textAllCaps="false" android:textSize="11sp" app:cornerRadius="10dp" android:layout_margin="4dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnLehnghoProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Lehngho" android:textAllCaps="false" android:textSize="11sp" app:cornerRadius="10dp" android:layout_margin="4dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnSafariProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Safari" android:textAllCaps="false" android:textSize="11sp" app:cornerRadius="10dp" android:layout_margin="4dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnJodhpuriProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Jodhpuri" android:textAllCaps="false" android:textSize="11sp" app:cornerRadius="10dp" android:layout_margin="4dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
             </GridLayout>
 
-            <!-- Measurement Values -->
-            <androidx.cardview.widget.CardView
+            <!-- Garment Details Main Container -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardGarmentMain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@android:color/white">
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="?attr/colorSurface">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                        <TextView android:id="@+id/tvMeasurementTitle" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Shirt Measurements" android:textStyle="bold" android:textColor="@android:color/black" />
-                        <TextView android:id="@+id/btnEditSize" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit Size" android:textColor="#0078FF" android:textStyle="bold" android:clickable="true" android:focusable="true"/>
+                    android:orientation="vertical">
+
+                    <!-- Unified Header -->
+                    <LinearLayout 
+                        android:id="@+id/layoutGarmentHeader"
+                        android:layout_width="match_parent" 
+                        android:layout_height="wrap_content" 
+                        android:orientation="horizontal" 
+                        android:gravity="center_vertical"
+                        android:padding="20dp"
+                        android:background="?attr/colorSurface">
+                        <TextView 
+                            android:id="@+id/tvUnifiedGarmentTitle" 
+                            android:layout_width="0dp" 
+                            android:layout_height="wrap_content" 
+                            android:layout_weight="1" 
+                            android:text="Shirt (0)" 
+                            android:textStyle="bold" 
+                            android:textColor="?attr/colorOnSurface" 
+                            android:textSize="14sp" />
+                        <TextView 
+                            android:id="@+id/btnEditUnified" 
+                            android:layout_width="wrap_content" 
+                            android:layout_height="wrap_content" 
+                            android:text="Edit" 
+                            android:textColor="#D32F2F" 
+                            android:textStyle="bold" 
+                            android:clickable="true" 
+                            android:focusable="true" 
+                            android:padding="8dp" 
+                            android:textSize="13sp" 
+                            android:visibility="gone"/>
                     </LinearLayout>
-                    
-                    <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:columnCount="2">
-                        <!-- Length -->
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="8dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Length" android:textSize="12sp" />
-                            <TextView android:id="@+id/tvLengthValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+
+                    <!-- Input Section -->
+                    <LinearLayout
+                        android:id="@+id/cardGarmentInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp"
+                        android:visibility="gone">
+                        
+                        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til1" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" app:boxStrokeColor="@color/red" app:hintTextColor="@color/red"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et1" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" android:textColor="?attr/colorOnSurface"/></com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til2" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" app:boxStrokeColor="@color/red" app:hintTextColor="@color/red"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et2" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" android:textColor="?attr/colorOnSurface"/></com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til3" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" app:boxStrokeColor="@color/red" app:hintTextColor="@color/red"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et3" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" android:textColor="?attr/colorOnSurface"/></com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til4" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" app:boxStrokeColor="@color/red" app:hintTextColor="@color/red"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et4" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" android:textColor="?attr/colorOnSurface"/></com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til5" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" app:boxStrokeColor="@color/red" app:hintTextColor="@color/red"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et5" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" android:textColor="?attr/colorOnSurface"/></com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til6" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" app:boxStrokeColor="@color/red" app:hintTextColor="@color/red"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et6" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" android:textColor="?attr/colorOnSurface"/></com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til7" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" app:boxStrokeColor="@color/red" app:hintTextColor="@color/red"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et7" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" android:textColor="?attr/colorOnSurface"/></com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout android:id="@+id/til8" style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" app:boxStrokeColor="@color/red" app:hintTextColor="@color/red"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et8" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal" android:textColor="?attr/colorOnSurface"/></com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton 
+                            android:id="@+id/btnSaveGarment" 
+                            android:layout_width="match_parent" 
+                            android:layout_height="56dp" 
+                            android:text="Save" 
+                            android:backgroundTint="#D32F2F" 
+                            android:textColor="@android:color/white" 
+                            app:cornerRadius="12dp" 
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Display Section -->
+                    <LinearLayout
+                        android:id="@+id/cardMeasurementDisplay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp"
+                        android:visibility="visible">
+                        
+                        <GridLayout 
+                            android:id="@+id/displayGrid" 
+                            android:layout_width="match_parent" 
+                            android:layout_height="wrap_content" 
+                            android:columnCount="2">
+                            <LinearLayout android:id="@+id/container1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvLabel1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label 1" android:textSize="12sp" android:textColor="@color/on_surface_variant" android:textAllCaps="true"/>
+                                <TextView android:id="@+id/tvValue1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="2dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvLabel2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label 2" android:textSize="12sp" android:textColor="@color/on_surface_variant" android:textAllCaps="true"/>
+                                <TextView android:id="@+id/tvValue2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="2dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvLabel3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label 3" android:textSize="12sp" android:textColor="@color/on_surface_variant" android:textAllCaps="true"/>
+                                <TextView android:id="@+id/tvValue3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="2dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvLabel4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label 4" android:textSize="12sp" android:textColor="@color/on_surface_variant" android:textAllCaps="true"/>
+                                <TextView android:id="@+id/tvValue4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="2dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvLabel5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label 5" android:textSize="12sp" android:textColor="@color/on_surface_variant" android:textAllCaps="true"/>
+                                <TextView android:id="@+id/tvValue5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="2dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvLabel6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label 6" android:textSize="12sp" android:textColor="@color/on_surface_variant" android:textAllCaps="true"/>
+                                <TextView android:id="@+id/tvValue6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="2dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvLabel7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label 7" android:textSize="12sp" android:textColor="@color/on_surface_variant" android:textAllCaps="true"/>
+                                <TextView android:id="@+id/tvValue7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="2dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container8" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="vertical">
+                                <TextView android:id="@+id/tvLabel8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label 8" android:textSize="12sp" android:textColor="@color/on_surface_variant" android:textAllCaps="true"/>
+                                <TextView android:id="@+id/tvValue8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="2dp"/>
+                            </LinearLayout>
+                        </GridLayout>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Additional Notes" android:textStyle="bold" android:textColor="?attr/colorOnSurface" android:layout_marginTop="20dp" android:textSize="14sp"/>
+                        <TextView android:id="@+id/tvNotesValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="No notes available" android:textColor="@color/on_surface_variant" android:layout_marginTop="4dp" android:textSize="14sp"/>
+
+                        <!-- Order Action Buttons -->
+                        <LinearLayout
+                            android:id="@+id/layoutOrderActions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="24dp"
+                            android:gravity="center">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnInProgress"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="In Progress"
+                                android:textAllCaps="false"
+                                android:backgroundTint="#FF9800"
+                                android:textColor="@android:color/white"
+                                android:layout_marginEnd="8dp"
+                                app:cornerRadius="8dp"
+                                android:textSize="12sp"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnCompleted"
+                                style="@style/Widget.MaterialComponents.Button"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Completed"
+                                android:textAllCaps="false"
+                                android:textSize="12sp"
+                                android:backgroundTint="@color/red"
+                                android:textColor="@android:color/white"
+                                app:cornerRadius="8dp"/>
                         </LinearLayout>
-                        <!-- Chest -->
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="8dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Chest" android:textSize="12sp" />
-                            <TextView android:id="@+id/tvChestValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
-                        </LinearLayout>
-                        <!-- Waist -->
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="8dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Waist" android:textSize="12sp" />
-                            <TextView android:id="@+id/tvWaistValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
-                        </LinearLayout>
-                        <!-- Collar -->
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="8dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Collar" android:textSize="12sp" />
-                            <TextView android:id="@+id/tvCollarValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
-                        </LinearLayout>
-                        <!-- Shoulder -->
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="8dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Shoulder" android:textSize="12sp" />
-                            <TextView android:id="@+id/tvShoulderValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
-                        </LinearLayout>
-                        <!-- Sleeve -->
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="8dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sleeve" android:textSize="12sp" />
-                            <TextView android:id="@+id/tvSleeveValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textSize="18sp" android:textStyle="bold" android:textColor="@android:color/black"/>
-                        </LinearLayout>
-                    </GridLayout>
-                    
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Special Instructions" android:layout_marginTop="12dp" android:textSize="12sp" />
-                    <TextView android:id="@+id/tvNotesValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="None" android:textColor="#404040" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNewOrder"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_margin="16dp"
-        android:backgroundTint="#111111"
         android:text="New Order"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
+        android:backgroundTint="#D32F2F"
+        app:cornerRadius="12dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

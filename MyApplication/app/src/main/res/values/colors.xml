@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="color_156_163_175">#FF9CA3AF</color>
+    <color name="color_229_231_235">#FFE5E7EB</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -8,4 +12,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FFFF0000</color>
+    <color name="red_dark">#D32F2F</color>
+    
+    <!-- Semantic Colors -->
+    <color name="background">#F6F7F9</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="on_surface">#333333</color>
+    <color name="on_surface_variant">#666666</color>
 </resources>

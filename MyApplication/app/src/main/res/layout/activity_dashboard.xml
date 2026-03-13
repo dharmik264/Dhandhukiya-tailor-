@@ -4,72 +4,121 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F7F9">
+    android:background="#F8F9FA">
 
-    <!-- Top App Bar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <!-- Top Red Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        app:elevation="0dp"
+        android:layout_height="140dp"
+        android:background="#D32F2F"
+        android:paddingTop="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+        <ImageView
+            android:id="@+id/ivAppLogo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/dt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Tailoring Management"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/ivAppLogo"
+            app:layout_constraintStart_toEndOf="@id/ivAppLogo"
+            app:layout_constraintTop_toTopOf="@id/ivAppLogo" />
+
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/bg_circle_black"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+
+            <View
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="4dp"
+                android:background="@drawable/bg_circle_black"
+                android:backgroundTint="#4CAF50" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Stats Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/statsCard"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginHorizontal="16dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/header"
+        app:layout_constraintTop_toBottomOf="@id/header">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/frame"
-            app:title="Tailoring Management"
-            app:titleCentered="false"
-            app:titleTextAppearance="@style/TextAppearance.Material3.TitleMedium">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:paddingEnd="16dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_scissors" app:tint="#D32F2F" />
+                <TextView android:id="@+id/tvActiveOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12" android:textColor="#333333" android:textSize="18sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="IN PROGRESS" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+            </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/ivNotification"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="Notifications"
-                    android:src="@drawable/frame"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/ivProfile"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="#666666" />
+            <View android:layout_width="1dp" android:layout_height="40dp" android:background="#F3F4F6" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/ivProfile"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/bg_circle_black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/file" app:tint="#D32F2F" />
+                <TextView android:id="@+id/tvPendingOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="05" android:textColor="#333333" android:textSize="18sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PENDING" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+            </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View android:layout_width="1dp" android:layout_height="40dp" android:background="#F3F4F6" />
 
-        </com.google.android.material.appbar.MaterialToolbar>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#EEEEEE" />
-    </com.google.android.material.appbar.AppBarLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_tick_arrow" app:tint="#D32F2F" />
+                <TextView android:id="@+id/tvCompletedOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="84" android:textColor="#333333" android:textSize="18sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="COMPLETED" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+            </LinearLayout>
 
-    <!-- Scrollable Content Area -->
+            <View android:layout_width="1dp" android:layout_height="40dp" android:background="#F3F4F6" />
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_group_customers" app:tint="#D32F2F" />
+                <TextView android:id="@+id/tvTotalCustomersCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="120" android:textColor="#333333" android:textSize="18sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CUSTOMERS" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/dashboardScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigation">
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintTop_toBottomOf="@id/statsCard">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,167 +126,81 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Summary Stats (2x2 Grid) -->
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:alignmentMode="alignMargins"
-                android:useDefaultMargins="true">
-
-                <!-- Active Orders -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@android:color/white">
-                    <LinearLayout android:orientation="vertical" android:padding="16dp" android:layout_width="match_parent" android:layout_height="wrap_content">
-                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/order" app:tint="#FF0000" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Orders" android:textSize="11sp" android:textColor="#999999" android:layout_marginTop="8dp"/>
-                        <TextView android:id="@+id/tvActiveOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="20sp" android:textStyle="bold" android:textColor="#333333"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Pending -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@android:color/white">
-                    <LinearLayout android:orientation="vertical" android:padding="16dp" android:layout_width="match_parent" android:layout_height="wrap_content">
-                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/frame" app:tint="#FF0000" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending" android:textSize="11sp" android:textColor="#999999" android:layout_marginTop="8dp"/>
-                        <TextView android:id="@+id/tvPendingOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="20sp" android:textStyle="bold" android:textColor="#333333"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Completed -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@android:color/white">
-                    <LinearLayout android:orientation="vertical" android:padding="16dp" android:layout_width="match_parent" android:layout_height="wrap_content">
-                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/frame" app:tint="#4CAF50" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed" android:textSize="11sp" android:textColor="#999999" android:layout_marginTop="8dp"/>
-                        <TextView android:id="@+id/tvCompletedOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="20sp" android:textStyle="bold" android:textColor="#333333"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Total Customers -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@android:color/white">
-                    <LinearLayout android:orientation="vertical" android:padding="16dp" android:layout_width="match_parent" android:layout_height="wrap_content">
-                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_customer" app:tint="#2196F3" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Customers" android:textSize="11sp" android:textColor="#999999" android:layout_marginTop="8dp"/>
-                        <TextView android:id="@+id/tvTotalCustomersCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="20sp" android:textStyle="bold" android:textColor="#333333"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </GridLayout>
-
-            <!-- Quick Actions -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quick Actions"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:textColor="#333333"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-            <GridLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:useDefaultMargins="true">
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.card.MaterialCardView 
-                    android:id="@+id/activity_check_order" 
-                    android:layout_width="0dp" 
-                    android:layout_height="100dp" 
-                    android:layout_columnWeight="1" 
-                    app:cardCornerRadius="12dp" 
-                    app:strokeWidth="1dp" 
-                    app:strokeColor="#EEEEEE" 
-                    app:cardBackgroundColor="@android:color/white" 
-                    android:clickable="true" 
-                    android:focusable="true" 
-                    android:foreground="?attr/selectableItemBackground">
-                    <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
-                        <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/frame" app:tint="#FF0000" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Check Order" android:textSize="12sp" android:layout_marginTop="4dp"/>
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/activity_check_order"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:strokeWidth="0dp"
+                    app:cardElevation="2dp">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center_vertical" android:padding="12dp">
+                        <ImageView android:layout_width="44dp" android:layout_height="44dp" android:background="@drawable/bg_black_rounded" android:backgroundTint="#D32F2F" android:padding="10dp" android:src="@android:drawable/ic_menu_search" app:tint="@android:color/white" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Check\nOrder" android:textColor="#333333" android:textSize="14sp" android:textStyle="bold" android:lineSpacingExtra="-2dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="View status" android:textColor="#9CA3AF" android:textSize="11sp" />
+                        </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.card.MaterialCardView 
-                    android:id="@+id/cardAddCustomer" 
-                    android:layout_width="0dp" 
-                    android:layout_height="100dp" 
-                    android:layout_columnWeight="1" 
-                    app:cardCornerRadius="12dp" 
-                    app:strokeWidth="1dp" 
-                    app:strokeColor="#EEEEEE" 
-                    app:cardBackgroundColor="@android:color/white" 
-                    android:clickable="true" 
-                    android:focusable="true" 
-                    android:foreground="?attr/selectableItemBackground">
-                    <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
-                        <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_customer" app:tint="#FF0000" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Add Customer" android:textSize="12sp" android:layout_marginTop="4dp"/>
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardAddCustomer"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:strokeWidth="0dp"
+                    app:cardElevation="2dp">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center_vertical" android:padding="12dp">
+                        <ImageView android:layout_width="44dp" android:layout_height="44dp" android:background="@drawable/bg_black_rounded" android:backgroundTint="#FEE2E2" android:padding="10dp" android:src="@drawable/ic_customer" app:tint="#D32F2F" />
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Add New" android:textColor="#333333" android:textSize="14sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Customer\nentry" android:textColor="#9CA3AF" android:textSize="11sp" android:lineSpacingExtra="-2dp"/>
+                        </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-            </GridLayout>
+            </LinearLayout>
 
-            <!-- Recent Orders -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recent Orders"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="#333333" android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"/>
-
-            <com.google.android.material.card.MaterialCardView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@android:color/white">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRecentOrders"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:padding="8dp"
-                    tools:listitem="@layout/item_check_order" />
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_marginTop="32dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Recent Orders" android:textColor="#333333" android:textSize="18sp" android:textStyle="bold" />
+                <TextView android:id="@+id/tvViewAll" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="View All" android:textColor="#D32F2F" android:textStyle="bold" />
+            </RelativeLayout>
 
-            <!-- Bottom Spacing -->
-            <Space android:layout_width="match_parent" android:layout_height="40dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecentOrders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_customer" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation -->
     <include
         android:id="@+id/bottomNavigation"
         layout="@layout/reusable_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

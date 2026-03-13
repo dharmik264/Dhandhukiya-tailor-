@@ -1,42 +1,165 @@
 package com.example.myapplication
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.myapplication.ui.theme.MyApplicationTheme
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    lateinit var viewPager: ViewPager2
+    lateinit var bottomNavigation: BottomNavigationView
+    private var isSyncing = false
+
+    fun navigateToTab(index: Int) {
+        viewPager.currentItem = index
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyApplicationTheme {
-                // Main content placeholder
+        setContentView(R.layout.activity_main)
+
+        viewPager = findViewById(R.id.viewPager)
+        bottomNavigation = findViewById(R.id.mainBottomNavigation)
+
+        // Setup ViewPager Adapter
+        val adapter = object : FragmentStateAdapter(this) {
+            override fun getItemCount(): Int = 3
+            override fun createFragment(position: Int): Fragment {
+                return when (position) {
+                    0 -> HomeFragment()
+                    1 -> AddCustomerFragment()
+                    2 -> ReportsFragment()
+                    else -> HomeFragment()
+                }
             }
+        }
+        
+        viewPager.isUserInputEnabled = true
+        viewPager.offscreenPageLimit = 2
+        viewPager.adapter = adapter
+
+        // Link ViewPager and BottomNavigation with guards to prevent loops
+        bottomNavigation.setOnItemSelectedListener { item ->
+            if (isSyncing) return@setOnItemSelectedListener true
+            val targetPos = when (item.itemId) {
+                R.id.nav_home -> 0
+                R.id.nav_customers -> 1
+                R.id.nav_reports -> 2
+                else -> -1
+            }
+            if (targetPos != -1 && viewPager.currentItem != targetPos) {
+                isSyncing = true
+                viewPager.setCurrentItem(targetPos, true) // Smooth scroll highlights the swipe action
+                isSyncing = false
+            }
+            true
+        }
+
+        // Handle page swipes to update current item in bottom nav
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                if (isSyncing) return
+                val targetId = when (position) {
+                    0 -> R.id.nav_home
+                    1 -> R.id.nav_customers
+                    2 -> R.id.nav_reports
+                    else -> -1
+                }
+                if (targetId != -1 && bottomNavigation.selectedItemId != targetId) {
+                    isSyncing = true
+                    bottomNavigation.selectedItemId = targetId
+                    isSyncing = false
+                }
+                
+                // Ensure bottom navigation is visible across all primary tabs
+                bottomNavigation.visibility = android.view.View.VISIBLE
+            }
+        })
+
+        // Ensure initial state or external navigation is handled
+        val externalTab = intent?.getIntExtra("TARGET_TAB", -1) ?: -1
+        if (externalTab != -1) {
+            viewPager.post {
+                isSyncing = true
+                viewPager.setCurrentItem(externalTab, true)
+                isSyncing = false
+            }
+        } else if (savedInstanceState == null) {
+            viewPager.post {
+                isSyncing = true
+                viewPager.setCurrentItem(0, false)
+                bottomNavigation.selectedItemId = R.id.nav_home
+                isSyncing = false
+            }
+        }
+
+        checkAppVersion()
+    }
+
+    private fun checkAppVersion() {
+        RetrofitClient.instance.getAppVersion().enqueue(object : Callback<AppVersionResponse> {
+            override fun onResponse(call: Call<AppVersionResponse>, response: Response<AppVersionResponse>) {
+                if (isFinishing || isDestroyed) return
+                
+                if (response.isSuccessful) {
+                    val versionInfo = response.body()
+                    val latestVersion = versionInfo?.latestVersion ?: "1.0"
+                    val forceUpdate = versionInfo?.forceUpdate ?: false
+                    val apkUrl = versionInfo?.apkUrl
+                    
+                    val currentVersion = try {
+                        packageManager.getPackageInfo(packageName, 0).versionName ?: "1.0"
+                    } catch (e: Exception) {
+                        "1.0"
+                    }
+
+                    android.util.Log.d("UPDATE_CHECK", "Current: $currentVersion, Latest: $latestVersion, Force: $forceUpdate")
+
+                    if (forceUpdate && currentVersion != latestVersion) {
+                        showUpdateDialog(apkUrl)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<AppVersionResponse>, t: Throwable) {
+                // Ignore failure
+            }
+        })
+    }
+
+    private fun showUpdateDialog(apkUrl: String?) {
+        if (isFinishing || isDestroyed) return
+        
+        AlertDialog.Builder(this)
+            .setTitle("New Update Available")
+            .setMessage("Please update the app to the latest version to continue using all features.")
+            .setPositiveButton("Update Now") { _, _ ->
+                apkUrl?.let {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                    startActivity(intent)
+                }
+            }
+            .setNegativeButton("Later", null)
+            .setCancelable(true)
+            .show()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        val targetTab = intent.getIntExtra("TARGET_TAB", -1)
+        if (targetTab != -1) {
+            isSyncing = true
+            viewPager.setCurrentItem(targetTab, true)
+            isSyncing = false
         }
     }
 }
-

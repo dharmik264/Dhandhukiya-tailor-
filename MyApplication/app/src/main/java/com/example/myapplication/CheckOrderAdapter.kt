@@ -9,17 +9,23 @@ import androidx.recyclerview.widget.RecyclerView
 data class CheckOrderModel(
     val id: String,
     val customerName: String,
-    val garmentType: String // Changed from status to show item name
+    val mobile: String,
+    val garmentType: String,
+    val orderDate: String = "",
+    val status: String = ""
 )
 
 class CheckOrderAdapter(
-    private var orders: List<CheckOrderModel>
+    private var orders: List<CheckOrderModel>,
+    private val onItemClick: (CheckOrderModel) -> Unit = {}
 ) : RecyclerView.Adapter<CheckOrderAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvOrderId: TextView = view.findViewById(R.id.tvCheckOrderId)
         val tvCustomerName: TextView = view.findViewById(R.id.tvCheckCustomerName)
-        val tvGarmentType: TextView = view.findViewById(R.id.tvCheckStatus) // Uses status badge UI for garment name
+        val tvMobile: TextView = view.findViewById(R.id.tvCheckMobile)
+        val tvDate: TextView = view.findViewById(R.id.tvCheckDate)
+        val tvGarmentType: TextView = view.findViewById(R.id.tvCheckStatus)
+        val tvInitials: TextView = view.findViewById(R.id.tvCheckInitials)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,14 +36,27 @@ class CheckOrderAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val order = orders[position]
-        holder.tvOrderId.text = "#" + order.id.padStart(3, '0')
-        holder.tvCustomerName.text = order.customerName
-        holder.tvGarmentType.text = order.garmentType
-        
-        // Always show in professional Red theme for garment identification
+
+        val name = order.customerName.ifEmpty { "Unknown" }
+        holder.tvCustomerName.text = name
+        holder.tvMobile.text = order.mobile.ifEmpty { "No number" }
+        holder.tvDate.text = order.orderDate.ifEmpty { "" }
+        holder.tvGarmentType.text = order.garmentType.ifEmpty { "General" }
+
+        // Generate initials from name
+        val initials = name.trim().split(" ")
+            .mapNotNull { it.firstOrNull()?.toString() }
+            .joinToString("")
+            .take(2)
+            .uppercase()
+        holder.tvInitials.text = initials.ifEmpty { "?" }
+
         holder.tvGarmentType.setBackgroundResource(R.drawable.bg_black_rounded)
-        holder.tvGarmentType.backgroundTintList = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#FFF0F0"))
+        holder.tvGarmentType.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#1AFF0000"))
         holder.tvGarmentType.setTextColor(android.graphics.Color.parseColor("#FF0000"))
+
+        holder.itemView.setOnClickListener { onItemClick(order) }
     }
 
     override fun getItemCount() = orders.size

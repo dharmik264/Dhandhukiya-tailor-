@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,16 +17,6 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // --- DEVELOPMENT MODE BYPASS LOGIC ---
-        val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        if (sharedPref.getBoolean("DEV_MODE", false)) {
-            Toast.makeText(this, "Development Mode active: Bypassing authentication.", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
-            return
-        }
-
         setContentView(R.layout.activity_register)
 
         val etFirstName = findViewById<EditText>(R.id.etFirstName)
