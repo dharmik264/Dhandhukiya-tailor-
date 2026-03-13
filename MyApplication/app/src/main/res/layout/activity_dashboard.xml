@@ -81,7 +81,16 @@
             android:orientation="horizontal"
             android:padding="8dp">
 
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/cardActiveOrders"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
                 <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_scissors" app:tint="#D32F2F" />
                 <TextView android:id="@+id/tvActiveOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12" android:textColor="#333333" android:textSize="18sp" android:textStyle="bold" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="IN PROGRESS" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
@@ -89,7 +98,16 @@
 
             <View android:layout_width="1dp" android:layout_height="40dp" android:background="#F3F4F6" />
 
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/cardPendingOrders"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
                 <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/file" app:tint="#D32F2F" />
                 <TextView android:id="@+id/tvPendingOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="05" android:textColor="#333333" android:textSize="18sp" android:textStyle="bold" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PENDING" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
@@ -97,7 +115,16 @@
 
             <View android:layout_width="1dp" android:layout_height="40dp" android:background="#F3F4F6" />
 
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/cardCompletedOrders"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
                 <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_tick_arrow" app:tint="#D32F2F" />
                 <TextView android:id="@+id/tvCompletedOrders" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="84" android:textColor="#333333" android:textSize="18sp" android:textStyle="bold" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="COMPLETED" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />

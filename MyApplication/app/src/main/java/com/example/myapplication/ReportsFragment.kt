@@ -39,7 +39,7 @@ class ReportsFragment : Fragment() {
         }
 
         // Setup Quick Actions
-        view.findViewById<MaterialCardView>(R.id.statsCard)?.setOnClickListener {
+        view.findViewById<MaterialCardView>(R.id.activity_check_order)?.setOnClickListener {
             context?.let { ctx ->
                 startActivity(Intent(ctx, CheckOrderActivity::class.java))
             }
