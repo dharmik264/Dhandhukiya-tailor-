@@ -59,6 +59,16 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        findViewById<android.view.View>(R.id.activity_check_order)?.setOnClickListener {
+            val intent = Intent(this, CheckOrderActivity::class.java)
+            startActivity(intent)
+        }
+
+        findViewById<android.view.View>(R.id.cardAddCustomer)?.setOnClickListener {
+            val intent = Intent(this, AddCustomerActivity::class.java)
+            startActivity(intent)
+        }
+
         updateStats()
         loadRecentOrders()
     }
