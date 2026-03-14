@@ -15,10 +15,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
+import org.json.JSONArray
+import org.json.JSONObject
+import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 class HomeFragment : Fragment() {
 
@@ -176,50 +184,78 @@ class HomeFragment : Fragment() {
 
     private fun checkAppVersion() {
         val client = okhttp3.OkHttpClient()
-        val request = okhttp3.Request.Builder()
-            .url("https://api.github.com/repos/dharmik264/Dhandhukiya-tailor-/releases/latest")
+        val request = Request.Builder()
+            .url("https://api.github.com/repos/dharmik264/Dhandhukiya-tailor-/releases")
             .build()
         
         client.newCall(request).enqueue(object : okhttp3.Callback {
-            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {}
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                Log.e("AppVersion", "Failed to check app version: ${e.message}")
+            }
 
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 if (!response.isSuccessful) return
+                val responseData = response.body?.string() ?: return
                 
-                val responseData = response.body?.string()
-                if (responseData != null) {
-                    try {
-                        val json = org.json.JSONObject(responseData)
-                        // Uses the GitHub release tag as the latest version identifier
-                        val latestVersion = json.getString("tag_name").removePrefix("v") 
-                        
-                        val assets = json.getJSONArray("assets")
-                        var apkUrl: String? = null
-                        if (assets.length() > 0) {
-                            apkUrl = assets.getJSONObject(0).getString("browser_download_url")
+                try {
+                    val jsonArray = org.json.JSONArray(responseData)
+                    if (jsonArray.length() == 0) return
+                    
+                    val json = jsonArray.getJSONObject(0)
+                    val latestTag = json.getString("tag_name")
+                    val latestVersion = latestTag.removePrefix("v") 
+                    
+                    Log.d("AppUpdate", "Latest Tag: $latestTag, latestVersion: $latestVersion")
+
+                    val assets = json.getJSONArray("assets")
+                    var apkUrl: String? = null
+                    for (i in 0 until assets.length()) {
+                        val asset = assets.getJSONObject(i)
+                        if (asset.getString("name").endsWith(".apk")) {
+                            apkUrl = asset.getString("browser_download_url")
+                            break
                         }
-                        
-                        activity?.runOnUiThread {
-                            if (!isAdded) return@runOnUiThread
-                            val currentVersion = try {
-                                context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)?.versionName ?: "1.0"
-                            } catch (e: Exception) {
-                                "1.0"
-                            }
-                            
-                            val prefs = context?.getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
-                            val dismissedVersion = prefs?.getString("DISMISSED_VERSION", "") ?: ""
-                            
-                            if (currentVersion != latestVersion && dismissedVersion != latestVersion) {
-                                showUpdateDialog(apkUrl, latestVersion, false)
-                            } else if (currentVersion == latestVersion && dismissedVersion.isNotEmpty()) {
-                                // Reset dismissed version if we're now on the latest version
-                                prefs?.edit()?.remove("DISMISSED_VERSION")?.apply()
-                            }
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
                     }
+                    
+                    activity?.runOnUiThread {
+                        if (!isAdded) return@runOnUiThread
+                        val currentVersion = try {
+                            val info = context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)
+                            Log.d("AppUpdate", "Current Version from Package: ${info?.versionName}")
+                            info?.versionName ?: "1.0"
+                        } catch (e: Exception) {
+                            "1.0"
+                        }
+                        
+                        val prefs = context?.getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+                        val dismissedVersion = prefs?.getString("DISMISSED_VERSION", "") ?: ""
+                        
+                        // Smarter version check
+                        val isUpdateAvailable = try {
+                            val cParts = currentVersion.split(".").mapNotNull { it.toIntOrNull() }
+                            val lParts = latestVersion.split(".").mapNotNull { it.toIntOrNull() }
+                            var newer = latestVersion != currentVersion && lParts.isNotEmpty()
+                            if (lParts.isNotEmpty() && cParts.isNotEmpty()) {
+                                for (i in 0 until maxOf(cParts.size, lParts.size)) {
+                                    val c = cParts.getOrElse(i) { 0 }
+                                    val l = lParts.getOrElse(i) { 0 }
+                                    if (l > c) { newer = true; break }
+                                    if (c > l) { newer = false; break }
+                                }
+                            }
+                            newer
+                        } catch (e: Exception) {
+                            latestVersion != currentVersion
+                        }
+                        
+                        if (isUpdateAvailable && dismissedVersion != latestVersion) {
+                            showUpdateDialog(apkUrl, latestVersion, false)
+                        } else if (!isUpdateAvailable && dismissedVersion.isNotEmpty()) {
+                            prefs?.edit()?.remove("DISMISSED_VERSION")?.apply()
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("AppVersion", "Error parsing release info: ${e.message}")
                 }
             }
         })

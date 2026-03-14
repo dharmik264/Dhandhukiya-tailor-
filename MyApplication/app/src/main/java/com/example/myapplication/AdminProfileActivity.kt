@@ -15,6 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import org.json.JSONObject
+import org.json.JSONArray
 import java.io.IOException
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -86,7 +87,7 @@ class AdminProfileActivity : AppCompatActivity() {
 
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("https://api.github.com/repos/dharmik264/Dhandhukiya-tailor-/releases/latest")
+            .url("https://api.github.com/repos/dharmik264/Dhandhukiya-tailor-/releases")
             .build()
             
         client.newCall(request).enqueue(object : okhttp3.Callback {
@@ -101,10 +102,29 @@ class AdminProfileActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (response.isSuccessful && responseData != null) {
                         try {
-                            val json = JSONObject(responseData)
+                            val jsonArray = org.json.JSONArray(responseData)
+                            if (jsonArray.length() == 0) return@runOnUiThread
+                            val json = jsonArray.getJSONObject(0)
                             val latestVersion = json.getString("tag_name").removePrefix("v")
                             
-                            if (currentVersion == latestVersion) {
+                            val isUpdateAvailable = try {
+                                val cParts = currentVersion.split(".").mapNotNull { it.toIntOrNull() }
+                                val lParts = latestVersion.split(".").mapNotNull { it.toIntOrNull() }
+                                var newer = latestVersion != currentVersion && lParts.isNotEmpty()
+                                if (lParts.isNotEmpty() && cParts.isNotEmpty()) {
+                                    for (i in 0 until maxOf(cParts.size, lParts.size)) {
+                                        val c = cParts.getOrElse(i) { 0 }
+                                        val l = lParts.getOrElse(i) { 0 }
+                                        if (l > c) { newer = true; break }
+                                        if (c > l) { newer = false; break }
+                                    }
+                                }
+                                newer
+                            } catch (e: Exception) {
+                                latestVersion != currentVersion
+                            }
+                            
+                            if (!isUpdateAvailable) {
                                 tvAppVersion.text = "Updated Application (v$currentVersion)"
                                 tvAppVersion.setTextColor(android.graphics.Color.parseColor("#4CAF50"))
                             } else {
