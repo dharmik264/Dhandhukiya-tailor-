@@ -14,6 +14,10 @@ import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import org.json.JSONObject
+import java.io.IOException
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 class AdminProfileActivity : AppCompatActivity() {
 
@@ -68,5 +72,53 @@ class AdminProfileActivity : AppCompatActivity() {
             recreate()
         }
 
+        checkAppStatus()
+    }
+
+    private fun checkAppStatus() {
+        val tvAppVersion = findViewById<TextView>(R.id.tvAppVersion)
+        
+        val currentVersion = try {
+            packageManager.getPackageInfo(packageName, 0).versionName ?: "1.0"
+        } catch (e: Exception) {
+            "1.0"
+        }
+
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url("https://api.github.com/repos/dharmik264/Dhandhukiya-tailor-/releases/latest")
+            .build()
+            
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                runOnUiThread {
+                    tvAppVersion.text = "Version: v$currentVersion"
+                }
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                val responseData = response.body?.string()
+                runOnUiThread {
+                    if (response.isSuccessful && responseData != null) {
+                        try {
+                            val json = JSONObject(responseData)
+                            val latestVersion = json.getString("tag_name").removePrefix("v")
+                            
+                            if (currentVersion == latestVersion) {
+                                tvAppVersion.text = "Updated Application (v$currentVersion)"
+                                tvAppVersion.setTextColor(android.graphics.Color.parseColor("#4CAF50"))
+                            } else {
+                                tvAppVersion.text = "Update Available: v$latestVersion (Current: v$currentVersion)"
+                                tvAppVersion.setTextColor(android.graphics.Color.parseColor("#D32F2F"))
+                            }
+                        } catch (e: Exception) {
+                            tvAppVersion.text = "Version: v$currentVersion"
+                        }
+                    } else {
+                        tvAppVersion.text = "Version: v$currentVersion"
+                    }
+                }
+            }
+        })
     }
 }

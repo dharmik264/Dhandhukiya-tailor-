@@ -13,7 +13,7 @@
         android:id="@+id/headerBackground"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:background="#D32F2F"
+        android:background="@drawable/bg_header_rounded"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 

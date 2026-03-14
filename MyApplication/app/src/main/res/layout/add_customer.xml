@@ -11,7 +11,7 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="#D32F2F"
+        android:background="@drawable/bg_header_rounded"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.card.MaterialCardView
@@ -208,22 +208,6 @@
                 app:elevation="4dp"/>
 
             <!-- Add Measurements Secondary Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddMeasurements"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center"
-                android:text="Add Measurements"
-                android:textAllCaps="false"
-                android:textColor="#D32F2F"
-                app:strokeColor="#E5E7EB"
-                app:cornerRadius="20dp"
-                android:paddingHorizontal="24dp"
-                app:icon="@drawable/ic_logo"
-                app:iconSize="14dp"
-                app:iconTint="#D32F2F"/>
 
         </LinearLayout>
     </ScrollView>
