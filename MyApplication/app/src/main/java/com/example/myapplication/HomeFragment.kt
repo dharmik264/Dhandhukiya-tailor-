@@ -50,6 +50,14 @@ class HomeFragment : Fragment() {
                 intent.putExtra("CUSTOMER_MOBILE", customer.mobile)
                 startActivity(intent)
             }
+        }, { customer ->
+            context?.let { ctx ->
+                val intent = Intent(ctx, AddCustomerActivity::class.java)
+                intent.putExtra("CUSTOMER_NAME", customer.name)
+                intent.putExtra("CUSTOMER_MOBILE", customer.mobile)
+                intent.putExtra("IS_EDIT_MODE", true)
+                startActivity(intent)
+            }
         }, { mobile ->
             if (isAdded) showDeleteConfirmation(mobile)
         })

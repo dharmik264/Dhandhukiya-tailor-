@@ -22,6 +22,7 @@ data class CustomerDisplayModel(
 class CustomerAdapter(
     private var customers: List<CustomerDisplayModel>,
     private val onItemClick: (CustomerDisplayModel) -> Unit,
+    private val onEditClick: (CustomerDisplayModel) -> Unit,
     private val onDeleteClick: (String) -> Unit
 ) : RecyclerView.Adapter<CustomerAdapter.ViewHolder>() {
 
@@ -29,6 +30,7 @@ class CustomerAdapter(
         val tvName: TextView = view.findViewById(R.id.tvName)
         val tvMobile: TextView = view.findViewById(R.id.tvMobile)
         val tvStatusBadge: TextView = view.findViewById(R.id.tvStatusBadge)
+        val btnEdit: ImageView = view.findViewById(R.id.btnEdit)
         val btnDelete: ImageView = view.findViewById(R.id.btnDelete)
     }
 
@@ -58,6 +60,10 @@ class CustomerAdapter(
 
         holder.itemView.setOnClickListener {
             onItemClick(customer)
+        }
+
+        holder.btnEdit.setOnClickListener {
+            onEditClick(customer)
         }
 
         holder.btnDelete.setOnClickListener {

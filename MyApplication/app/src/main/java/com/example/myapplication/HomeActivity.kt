@@ -45,6 +45,12 @@ class HomeActivity : AppCompatActivity() {
             intent.putExtra("CUSTOMER_NAME", customer.name)
             intent.putExtra("CUSTOMER_MOBILE", customer.mobile)
             startActivity(intent)
+        }, { customer ->
+            val intent = Intent(this, AddCustomerActivity::class.java)
+            intent.putExtra("CUSTOMER_NAME", customer.name)
+            intent.putExtra("CUSTOMER_MOBILE", customer.mobile)
+            intent.putExtra("IS_EDIT_MODE", true)
+            startActivity(intent)
         }, { mobile ->
             showDeleteConfirmation(mobile)
         })

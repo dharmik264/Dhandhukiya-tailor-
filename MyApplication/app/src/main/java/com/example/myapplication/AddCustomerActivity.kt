@@ -26,6 +26,16 @@ class AddCustomerActivity : AppCompatActivity() {
         val etAddress = findViewById<EditText>(R.id.etAddress)
         val btnSaveCustomer = findViewById<Button>(R.id.btnSaveCustomer)
         val btnBack = findViewById<ImageView>(R.id.btnBack)
+        val tvTopTitle = findViewById<android.widget.TextView>(R.id.tvTopTitle)
+
+        val isEditMode = intent.getBooleanExtra("IS_EDIT_MODE", false)
+        if (isEditMode) {
+            tvTopTitle?.text = "Edit Customer"
+            val existingName = intent.getStringExtra("CUSTOMER_NAME") ?: ""
+            val existingMobile = intent.getStringExtra("CUSTOMER_MOBILE") ?: ""
+            etCustomerName.setText(existingName)
+            etMobileNumber.setText(existingMobile)
+        }
 
         btnBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
