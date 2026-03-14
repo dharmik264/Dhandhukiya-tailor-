@@ -208,10 +208,13 @@ class HomeFragment : Fragment() {
                             }
                             
                             val prefs = context?.getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
-                            val dismissedVersion = prefs?.getString("DISMISSED_VERSION", "")
+                            val dismissedVersion = prefs?.getString("DISMISSED_VERSION", "") ?: ""
                             
                             if (currentVersion != latestVersion && dismissedVersion != latestVersion) {
                                 showUpdateDialog(apkUrl, latestVersion, false)
+                            } else if (currentVersion == latestVersion && dismissedVersion.isNotEmpty()) {
+                                // Reset dismissed version if we're now on the latest version
+                                prefs?.edit()?.remove("DISMISSED_VERSION")?.apply()
                             }
                         }
                     } catch (e: Exception) {
