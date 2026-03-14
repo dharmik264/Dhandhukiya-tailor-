@@ -167,31 +167,50 @@ class HomeFragment : Fragment() {
     }
 
     private fun checkAppVersion() {
-        RetrofitClient.instance.getAppVersion().enqueue(object : Callback<AppVersionResponse> {
-            override fun onResponse(call: Call<AppVersionResponse>, response: Response<AppVersionResponse>) {
-                if (!isAdded) return
+        val client = okhttp3.OkHttpClient()
+        val request = okhttp3.Request.Builder()
+            .url("https://api.github.com/repos/dharmik264/Dhandhukiya-tailor-/releases/latest")
+            .build()
+        
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {}
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                if (!response.isSuccessful) return
                 
-                if (response.isSuccessful) {
-                    val versionInfo = response.body()
-                    val latestVersion = versionInfo?.latestVersion ?: "1.0"
-                    val forceUpdate = versionInfo?.forceUpdate ?: false
-                    val apkUrl = versionInfo?.apkUrl
-                    
-                    val currentVersion = try {
-                        context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)?.versionName ?: "1.0"
+                val responseData = response.body?.string()
+                if (responseData != null) {
+                    try {
+                        val json = org.json.JSONObject(responseData)
+                        // Uses the GitHub release tag as the latest version identifier
+                        val latestVersion = json.getString("tag_name").removePrefix("v") 
+                        
+                        val assets = json.getJSONArray("assets")
+                        var apkUrl: String? = null
+                        if (assets.length() > 0) {
+                            apkUrl = assets.getJSONObject(0).getString("browser_download_url")
+                        }
+                        
+                        activity?.runOnUiThread {
+                            if (!isAdded) return@runOnUiThread
+                            val currentVersion = try {
+                                context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)?.versionName ?: "1.0"
+                            } catch (e: Exception) {
+                                "1.0"
+                            }
+                            
+                            val prefs = context?.getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+                            val dismissedVersion = prefs?.getString("DISMISSED_VERSION", "")
+                            
+                            if (currentVersion != latestVersion && dismissedVersion != latestVersion) {
+                                showUpdateDialog(apkUrl, latestVersion, false)
+                            }
+                        }
                     } catch (e: Exception) {
-                        "1.0"
-                    }
-
-                    val prefs = context?.getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
-                    val dismissedVersion = prefs?.getString("DISMISSED_VERSION", "")
-
-                    if (currentVersion != latestVersion && dismissedVersion != latestVersion) {
-                        showUpdateDialog(apkUrl, latestVersion, forceUpdate)
+                        e.printStackTrace()
                     }
                 }
             }
-            override fun onFailure(call: Call<AppVersionResponse>, t: Throwable) {}
         })
     }
 
