@@ -26,6 +26,7 @@
             app:tint="@android:color/white" />
 
         <TextView
+            android:id="@+id/tvAppTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -33,9 +34,19 @@
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/ivAppLogo"
             app:layout_constraintStart_toEndOf="@id/ivAppLogo"
             app:layout_constraintTop_toTopOf="@id/ivAppLogo" />
+
+        <TextView
+            android:id="@+id/tvAppStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="App is up to date"
+            android:textColor="#E0E0E0"
+            android:textSize="11sp"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="@id/tvAppTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvAppTitle" />
 
         <FrameLayout
             android:id="@+id/ivProfileBtn"
