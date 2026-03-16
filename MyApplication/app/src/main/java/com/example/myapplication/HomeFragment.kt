@@ -117,7 +117,8 @@ class HomeFragment : Fragment() {
                             id = it.id?.toString() ?: "0", 
                             name = it.name ?: "Unknown", 
                             mobile = it.mobileNumber ?: "No Number", 
-                            length = it.length ?: ""
+                            length = it.length ?: "",
+                            status = it.status ?: "No Orders"
                         ) 
                     }
                     updateUI(newList, " (Synced)")

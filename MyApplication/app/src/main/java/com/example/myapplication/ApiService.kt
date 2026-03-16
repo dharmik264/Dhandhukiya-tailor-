@@ -23,7 +23,8 @@ data class CustomerResponse(
     @SerializedName("name") val name: String?,
     @SerializedName("mobile_number") val mobileNumber: String?,
     @SerializedName("address") val address: String?,
-    @SerializedName("length") val length: String?
+    @SerializedName("length") val length: String?,
+    @SerializedName("status") val status: String?
 )
 
 // Data model for Login

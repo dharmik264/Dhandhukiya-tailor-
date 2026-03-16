@@ -24,7 +24,8 @@ class CheckOrderAdapter(
         val tvCustomerName: TextView = view.findViewById(R.id.tvCheckCustomerName)
         val tvMobile: TextView = view.findViewById(R.id.tvCheckMobile)
         val tvDate: TextView = view.findViewById(R.id.tvCheckDate)
-        val tvGarmentType: TextView = view.findViewById(R.id.tvCheckStatus)
+        val tvGarmentType: TextView = view.findViewById(R.id.tvCheckGarmentType)
+        val tvStatus: TextView = view.findViewById(R.id.tvCheckStatus)
         val tvInitials: TextView = view.findViewById(R.id.tvCheckInitials)
     }
 
@@ -41,7 +42,8 @@ class CheckOrderAdapter(
         holder.tvCustomerName.text = name
         holder.tvMobile.text = order.mobile.ifEmpty { "No number" }
         holder.tvDate.text = order.orderDate.ifEmpty { "" }
-        holder.tvGarmentType.text = order.garmentType.ifEmpty { "General" }
+        holder.tvGarmentType.text = order.garmentType.uppercase().ifEmpty { "GENERAL" }
+        holder.tvStatus.text = order.status.uppercase().ifEmpty { "PENDING" }
 
         // Generate initials from name
         val initials = name.trim().split(" ")
@@ -51,10 +53,22 @@ class CheckOrderAdapter(
             .uppercase()
         holder.tvInitials.text = initials.ifEmpty { "?" }
 
-        holder.tvGarmentType.setBackgroundResource(R.drawable.bg_black_rounded)
-        holder.tvGarmentType.backgroundTintList =
-            android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#1AFF0000"))
-        holder.tvGarmentType.setTextColor(android.graphics.Color.parseColor("#FF0000"))
+        // Styling for Status Badge
+        holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_rounded)
+        val statusColor = when (order.status.lowercase()) {
+            "completed", "ready" -> "#4CAF50" // Green
+            "in progress" -> "#2196F3"     // Blue
+            else -> "#D32F2F"              // Red (Pending)
+        }
+        val statusBgColor = when (order.status.lowercase()) {
+            "completed", "ready" -> "#1A4CAF50"
+            "in progress" -> "#1A2196F3"
+            else -> "#1AD32F2F"
+        }
+        
+        holder.tvStatus.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor(statusBgColor))
+        holder.tvStatus.setTextColor(android.graphics.Color.parseColor(statusColor))
 
         holder.itemView.setOnClickListener { onItemClick(order) }
     }

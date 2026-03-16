@@ -153,12 +153,11 @@
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="411dp"
-        android:layout_height="589dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="60dp"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
-        app:layout_constraintTop_toBottomOf="@id/statsCard"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintTop_toBottomOf="@id/statsCard">
 
         <LinearLayout
             android:layout_width="match_parent"

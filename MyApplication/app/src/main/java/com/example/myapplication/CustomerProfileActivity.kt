@@ -424,7 +424,7 @@ class CustomerProfileActivity : AppCompatActivity() {
             "Safari" -> {
                 data["length"] = v1; data["chest"] = v2; data["waist"] = v3
                 data["shoulder"] = v4; data["sleeve"] = v5; data["collar"] = v6
-                data["hip"] = v7; data["collar"] = v8 // Inside leg
+                data["hip"] = v7; data["rise"] = v8 // Fixed from double collar
             }
             "Jodhpuri" -> {
                 data["length"] = v1; data["chest"] = v2; data["waist"] = v3
@@ -708,16 +708,34 @@ class CustomerProfileActivity : AppCompatActivity() {
             val sharedPref = getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
             val userIdString = sharedPref.getInt("USER_ID", 1).toString()
 
+            // Dynamic Mapping based on Garment Type to match Sheet Hints
             val data = mutableMapOf(
                 "user_id" to userIdString,
                 "mobile_number" to currentMobile,
                 "garment_type" to selectedGarment,
-                "length" to v1, "chest" to v2, "waist" to v3,
-                "collar" to v4, "shoulder" to v5, "sleeve" to v6,
-                "hip" to v7, "rise" to v8,
-                "notes" to notes,
-                "is_update" to isEditMode.toString()
+                "is_update" to isEditMode.toString(),
+                "notes" to notes
             )
+
+            when (selectedGarment) {
+                "Shirt" -> {
+                    data["length"] = v1; data["chest"] = v2; data["waist"] = v3
+                    data["collar"] = v4; data["shoulder"] = v5; data["sleeve"] = v6
+                }
+                "Pant", "Lehngho" -> {
+                    data["length"] = v1; data["hip"] = v2; data["waist"] = v3
+                    data["collar"] = v4; data["rise"] = v5
+                }
+                "Koti", "Suit", "Safari", "Jodhpuri" -> {
+                    data["length"] = v1; data["chest"] = v2; data["waist"] = v3
+                    data["shoulder"] = v4; data["sleeve"] = v5; data["collar"] = v6
+                    data["hip"] = v7; data["rise"] = v8
+                }
+                "Jabbho" -> {
+                    data["length"] = v1; data["chest"] = v2; data["shoulder"] = v3
+                    data["sleeve"] = v4; data["collar"] = v5
+                }
+            }
 
             RetrofitClient.instance.addMeasurement(data).enqueue(object : retrofit2.Callback<Void> {
                 override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {

@@ -100,6 +100,13 @@ class ReportsFragment : Fragment() {
             }
         }
 
+        // View All Recent Orders
+        view.findViewById<TextView>(R.id.tvViewAll)?.setOnClickListener {
+            context?.let { ctx ->
+                startActivity(Intent(ctx, CheckOrderActivity::class.java))
+            }
+        }
+
         updateStats()
         loadRecentOrders()
 
