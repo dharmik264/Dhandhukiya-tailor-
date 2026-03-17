@@ -13,8 +13,7 @@ class OrderDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_order_details)
 
         // Setup the bottom navigation bar
-        val navBar = findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        navBar?.setupGlobalNavigation(this, R.id.nav_reports)
+        findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.setupGlobalNavigation(this, R.id.nav_reports)
 
         // Find views
         val tvCustomerName = findViewById<TextView>(R.id.tvOrderCustomerName)

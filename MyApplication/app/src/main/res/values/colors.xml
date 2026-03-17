@@ -19,4 +19,16 @@
     <color name="surface">#FFFFFF</color>
     <color name="on_surface">#333333</color>
     <color name="on_surface_variant">#666666</color>
+    <color name="divider">#E5E7EB</color>
+    <color name="search_background">#FFFFFF</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="success_bg">#F0F9F4</color>
+    <color name="success_text">#22C55E</color>
+    <color name="warning_bg">#FFF7ED</color>
+    <color name="warning_text">#F59E0B</color>
+    <color name="error_bg">#FEE2E2</color>
+    <color name="error_text">#D32F2F</color>
+    <color name="info_bg">#F3F4F6</color>
+    <color name="orange_primary">#D97706</color>
+    <color name="emerald_primary">#10B981</color>
 </resources>

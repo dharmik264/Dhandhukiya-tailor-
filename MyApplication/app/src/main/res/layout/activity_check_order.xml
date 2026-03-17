@@ -1,161 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8F9FA">
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/background">
 
-    <!-- Top Bar -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="#D32F2F"
-        app:layout_constraintTop_toTopOf="parent">
+    <!-- Responsive Content Wrapper -->
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="0dp" android:layout_height="match_parent" app:layout_constraintWidth_max="@dimen/max_content_width" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnBackCard"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <ImageView
-                android:id="@+id/btnBack"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="10dp"
-                android:src="@drawable/ic_back_arrow"
-                app:tint="#333333" />
+        <!-- Top Red Header -->
+        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/topBar" android:layout_width="match_parent" android:layout_height="120dp" android:background="@color/red_dark" app:layout_constraintTop_toTopOf="parent">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/btnBackCard" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginStart="16dp" android:layout_marginTop="16dp" app:cardCornerRadius="10dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/card_background" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+                <ImageView android:id="@+id/btnBack" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="10dp" android:src="@drawable/ic_back_arrow" app:tint="@color/on_surface" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView android:id="@+id/tvCheckOrderTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Customer Orders" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@id/btnBackCard" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/btnBackCard" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Search Card -->
+        <com.google.android.material.card.MaterialCardView android:id="@+id/searchCard" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginHorizontal="16dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:layout_constraintBottom_toBottomOf="@id/topBar" app:layout_constraintTop_toBottomOf="@id/topBar">
+            <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="match_parent" android:paddingHorizontal="12dp">
+                <ImageView android:id="@+id/ivSearch" android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_search" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:tint="@color/on_surface_variant" />
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/etSearchOrder" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginStart="12dp" android:background="@android:color/transparent" android:hint="Search by ID or Customer Name" android:inputType="text" android:textSize="14sp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@id/ivSearch" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/tvCheckOrderTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Customer Orders"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBackCard"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnBackCard" />
+        <!-- Filter Chips -->
+        <HorizontalScrollView android:id="@+id/svFilters" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:scrollbars="none" android:paddingHorizontal="16dp" android:clipToPadding="false" app:layout_constraintTop_toBottomOf="@id/searchCard">
+            <com.google.android.material.chip.ChipGroup android:id="@+id/chipGroupFilters" android:layout_width="wrap_content" android:layout_height="wrap_content" app:singleSelection="true" app:selectionRequired="true">
+                <com.google.android.material.chip.Chip android:id="@+id/chipAll" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="All" android:checked="true" app:chipBackgroundColor="@color/red_dark" android:textColor="#FFFFFF"/>
+                <com.google.android.material.chip.Chip android:id="@+id/chipPending" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending"/>
+                <com.google.android.material.chip.Chip android:id="@+id/chipInProgress" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="In Progress"/>
+                <com.google.android.material.chip.Chip android:id="@+id/chipCompleted" style="@style/Widget.MaterialComponents.Chip.Choice" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed"/>
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <!-- Orders List -->
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvCheckOrders" android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="12dp" android:paddingBottom="80dp" android:clipToPadding="false" app:layout_constraintTop_toBottomOf="@id/svFilters" app:layout_constraintBottom_toBottomOf="parent" tools:listitem="@layout/item_check_order" />
+
+        <include android:id="@+id/mainBottomNavigation" layout="@layout/reusable_bottom_navigation" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Search Section -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/searchCard"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginHorizontal="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:strokeWidth="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/topBar"
-        app:layout_constraintTop_toBottomOf="@id/topBar">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="12dp">
-
-            <ImageView
-                android:id="@+id/ivSearch"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_search"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#9CA3AF" />
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etSearchOrder"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="12dp"
-                android:background="@android:color/transparent"
-                android:hint="Search by ID or Customer Name"
-                android:inputType="text"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivSearch"
-                tools:ignore="NotSibling" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Filter Chips -->
-    <HorizontalScrollView
-        android:id="@+id/svFilters"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:scrollbars="none"
-        android:paddingHorizontal="16dp"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/searchCard">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupFilters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:selectionRequired="true">
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAll"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All"
-                android:checked="true"
-                app:chipBackgroundColor="#D32F2F"
-                android:textColor="#FFFFFF"/>
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipPending"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pending"/>
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipInProgress"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="In Progress"/>
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipCompleted"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Completed"/>
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
-
-    <!-- Orders List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCheckOrders"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:paddingBottom="80dp"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/svFilters"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_check_order" />
-
-    <!-- Bottom Navigation -->
-    <include
-        android:id="@+id/bottomNavigation"
-        layout="@layout/reusable_bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

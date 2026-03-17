@@ -1,217 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/background">
 
-    <!-- Top Red Bar -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@drawable/bg_header_rounded"
-        app:layout_constraintTop_toTopOf="parent">
+    <!-- Responsive Content Wrapper -->
+    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="0dp" android:layout_height="match_parent" app:layout_constraintWidth_max="@dimen/max_content_width" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnBackCard"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <ImageView
-                android:id="@+id/btnBack"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="10dp"
-                android:src="@drawable/ic_back_arrow"
-                app:tint="#333333" />
-        </com.google.android.material.card.MaterialCardView>
+        <!-- Top Red Bar -->
+        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/topBar" android:layout_width="match_parent" android:layout_height="120dp" android:background="@drawable/bg_header_rounded" app:layout_constraintTop_toTopOf="parent">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/btnBackCard" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginStart="16dp" android:layout_marginTop="16dp" app:cardCornerRadius="10dp" app:cardElevation="0dp" app:cardBackgroundColor="@color/card_background" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+                <ImageView android:id="@+id/btnBack" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="10dp" android:src="@drawable/ic_back_arrow" app:tint="@color/on_surface" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView android:id="@+id/tvTopTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Add Customer" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@id/btnBackCard" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/btnBackCard" />
+            <ImageView android:id="@+id/btnMore" android:layout_width="24dp" android:layout_height="24dp" android:layout_marginEnd="16dp" android:src="@android:drawable/ic_menu_more" app:layout_constraintBottom_toBottomOf="@id/btnBackCard" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/btnBackCard" app:tint="#FFFFFF" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/tvTopTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Customer"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBackCard"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnBackCard" />
+        <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:fillViewport="true" app:layout_constraintBottom_toTopOf="@id/mainBottomNavigation" app:layout_constraintTop_toBottomOf="@id/topBar">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+                <!-- Customer Name -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CUSTOMER NAME" android:textColor="@color/on_surface_variant" android:textSize="12sp" android:textStyle="bold" android:letterSpacing="0.05"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_gray" android:gravity="center_vertical" android:paddingHorizontal="16dp">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="#9CA3AF" />
+                    <EditText android:id="@+id/etCustomerName" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginStart="12dp" android:background="@android:color/transparent" android:hint="e.g. Kieran Pratt" android:inputType="textPersonName" android:textSize="15sp" android:textColor="@color/on_surface"/>
+                </LinearLayout>
+                <!-- Mobile Number -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="MOBILE NUMBER" android:textColor="@color/on_surface_variant" android:textSize="12sp" android:textStyle="bold" android:letterSpacing="0.05"/>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_gray" android:gravity="center_vertical" android:paddingHorizontal="16dp">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_menu_call" app:tint="#9CA3AF" />
+                    <EditText android:id="@+id/etMobileNumber" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginStart="12dp" android:background="@android:color/transparent" android:hint="+1 (555) 000-0000" android:inputType="phone" android:textSize="15sp" android:textColor="@color/on_surface"/>
+                </LinearLayout>
+                <!-- Address -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ADDRESS" android:textColor="#9CA3AF" android:textSize="12sp" android:textStyle="bold" android:letterSpacing="0.05"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Optional" android:textColor="#D1D5DB" android:textSize="11sp" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="120dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_gray" android:padding="16dp">
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@android:drawable/ic_dialog_map" app:tint="#9CA3AF" />
+                    <EditText android:id="@+id/etAddress" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginStart="12dp" android:background="@android:color/transparent" android:gravity="top" android:hint="Enter home or shipping address..." android:inputType="textMultiLine" android:textSize="15sp" android:textColor="#333333"/>
+                </LinearLayout>
+                <!-- Save Button -->
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnSaveCustomer" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="40dp" android:text="Save Customer" android:textAllCaps="false" android:backgroundTint="@color/red_dark" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" app:icon="@drawable/ic_customer" app:iconGravity="textStart" app:iconTint="#FFFFFF" app:cornerRadius="12dp" app:elevation="4dp"/>
+            </LinearLayout>
+        </ScrollView>
 
-        <ImageView
-            android:id="@+id/btnMore"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:src="@android:drawable/ic_menu_more"
-            app:layout_constraintBottom_toBottomOf="@id/btnBackCard"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnBackCard"
-            app:tint="#FFFFFF" />
+        <include layout="@layout/reusable_bottom_navigation" android:id="@+id/mainBottomNavigation" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topBar">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
-
-            <!-- Customer Name -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CUSTOMER NAME"
-                android:textColor="#9CA3AF"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.05"/>
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_input_gray"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_menu_myplaces"
-                    app:tint="#9CA3AF" />
-                <EditText
-                    android:id="@+id/etCustomerName"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:background="@android:color/transparent"
-                    android:hint="e.g. Kieran Pratt"
-                    android:inputType="textPersonName"
-                    android:textSize="15sp"
-                    android:textColor="#333333"/>
-            </LinearLayout>
-
-            <!-- Mobile Number -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="MOBILE NUMBER"
-                android:textColor="#9CA3AF"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.05"/>
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_input_gray"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_menu_call"
-                    app:tint="#9CA3AF" />
-                <EditText
-                    android:id="@+id/etMobileNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:background="@android:color/transparent"
-                    android:hint="+1 (555) 000-0000"
-                    android:inputType="phone"
-                    android:textSize="15sp"
-                    android:textColor="#333333"/>
-            </LinearLayout>
-
-            <!-- Address -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="ADDRESS"
-                    android:textColor="#9CA3AF"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Optional"
-                    android:textColor="#D1D5DB"
-                    android:textSize="11sp" />
-            </LinearLayout>
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_input_gray"
-                android:padding="16dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_dialog_map"
-                    app:tint="#9CA3AF" />
-                <EditText
-                    android:id="@+id/etAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:background="@android:color/transparent"
-                    android:gravity="top"
-                    android:hint="Enter home or shipping address..."
-                    android:inputType="textMultiLine"
-                    android:textSize="15sp"
-                    android:textColor="#333333"/>
-            </LinearLayout>
-
-            <!-- Save Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSaveCustomer"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="40dp"
-                android:text="Save Customer"
-                android:textAllCaps="false"
-                android:backgroundTint="#D32F2F"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:icon="@drawable/ic_customer"
-                app:iconGravity="textStart"
-                app:iconTint="#FFFFFF"
-                app:cornerRadius="12dp"
-                app:elevation="4dp"/>
-
-            <!-- Add Measurements Secondary Button -->
-
-        </LinearLayout>
-    </ScrollView>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

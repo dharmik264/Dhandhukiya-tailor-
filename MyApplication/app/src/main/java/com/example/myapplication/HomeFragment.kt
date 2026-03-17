@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -41,16 +42,17 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.activity_home, container, false)
+
+        // Fragments shouldn't show the internal navbar as MainActivity provides one
+        view.findViewById<View>(R.id.mainBottomNavigation)?.visibility = View.GONE
         
-        // Hide the navigation bar because it's now in the activity
-        view.findViewById<View>(R.id.bottomNavigation)?.visibility = View.GONE
 
         tvCustomerListTitle = view.findViewById(R.id.tvCustomerListTitle)
         rvCustomers = view.findViewById(R.id.rvCustomers)
         etSearch = view.findViewById(R.id.etSearch)
 
         val currentContext = context ?: return view
-        rvCustomers.layoutManager = LinearLayoutManager(currentContext)
+        ResponsiveUtils.setupResponsiveRecyclerView(currentContext, rvCustomers, 300) // 300dp per customer item in grid
         adapter = CustomerAdapter(emptyList(), { customer ->
             context?.let { ctx ->
                 val intent = Intent(ctx, CustomerProfileActivity::class.java)
@@ -144,21 +146,46 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupAlphabetFilters(view: View) {
-        view.findViewById<Button>(R.id.btnAll)?.setOnClickListener {
+        val layoutAlphabetBar = view.findViewById<ViewGroup>(R.id.layoutAlphabetBar) ?: return
+        
+        view.findViewById<View>(R.id.btnAll)?.setOnClickListener {
             etSearch.text?.clear()
             adapter.updateData(allCustomers)
+            tvCustomerListTitle.text = "All Customers"
         }
+
+        val alphabetList = ('A'..'Z').toList()
         val currentContext = context ?: return
-        val alphabets = 'A'..'Z'
-        alphabets.forEach { char ->
-            val resId = resources.getIdentifier("btn$char", "id", currentContext.packageName)
-            if (resId != 0) {
-                view.findViewById<Button>(resId)?.setOnClickListener {
+
+        alphabetList.forEach { char ->
+            val textView = TextView(currentContext).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    (36 * resources.displayMetrics.density).toInt(),
+                    (36 * resources.displayMetrics.density).toInt()
+                ).apply {
+                    marginEnd = (8 * resources.displayMetrics.density).toInt()
+                }
+                text = char.toString()
+                textSize = 14f
+                gravity = android.view.Gravity.CENTER
+                setTextColor(resources.getColor(R.color.on_surface_variant, null))
+                
+                setOnClickListener {
                     val filtered = allCustomers.filter { it.name.startsWith(char, ignoreCase = true) }
                     adapter.updateData(filtered)
                     tvCustomerListTitle.text = "Starting with $char (${filtered.size})"
+                    
+                    // Highlight selected
+                    for (i in 0 until layoutAlphabetBar.childCount) {
+                        val child = layoutAlphabetBar.getChildAt(i) as? TextView
+                        child?.setTextColor(resources.getColor(R.color.on_surface_variant, null))
+                        child?.setBackgroundResource(0)
+                    }
+                    setTextColor(resources.getColor(android.R.color.white, null))
+                    setBackgroundResource(R.drawable.bg_circle_red)
                 }
             }
+            layoutAlphabetBar.addView(textView)
         }
     }
 

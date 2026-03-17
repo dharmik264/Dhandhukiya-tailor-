@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Overrides for tablet/wide screens -->
+    <dimen name="screen_padding">32dp</dimen>
+    <dimen name="card_margin">12dp</dimen>
+    <dimen name="header_height">180dp</dimen>
+    <dimen name="text_size_header">24sp</dimen>
+    <dimen name="text_size_subheader">18sp</dimen>
+    <dimen name="text_size_body">16sp</dimen>
+    <dimen name="max_content_width">800dp</dimen>    <!-- Center content on tablets -->
+</resources>

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
@@ -128,6 +129,8 @@ class AddMeasurementsActivity : AppCompatActivity() {
         btnSaveMeasurements.setOnClickListener {
             saveAndSyncData()
         }
+
+        findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.setupGlobalNavigation(this, R.id.nav_customers)
     }
 
     private fun fetchMeasurementsForEdit(type: String) {

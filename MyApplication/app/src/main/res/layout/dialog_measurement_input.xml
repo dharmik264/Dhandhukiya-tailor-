@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Inches"
-            android:textColor="@color/red"
+            android:textColor="@color/red_dark"
             android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -63,8 +63,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    app:boxStrokeColor="@color/red"
-                    app:hintTextColor="@color/red">
+                    app:boxStrokeColor="@color/red_dark"
+                    app:hintTextColor="@color/red_dark">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSheet1"
                         android:layout_width="match_parent"
@@ -79,8 +79,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    app:boxStrokeColor="@color/red"
-                    app:hintTextColor="@color/red">
+                    app:boxStrokeColor="@color/red_dark"
+                    app:hintTextColor="@color/red_dark">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSheet2"
                         android:layout_width="match_parent"
@@ -96,8 +96,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    app:boxStrokeColor="@color/red"
-                    app:hintTextColor="@color/red">
+                    app:boxStrokeColor="@color/red_dark"
+                    app:hintTextColor="@color/red_dark">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSheet3"
                         android:layout_width="match_parent"
@@ -112,8 +112,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    app:boxStrokeColor="@color/red"
-                    app:hintTextColor="@color/red">
+                    app:boxStrokeColor="@color/red_dark"
+                    app:hintTextColor="@color/red_dark">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSheet4"
                         android:layout_width="match_parent"
@@ -129,8 +129,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    app:boxStrokeColor="@color/red"
-                    app:hintTextColor="@color/red">
+                    app:boxStrokeColor="@color/red_dark"
+                    app:hintTextColor="@color/red_dark">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSheet5"
                         android:layout_width="match_parent"
@@ -145,8 +145,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    app:boxStrokeColor="@color/red"
-                    app:hintTextColor="@color/red">
+                    app:boxStrokeColor="@color/red_dark"
+                    app:hintTextColor="@color/red_dark">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSheet6"
                         android:layout_width="match_parent"
@@ -162,8 +162,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    app:boxStrokeColor="@color/red"
-                    app:hintTextColor="@color/red">
+                    app:boxStrokeColor="@color/red_dark"
+                    app:hintTextColor="@color/red_dark">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSheet7"
                         android:layout_width="match_parent"
@@ -178,8 +178,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
-                    app:boxStrokeColor="@color/red"
-                    app:hintTextColor="@color/red">
+                    app:boxStrokeColor="@color/red_dark"
+                    app:hintTextColor="@color/red_dark">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSheet8"
                         android:layout_width="match_parent"
@@ -217,7 +217,7 @@
         android:layout_height="56dp"
         android:layout_marginTop="20dp"
         android:text="Save Measurement"
-        android:backgroundTint="#D32F2F"
+        android:backgroundTint="@color/red_dark"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:cornerRadius="12dp" />

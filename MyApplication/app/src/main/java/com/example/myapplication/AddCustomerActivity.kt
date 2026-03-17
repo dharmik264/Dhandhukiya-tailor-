@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -37,11 +38,13 @@ class AddCustomerActivity : AppCompatActivity() {
             etMobileNumber.setText(existingMobile)
         }
 
-        btnBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        findViewById<androidx.cardview.widget.CardView>(R.id.btnBackCard).setOnClickListener {
+            animateButtonClick(it)
+            it.postDelayed({ onBackPressedDispatcher.onBackPressed() }, 150)
         }
 
         btnSaveCustomer.setOnClickListener {
+            animateButtonClick(it)
             val name = etCustomerName.text.toString().trim()
             val mobile = etMobileNumber.text.toString().trim()
             val address = etAddress.text.toString().trim()
@@ -77,6 +80,27 @@ class AddCustomerActivity : AppCompatActivity() {
                     }
                 })
         }
+
+        findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.setupGlobalNavigation(this, R.id.nav_customers)
+    }
+
+    private fun animateButtonClick(view: View) {
+        view.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+        view.animate().cancel()
+        view.animate()
+            .scaleX(0.9f)
+            .scaleY(0.9f)
+            .setDuration(120)
+            .setInterpolator(android.view.animation.DecelerateInterpolator())
+            .withEndAction {
+                view.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(120)
+                    .setInterpolator(android.view.animation.AccelerateInterpolator())
+                    .start()
+            }
+            .start()
     }
 
     private fun navigateToMeasurements(name: String, mobile: String, id: Int) {

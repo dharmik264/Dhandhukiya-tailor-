@@ -61,7 +61,7 @@ class CheckOrderActivity : AppCompatActivity() {
         }
         rvCheckOrders.adapter = adapter
 
-        val navBar = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        val navBar = findViewById<BottomNavigationView>(R.id.mainBottomNavigation)
         navBar?.setupGlobalNavigation(this, R.id.nav_reports)
 
         findViewById<ImageView>(R.id.btnBack)?.setOnClickListener {
@@ -73,7 +73,7 @@ class CheckOrderActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.selectedItemId = R.id.nav_reports
+        findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.selectedItemId = R.id.nav_reports
         loadAllOrders()
     }
 

@@ -36,12 +36,12 @@
             android:layout_height="60dp"
             android:layout_columnWeight="1"
             android:text="Shirt"
-            android:textColor="#D32F2F"
-            app:strokeColor="#D32F2F"
+            android:textColor="@color/red_dark"
+            app:strokeColor="@color/red_dark"
             app:cornerRadius="12dp"
             app:icon="@drawable/frame"
             app:iconPadding="8dp"
-            app:iconTint="#D32F2F"/>
+            app:iconTint="@color/red_dark"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPickPant"
@@ -50,8 +50,8 @@
             android:layout_height="60dp"
             android:layout_columnWeight="1"
             android:text="Pant"
-            android:textColor="#D32F2F"
-            app:strokeColor="#D32F2F"
+            android:textColor="@color/red_dark"
+            app:strokeColor="@color/red_dark"
             app:cornerRadius="12dp"
             app:icon="@drawable/order"
             app:iconPadding="8dp"

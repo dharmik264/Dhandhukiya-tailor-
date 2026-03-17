@@ -7,7 +7,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -58,7 +60,7 @@ class HomeActivity : AppCompatActivity() {
 
 
 
-        val navBar = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        val navBar = findViewById<BottomNavigationView>(R.id.mainBottomNavigation)
         navBar?.setupGlobalNavigation(this, R.id.nav_home)
 
         setupAlphabetFilters()
@@ -73,7 +75,7 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
 
         refreshAllData()
-        findViewById<BottomNavigationView>(R.id.bottomNavigation)?.selectedItemId = R.id.nav_home
+        findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.selectedItemId = R.id.nav_home
     }
 
     private fun setupSearch() {
@@ -143,11 +145,46 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupAlphabetFilters() {
-        findViewById<Button>(R.id.btnAll)?.setOnClickListener {
+        val layoutAlphabetBar = findViewById<ViewGroup>(R.id.layoutAlphabetBar) ?: return
+        
+        findViewById<View>(R.id.btnAll)?.setOnClickListener {
             etSearch.text?.clear()
             adapter.updateData(allCustomers)
+            tvCustomerListTitle.text = "All Customers"
         }
-        // ... (rest of alphabet filter logic)
+
+        val alphabetList = ('A'..'Z').toList()
+
+        alphabetList.forEach { char ->
+            val textView = TextView(this).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    (36 * resources.displayMetrics.density).toInt(),
+                    (36 * resources.displayMetrics.density).toInt()
+                ).apply {
+                    marginEnd = (8 * resources.displayMetrics.density).toInt()
+                }
+                text = char.toString()
+                textSize = 14f
+                gravity = android.view.Gravity.CENTER
+                setTextColor(resources.getColor(R.color.on_surface_variant, null))
+                
+                setOnClickListener {
+                    val filtered = allCustomers.filter { it.name.startsWith(char, ignoreCase = true) }
+                    adapter.updateData(filtered)
+                    tvCustomerListTitle.text = "Starting with $char (${filtered.size})"
+                    
+                    // Highlight selected
+                    for (i in 0 until layoutAlphabetBar.childCount) {
+                        val child = layoutAlphabetBar.getChildAt(i) as? TextView
+                        child?.setTextColor(resources.getColor(R.color.on_surface_variant, null))
+                        child?.setBackgroundResource(0)
+                    }
+                    setTextColor(resources.getColor(android.R.color.white, null))
+                    setBackgroundResource(R.drawable.bg_circle_red)
+                }
+            }
+            layoutAlphabetBar.addView(textView)
+        }
     }
 
     private fun showDeleteConfirmation(mobile: String) {

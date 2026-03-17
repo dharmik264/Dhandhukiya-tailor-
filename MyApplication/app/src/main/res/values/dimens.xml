@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="dp_16">16dp</dimen>
-    <dimen name="dp_18">18dp</dimen>
-    <dimen name="dp_20">20dp</dimen>
+    <!-- Default margins and paddings for phone -->
+    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
+    <dimen name="header_height">140dp</dimen>
+    <dimen name="text_size_header">18sp</dimen>
+    <dimen name="text_size_subheader">14sp</dimen>
+    <dimen name="text_size_body">12sp</dimen>
+    <dimen name="max_content_width">10000dp</dimen>    <!-- Disables max width by default -->
 </resources>

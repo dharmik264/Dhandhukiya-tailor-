@@ -9,7 +9,7 @@
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
     app:strokeWidth="0dp"
-    app:cardBackgroundColor="@android:color/white">
+    app:cardBackgroundColor="@color/card_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:id="@+id/statusStrip"
             android:layout_width="4dp"
             android:layout_height="0dp"
-            android:background="#D32F2F"
+            android:background="@color/red_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="JS"
-                android:textColor="#D32F2F"
+                android:textColor="@color/red_dark"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </FrameLayout>
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="James Smith"
-                android:textColor="@android:color/black"
+                android:textColor="@color/on_surface"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="+1 234 567 890"
-                android:textColor="#666666"
+                android:textColor="@color/on_surface_variant"
                 android:textSize="13sp" />
 
             <TextView
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="OCT 24, 2023"
-                android:textColor="#9CA3AF"
+                android:textColor="@color/on_surface_variant"
                 android:textSize="11sp"
                 android:textAllCaps="true" />
         </LinearLayout>
@@ -111,11 +111,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_badge_rounded"
-                android:backgroundTint="#F3F4F6"
+                android:backgroundTint="@color/info_bg"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="2dp"
                 android:text="SUIT"
-                android:textColor="#9CA3AF"
+                android:textColor="@color/on_surface_variant"
                 android:textSize="10sp"
                 android:textStyle="bold" />
 
@@ -126,11 +126,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_badge_rounded"
-                android:backgroundTint="#FEE2E2"
+                android:backgroundTint="@color/error_bg"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="2dp"
                 android:text="PENDING"
-                android:textColor="#D32F2F"
+                android:textColor="@color/error_text"
                 android:textSize="10sp"
                 android:textStyle="bold" />
         </LinearLayout>

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,16 +41,20 @@ class AdminProfileActivity : AppCompatActivity() {
         tvProfileMobile.text = userMobile
 
         btnBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            animateButtonClick(it)
+            it.postDelayed({ onBackPressedDispatcher.onBackPressed() }, 150)
         }
 
         btnLogout.setOnClickListener {
-            // Logout logic
-            sharedPref.edit().clear().apply()
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
+            animateButtonClick(it)
+            it.postDelayed({
+                // Logout logic
+                sharedPref.edit().clear().apply()
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }, 150)
         }
 
         val btnThemeToggle = findViewById<MaterialButton>(R.id.btnThemeToggle)
@@ -58,22 +63,45 @@ class AdminProfileActivity : AppCompatActivity() {
         btnThemeToggle.text = if (isDarkMode) "Switch to Light Mode" else "Switch to Dark Mode"
         
         btnThemeToggle.setOnClickListener {
+            animateButtonClick(it)
             val currentlyDark = sharedPref.getBoolean("IS_DARK_MODE", false)
             val nextMode = !currentlyDark
             
             sharedPref.edit().putBoolean("IS_DARK_MODE", nextMode).apply()
             
-            if (nextMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            
-            // Recreate activity to apply theme change
-            recreate()
+            it.postDelayed({
+                if (nextMode) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+                recreate()
+            }, 150)
         }
 
         checkAppStatus()
+
+        // Setup Bottom Navigation
+        findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.setupGlobalNavigation(this, R.id.nav_home)
+    }
+
+    private fun animateButtonClick(view: android.view.View) {
+        view.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+        view.animate().cancel()
+        view.animate()
+            .scaleX(0.9f)
+            .scaleY(0.9f)
+            .setDuration(120)
+            .setInterpolator(android.view.animation.DecelerateInterpolator())
+            .withEndAction {
+                view.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(120)
+                    .setInterpolator(android.view.animation.AccelerateInterpolator())
+                    .start()
+            }
+            .start()
     }
 
     private fun checkAppStatus() {

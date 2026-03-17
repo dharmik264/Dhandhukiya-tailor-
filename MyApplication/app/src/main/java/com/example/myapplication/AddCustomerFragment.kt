@@ -22,6 +22,9 @@ class AddCustomerFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.add_customer, container, false)
 
+        // Fragments shouldn't show the internal navbar as MainActivity provides one
+        view.findViewById<View>(R.id.mainBottomNavigation)?.visibility = View.GONE
+
         val etCustomerName = view.findViewById<EditText>(R.id.etCustomerName)
         val etMobileNumber = view.findViewById<EditText>(R.id.etMobileNumber)
         val etAddress = view.findViewById<EditText>(R.id.etAddress)

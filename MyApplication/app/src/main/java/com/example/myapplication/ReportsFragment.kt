@@ -29,9 +29,10 @@ class ReportsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.activity_dashboard, container, false)
+
+        // Fragments shouldn't show the internal navbar as MainActivity provides one
+        view.findViewById<View>(R.id.mainBottomNavigation)?.visibility = View.GONE
         
-        // Hide the navigation bar because it's now in the activity
-        view.findViewById<View>(R.id.bottomNavigation)?.visibility = View.GONE
 
         // Handle Logo Click as Back (Navigate to Home tab)
         view.findViewById<android.widget.ImageView>(R.id.ivAppLogo)?.setOnClickListener {
