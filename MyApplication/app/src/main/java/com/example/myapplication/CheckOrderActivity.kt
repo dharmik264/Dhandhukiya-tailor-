@@ -21,12 +21,12 @@ class CheckOrderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_order)
 
-        rvCheckOrders = findViewById(R.id.rvCheckOrders)
+        rvCheckOrders = findViewById(R.id.rvCheckOrders) ?: return
         rvCheckOrders.layoutManager = LinearLayoutManager(this)
-        tvTitle = findViewById(R.id.tvCheckOrderTitle)
+        tvTitle = findViewById(R.id.tvCheckOrderTitle) ?: return
 
         filterStatus = intent.getStringExtra("ORDER_STATUS")
-        val chipGroup = findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupFilters)
+        val chipGroup = findViewById<com.google.android.material.chip.ChipGroup>(R.id.chipGroupFilters) ?: return
 
         // Set initial chip based on intent
         when (filterStatus) {

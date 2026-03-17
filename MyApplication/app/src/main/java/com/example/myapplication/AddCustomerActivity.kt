@@ -22,23 +22,35 @@ class AddCustomerActivity : AppCompatActivity() {
         setContentView(R.layout.add_customer)
 
 
-        val etCustomerName = findViewById<EditText>(R.id.etCustomerName)
-        val etMobileNumber = findViewById<EditText>(R.id.etMobileNumber)
-        val etAddress = findViewById<EditText>(R.id.etAddress)
-        val btnSaveCustomer = findViewById<Button>(R.id.btnSaveCustomer)
-        val btnBack = findViewById<ImageView>(R.id.btnBack)
-        val tvTopTitle = findViewById<android.widget.TextView>(R.id.tvTopTitle)
+        val etCustomerName = findViewById<EditText>(R.id.etCustomerName) ?: return
+        val etMobileNumber = findViewById<EditText>(R.id.etMobileNumber) ?: return
+        val etAddress = findViewById<EditText>(R.id.etAddress) ?: return
+        val btnSaveCustomer = findViewById<Button>(R.id.btnSaveCustomer) ?: return
+        val btnBack = findViewById<ImageView>(R.id.btnBack) ?: return
+        val tvTopTitle = findViewById<android.widget.TextView>(R.id.tvTopTitle) ?: return
 
         val isEditMode = intent.getBooleanExtra("IS_EDIT_MODE", false)
         if (isEditMode) {
-            tvTopTitle?.text = "Edit Customer"
+            tvTopTitle.text = "Edit Customer"
             val existingName = intent.getStringExtra("CUSTOMER_NAME") ?: ""
             val existingMobile = intent.getStringExtra("CUSTOMER_MOBILE") ?: ""
             etCustomerName.setText(existingName)
             etMobileNumber.setText(existingMobile)
+            
+            // Also fetch the full details to get the address
+            RetrofitClient.instance.getCustomerDetails(existingMobile).enqueue(object : Callback<CustomerResponse> {
+                override fun onResponse(call: Call<CustomerResponse>, response: Response<CustomerResponse>) {
+                    if (response.isSuccessful) {
+                        etAddress.setText(response.body()?.address ?: "")
+                    }
+                }
+                override fun onFailure(call: Call<CustomerResponse>, t: Throwable) {
+                    Log.e("EDIT_FETCH", "Failed to fetch address: ${t.message}")
+                }
+            })
         }
 
-        findViewById<androidx.cardview.widget.CardView>(R.id.btnBackCard).setOnClickListener {
+        findViewById<androidx.cardview.widget.CardView>(R.id.btnBackCard)?.setOnClickListener {
             animateButtonClick(it)
             it.postDelayed({ onBackPressedDispatcher.onBackPressed() }, 150)
         }
@@ -68,7 +80,7 @@ class AddCustomerActivity : AppCompatActivity() {
                         btnSaveCustomer.isEnabled = true
                         if (response.isSuccessful) {
                             Toast.makeText(this@AddCustomerActivity, "Customer Saved!", Toast.LENGTH_SHORT).show()
-                            navigateToMeasurements(name, mobile, -1)
+                            navigateToMeasurements(name, mobile, -1, isEditMode)
                         } else {
                             Toast.makeText(this@AddCustomerActivity, "Server Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                         }
@@ -103,11 +115,12 @@ class AddCustomerActivity : AppCompatActivity() {
             .start()
     }
 
-    private fun navigateToMeasurements(name: String, mobile: String, id: Int) {
+    private fun navigateToMeasurements(name: String, mobile: String, id: Int, isEdit: Boolean) {
         val intent = Intent(this@AddCustomerActivity, AddMeasurementsActivity::class.java)
         intent.putExtra("CUSTOMER_NAME", name)
         intent.putExtra("CUSTOMER_MOBILE", mobile)
-        intent.putExtra("CUSTOMER_ID", id) // Pass the actual ID from DB
+        intent.putExtra("CUSTOMER_ID", id)
+        intent.putExtra("IS_EDIT_MODE", isEdit)
         startActivity(intent)
         finish()
     }

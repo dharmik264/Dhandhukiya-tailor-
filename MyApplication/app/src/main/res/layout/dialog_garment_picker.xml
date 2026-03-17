@@ -1,128 +1,352 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:background="@drawable/bg_white_rounded_top">
+    android:background="@drawable/bg_white_rounded_top"
+    android:padding="20dp">
 
+    <!-- Handle bar -->
     <View
         android:layout_width="40dp"
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp"
-        android:background="#DDDDDD" />
+        android:background="#E5E7EB"
+        android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Header -->
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Garment Type"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="?attr/colorOnSurface"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="24dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Garment Type"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#111827" />
+
+        <ImageView
+            android:id="@+id/btnCloseSheet"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:padding="6dp"
+            android:background="@drawable/bg_circle_light_gray"
+            app:tint="#6B7280" />
+    </RelativeLayout>
+
+    <!-- Garment Grid -->
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="2"
-        android:useDefaultMargins="true">
+        android:rowCount="4"
+        android:alignmentMode="alignMargins">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPickShirt"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <!-- Shirt -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPickShirt"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:text="Shirt"
-            android:textColor="@color/red_dark"
-            app:strokeColor="@color/red_dark"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/frame"
-            app:iconPadding="8dp"
-            app:iconTint="@color/red_dark"/>
+            android:layout_margin="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#F3F4F6">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_logo"
+                    android:background="@drawable/bg_circle_red_light"
+                    app:tint="#D32F2F"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shirt"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#4B5563"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPickPant"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <!-- Pant (Selected State Example) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPickPant"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:text="Pant"
-            android:textColor="@color/red_dark"
-            app:strokeColor="@color/red_dark"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/order"
-            app:iconPadding="8dp"
-            app:iconTint="#D32F2F"/>
+            android:layout_margin="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="#D32F2F">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/order"
+                    android:background="@drawable/bg_circle_red"
+                    app:tint="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pant"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#D32F2F"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPickKoti"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <!-- Koti -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPickKoti"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:text="Koti"
-            android:textColor="#D32F2F"
-            app:strokeColor="#D32F2F"
-            app:cornerRadius="12dp" />
+            android:layout_margin="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#F3F4F6">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_scissors"
+                    android:background="@drawable/bg_circle_red_light"
+                    app:tint="#D32F2F"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Koti"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#4B5563"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPickSuit"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <!-- Suit -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPickSuit"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:text="Suit"
-            android:textColor="#D32F2F"
-            app:strokeColor="#D32F2F"
-            app:cornerRadius="12dp" />
+            android:layout_margin="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#F3F4F6">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_logo"
+                    android:background="@drawable/bg_circle_red_light"
+                    app:tint="#D32F2F"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Suit"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#4B5563"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPickJabbho"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <!-- Jabbho -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPickJabbho"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:text="Jabbho"
-            android:textColor="#D32F2F"
-            app:strokeColor="#D32F2F"
-            app:cornerRadius="12dp" />
+            android:layout_margin="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#F3F4F6">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_logo"
+                    android:background="@drawable/bg_circle_red_light"
+                    app:tint="#D32F2F"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jabbho"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#4B5563"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPickLehngho"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <!-- Lehngo -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPickLehngo"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:text="Lehngho"
-            android:textColor="#D32F2F"
-            app:strokeColor="#D32F2F"
-            app:cornerRadius="12dp" />
+            android:layout_margin="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#F3F4F6">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_logo"
+                    android:background="@drawable/bg_circle_red_light"
+                    app:tint="#D32F2F"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lehngo"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#4B5563"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPickSafari"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <!-- Safari -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPickSafari"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:text="Safari"
-            android:textColor="#D32F2F"
-            app:strokeColor="#D32F2F"
-            app:cornerRadius="12dp" />
+            android:layout_margin="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#F3F4F6">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_logo"
+                    android:background="@drawable/bg_circle_red_light"
+                    app:tint="#D32F2F"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Safari"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#4B5563"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPickJodhpuri"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <!-- Jodhpuri -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPickJodhpuri"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:text="Jodhpuri"
-            android:textColor="#D32F2F"
-            app:strokeColor="#D32F2F"
-            app:cornerRadius="12dp" />
+            android:layout_margin="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#F3F4F6">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_logo"
+                    android:background="@drawable/bg_circle_red_light"
+                    app:tint="#D32F2F"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jodhpuri"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#4B5563"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </GridLayout>
+
+    <!-- Footer Actions -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnContinueSelection"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:text="Continue with Selection"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:backgroundTint="#D32F2F"
+        app:cornerRadius="12dp" />
+
+    <TextView
+        android:id="@+id/btnSkipSelection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Skip for now"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="#9CA3AF"
+        android:textSize="14sp"
+        android:clickable="true"
+        android:focusable="true"/>
 
 </LinearLayout>

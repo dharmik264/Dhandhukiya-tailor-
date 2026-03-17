@@ -27,10 +27,10 @@ class AdminProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_profile)
 
-        val btnBack = findViewById<ImageView>(R.id.btnBack)
-        val tvProfileName = findViewById<TextView>(R.id.tvProfileName)
-        val tvProfileMobile = findViewById<TextView>(R.id.tvProfileMobile)
-        val btnLogout = findViewById<MaterialButton>(R.id.btnProfileLogout)
+        val btnBack = findViewById<ImageView>(R.id.btnBack) ?: return
+        val tvProfileName = findViewById<TextView>(R.id.tvProfileName) ?: return
+        val tvProfileMobile = findViewById<TextView>(R.id.tvProfileMobile) ?: return
+        val btnLogout = findViewById<MaterialButton>(R.id.btnProfileLogout) ?: return
 
         // Load data from SharedPreferences
         val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
@@ -57,7 +57,7 @@ class AdminProfileActivity : AppCompatActivity() {
             }, 150)
         }
 
-        val btnThemeToggle = findViewById<MaterialButton>(R.id.btnThemeToggle)
+        val btnThemeToggle = findViewById<MaterialButton>(R.id.btnThemeToggle) ?: return
         val isDarkMode = sharedPref.getBoolean("IS_DARK_MODE", false)
         
         btnThemeToggle.text = if (isDarkMode) "Switch to Light Mode" else "Switch to Dark Mode"

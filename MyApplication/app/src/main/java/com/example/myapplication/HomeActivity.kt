@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -166,7 +167,7 @@ class HomeActivity : AppCompatActivity() {
                 text = char.toString()
                 textSize = 14f
                 gravity = android.view.Gravity.CENTER
-                setTextColor(resources.getColor(R.color.on_surface_variant, null))
+                setTextColor(ContextCompat.getColor(this@HomeActivity, R.color.on_surface_variant))
                 
                 setOnClickListener {
                     val filtered = allCustomers.filter { it.name.startsWith(char, ignoreCase = true) }
@@ -176,10 +177,10 @@ class HomeActivity : AppCompatActivity() {
                     // Highlight selected
                     for (i in 0 until layoutAlphabetBar.childCount) {
                         val child = layoutAlphabetBar.getChildAt(i) as? TextView
-                        child?.setTextColor(resources.getColor(R.color.on_surface_variant, null))
+                        child?.setTextColor(ContextCompat.getColor(this@HomeActivity, R.color.on_surface_variant))
                         child?.setBackgroundResource(0)
                     }
-                    setTextColor(resources.getColor(android.R.color.white, null))
+                    setTextColor(ContextCompat.getColor(this@HomeActivity, android.R.color.white))
                     setBackgroundResource(R.drawable.bg_circle_red)
                 }
             }

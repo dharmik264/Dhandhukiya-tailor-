@@ -34,7 +34,7 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         // Setup Recent Orders RecyclerView
-        val rvRecentOrders = findViewById<RecyclerView>(R.id.rvRecentOrders)
+        val rvRecentOrders = findViewById<RecyclerView>(R.id.rvRecentOrders) ?: return
         ResponsiveUtils.setupResponsiveRecyclerView(this, rvRecentOrders, 350) // 350dp for dashboard items
         recentOrdersAdapter = CheckOrderAdapter(emptyList()) { order ->
             val intent = Intent(this, CustomerProfileActivity::class.java)
