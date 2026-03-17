@@ -167,7 +167,7 @@ class AddMeasurementsActivity : AppCompatActivity() {
             }
             "Shirt", "Jabbho" -> {
                 tilLength?.hint = "Length"; tilChest?.hint = "Chest"
-                tilWaist?.hint = "Waist"; tilCollar?.hint = "Collar"
+                tilWaist?.hint = "Waist"; tilCollar?.hint = if (garmentType == "Jabbho") "Neck" else "Collar"
                 tilShoulder?.hint = "Shoulder"; tilSleeve?.hint = "Sleeve"
                 
                 if (garmentType == "Jabbho") tilWaist?.visibility = View.GONE
@@ -178,7 +178,7 @@ class AddMeasurementsActivity : AppCompatActivity() {
                 tilLength?.hint = "Length"; tilChest?.hint = "Chest"
                 tilWaist?.hint = "Waist"; tilCollar?.hint = "Collar"
                 tilShoulder?.hint = "Shoulder"; tilSleeve?.hint = "Sleeve"
-                tilHip?.hint = "Hip"; tilRise?.hint = "Rise"
+                tilHip?.hint = "Hip"; tilRise?.hint = if (garmentType == "Safari") "Inseam" else "Rise"
                 
                 if (garmentType == "Suit") {
                     tilHip?.visibility = View.GONE

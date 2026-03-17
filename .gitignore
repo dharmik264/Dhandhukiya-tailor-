@@ -1,0 +1,22 @@
+# Android
+.gradle/
+build/
+*.iml
+.idea/
+local.properties
+.DS_Store
+*.log
+capture/
+
+# Backend
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+db.sqlite3
+/static/
+
+# Temporary files
+*.txt
+.git_bak/
+.antigravityignore

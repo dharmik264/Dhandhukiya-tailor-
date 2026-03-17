@@ -1,129 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F8F9FA">
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8F9FA">
 
     <!-- Top Bar -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="#D32F2F"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/topBar" android:layout_width="match_parent" android:layout_height="110dp" android:background="#D32F2F" app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnBackCard"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <ImageView
-                android:id="@+id/btnBack"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="12dp"
-                android:src="@drawable/ic_back_arrow"
-                app:tint="#333333" />
+        <com.google.android.material.card.MaterialCardView android:id="@+id/btnBackCard" android:layout_width="44dp" android:layout_height="44dp" android:layout_marginStart="16dp" android:layout_marginTop="16dp" app:cardCornerRadius="12dp" app:cardElevation="0dp" app:cardBackgroundColor="#FFFFFF" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+            <ImageView android:id="@+id/btnBack" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="12dp" android:src="@drawable/ic_back_arrow" app:tint="#333333" />
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Customer Details"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBackCard"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnBackCard" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Customer Details" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@id/btnBackCard" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/btnBackCard" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@id/btnNewOrder"
-        app:layout_constraintTop_toBottomOf="@id/topBar">
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:fillViewport="true" app:layout_constraintBottom_toTopOf="@id/btnNewOrder" app:layout_constraintTop_toBottomOf="@id/topBar">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="16dp" android:paddingBottom="24dp">
 
             <!-- Profile Info Card (Mapped to cardGarmentMain in code for logic purposes) -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardGarmentMain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:strokeWidth="0dp"
-                app:cardBackgroundColor="@android:color/white">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardGarmentMain" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="-20dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+                <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
 
-                    <FrameLayout
-                        android:id="@+id/initialsContainer"
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_circle_black"
-                            android:backgroundTint="#FEE2E2" />
-                        <TextView
-                            android:id="@+id/tvInitials"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="JD"
-                            android:textColor="#D32F2F"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
+                    <FrameLayout android:id="@+id/initialsContainer" android:layout_width="72dp" android:layout_height="72dp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent">
+                        <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_circle_black" android:backgroundTint="#FEE2E2" />
+                        <TextView android:id="@+id/tvInitials" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="JD" android:textColor="#D32F2F" android:textSize="22sp" android:textStyle="bold" />
                     </FrameLayout>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical"
-                        app:layout_constraintStart_toEndOf="@id/initialsContainer"
-                        app:layout_constraintEnd_toStartOf="@id/btnEditProfile"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:orientation="vertical" app:layout_constraintStart_toEndOf="@id/initialsContainer" app:layout_constraintEnd_toStartOf="@id/btnEditProfile" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent">
                         <TextView android:id="@+id/tvName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="James Dalton" android:textColor="@android:color/black" android:textSize="19sp" android:textStyle="bold" />
                         <TextView android:id="@+id/tvMobile" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+1 (555) 123-4567" android:textColor="#666666" android:textSize="14sp" android:layout_marginTop="2dp" />
                         <TextView android:id="@+id/tvAddress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="123 Maple St" android:textColor="#666666" android:textSize="13sp" android:layout_marginTop="2dp" />
                         <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Status: Pending" android:textColor="#D32F2F" android:textSize="11sp" android:textStyle="bold" android:paddingHorizontal="10dp" android:paddingVertical="4dp" android:layout_marginTop="8dp" android:background="@drawable/bg_badge_rounded" android:backgroundTint="#FEE2E2"/>
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/btnEditProfile"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:padding="8dp"
-                        android:src="@drawable/pencil_7778162"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:tint="#9CA3AF" />
+                    <ImageView android:id="@+id/btnEditProfile" android:layout_width="36dp" android:layout_height="36dp" android:padding="8dp" android:src="@drawable/pencil_7778162" app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent" app:tint="#9CA3AF" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -144,18 +55,9 @@
             </HorizontalScrollView>
 
             <!-- Measurements Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardMeasurementDisplay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="#E5E7EB"
-                app:cardBackgroundColor="@android:color/white">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardMeasurementDisplay" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" app:cardCornerRadius="16dp" app:cardElevation="2dp" app:strokeWidth="1dp" app:strokeColor="#E5E7EB" app:cardBackgroundColor="@android:color/white">
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                    
+
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="20dp">
                         <TextView android:id="@+id/tvUnifiedGarmentTitle" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Garment Measurements" android:textStyle="bold" android:textColor="@android:color/black" android:textSize="17sp" />
                         <com.google.android.material.button.MaterialButton android:id="@+id/btnEditUnified" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="wrap_content" android:layout_height="36dp" android:text="Edit" android:textColor="#D32F2F" android:backgroundTint="#FEE2E2" app:icon="@android:drawable/ic_menu_edit" app:iconTint="#D32F2F" app:iconSize="16dp" app:cornerRadius="8dp" android:textSize="12sp" android:paddingHorizontal="12dp" android:insetTop="0dp" android:insetBottom="0dp"/>
@@ -163,14 +65,62 @@
 
                     <LinearLayout android:id="@+id/layoutMeasurementsCollapse" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
                         <GridLayout android:id="@+id/displayGrid" android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2">
-                            <LinearLayout android:id="@+id/container1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal"><View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:id="@+id/tvLabel1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 1" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" /><TextView android:id="@+id/tvValue1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/></LinearLayout></LinearLayout>
-                            <LinearLayout android:id="@+id/container2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal"><View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:id="@+id/tvLabel2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 2" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" /><TextView android:id="@+id/tvValue2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/></LinearLayout></LinearLayout>
-                            <LinearLayout android:id="@+id/container3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal"><View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:id="@+id/tvLabel3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 3" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" /><TextView android:id="@+id/tvValue3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/></LinearLayout></LinearLayout>
-                            <LinearLayout android:id="@+id/container4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal"><View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:id="@+id/tvLabel4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 4" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" /><TextView android:id="@+id/tvValue4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/></LinearLayout></LinearLayout>
-                            <LinearLayout android:id="@+id/container5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal"><View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:id="@+id/tvLabel5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 5" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" /><TextView android:id="@+id/tvValue5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/></LinearLayout></LinearLayout>
-                            <LinearLayout android:id="@+id/container6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal"><View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:id="@+id/tvLabel6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 6" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" /><TextView android:id="@+id/tvValue6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/></LinearLayout></LinearLayout>
-                            <LinearLayout android:id="@+id/container7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal"><View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:id="@+id/tvLabel7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 7" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" /><TextView android:id="@+id/tvValue7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/></LinearLayout></LinearLayout>
-                            <LinearLayout android:id="@+id/container8" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal"><View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:id="@+id/tvLabel8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 8" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" /><TextView android:id="@+id/tvValue8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/></LinearLayout></LinearLayout>
+                            <LinearLayout android:id="@+id/container1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 1" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 2" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 3" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 4" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 5" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 6" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 7" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/container8" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 8" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                                </LinearLayout>
+                            </LinearLayout>
                         </GridLayout>
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Notes" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="16dp" android:textSize="14sp"/>
                         <TextView android:id="@+id/tvNotesValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="None" android:textColor="#666666" android:layout_marginTop="4dp" android:textSize="13sp"/>
@@ -187,30 +137,9 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Hidden Input Container (to satisfy til and et references) -->
-    <com.google.android.material.card.MaterialCardView android:id="@+id/cardGarmentInput" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" app:layout_constraintTop_toTopOf="parent">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-            <com.google.android.material.textfield.TextInputLayout android:id="@+id/til1"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et1"/></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout android:id="@+id/til2"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et2"/></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout android:id="@+id/til3"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et3"/></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout android:id="@+id/til4"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et4"/></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout android:id="@+id/til5"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et5"/></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout android:id="@+id/til6"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et6"/></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout android:id="@+id/til7"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et7"/></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout android:id="@+id/til8"><com.google.android.material.textfield.TextInputEditText android:id="@+id/et8"/></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.button.MaterialButton android:id="@+id/btnSaveGarment" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnNewOrder"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_margin="16dp"
-        android:text="+ NEW ORDER"
-        android:backgroundTint="#D32F2F"
-        app:cornerRadius="12dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent" />
+    <com.google.android.material.button.MaterialButton android:id="@+id/btnNewOrder" android:layout_width="match_parent" android:layout_height="56dp" android:layout_margin="16dp" android:text="+ NEW ORDER" android:backgroundTint="#D32F2F" app:cornerRadius="12dp" android:textStyle="bold" app:layout_constraintBottom_toTopOf="@id/mainBottomNavigation" />
+
+    <include layout="@layout/reusable_bottom_navigation" android:id="@+id/mainBottomNavigation" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,6 +58,7 @@ class HomeFragment : Fragment() {
                 val intent = Intent(ctx, CustomerProfileActivity::class.java)
                 intent.putExtra("CUSTOMER_NAME", customer.name)
                 intent.putExtra("CUSTOMER_MOBILE", customer.mobile)
+                intent.putExtra("SELECTED_GARMENT", "Shirt") // Default to Shirt for now
                 startActivity(intent)
             }
         }, { customer ->

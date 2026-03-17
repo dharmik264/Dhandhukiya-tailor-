@@ -37,6 +37,7 @@ class CustomerListActivity : AppCompatActivity() {
             val intent = Intent(this, CustomerProfileActivity::class.java)
             intent.putExtra("CUSTOMER_NAME", customer.name)
             intent.putExtra("CUSTOMER_MOBILE", customer.mobile)
+            intent.putExtra("SELECTED_GARMENT", "Shirt")
             startActivity(intent)
         }, { customer ->
             val intent = Intent(this, AddCustomerActivity::class.java)
