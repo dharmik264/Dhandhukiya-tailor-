@@ -1,6 +1,7 @@
 import json
 from datetime import date
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from openpyxl import Workbook
 
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -438,3 +439,52 @@ def check_update(request):
         'force_update': config.force_update,
         'update_message': config.update_message
     }, status=status.HTTP_200_OK)
+
+
+# ──────────────────────────── BACKUP ────────────────────────────
+
+def export_customers_excel(request):
+    """
+    Exports all customers and their measurements to an Excel file.
+    """
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Customers Backup"
+
+    # Define headers
+    headers = [
+        "Customer Name", "Mobile Number", "Address",
+        "Garment Type", "Length", "Chest", "Waist",
+        "Collar", "Shoulder", "Sleeve", "Hip", "Rise",
+        "Notes", "Status"
+    ]
+    ws.append(headers)
+
+    # Fetch all customers and their measurements
+    customers = Customer.objects.all().prefetch_related('measurements')
+
+    for customer in customers:
+        measurements = customer.measurements.all()
+        if not measurements.exists():
+            # If no measurements, just add customer info
+            ws.append([
+                customer.name, customer.mobile_number, customer.address,
+                "", "", "", "", "", "", "", "", "", "", ""
+            ])
+        else:
+            for m in measurements:
+                ws.append([
+                    customer.name, customer.mobile_number, customer.address,
+                    m.garment_type, m.length, m.chest, m.waist,
+                    m.collar, m.shoulder, m.sleeve, m.hip, m.rise,
+                    m.notes, m.status
+                ])
+
+    # Prepare response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=tailorhub_backup.xlsx'
+
+    wb.save(response)
+    return response
