@@ -10,9 +10,10 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddCustomerFragment : Fragment() {
 
@@ -50,42 +51,51 @@ class AddCustomerFragment : Fragment() {
 
             btnSaveCustomer.isEnabled = false
 
-            val customerData = mapOf(
-                "name" to name,
-                "mobile_number" to mobile,
-                "address" to address
-            )
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    val db = AppDatabase.getDatabase(requireContext())
+                    val customerDao = db.customerDao()
+                    
+                    val newCustomer = Customer(
+                        name = name,
+                        mobileNumber = mobile,
+                        address = address,
+                        isSynced = true, // Set to true for offline mode
+                        updatedAt = System.currentTimeMillis()
+                    )
 
-            RetrofitClient.instance.addCustomer(customerData)
-                .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (!isAdded) return
-                        btnSaveCustomer.isEnabled = true
-                        if (response.isSuccessful) {
-                            context?.let { Toast.makeText(it, "Customer Saved!", Toast.LENGTH_SHORT).show() }
-                            navigateToMeasurements(name, mobile, -1)
-                        } else {
-                            context?.let { Toast.makeText(it, "Server Error: ${response.code()}", Toast.LENGTH_SHORT).show() }
+                    customerDao.insert(newCustomer)
+
+                    withContext(Dispatchers.Main) {
+                        if (isAdded) {
+                            Toast.makeText(context, "Customer Saved!", Toast.LENGTH_SHORT).show()
+                            navigateToMeasurements(name, mobile)
+                            btnSaveCustomer.isEnabled = true
+                            etCustomerName.text.clear()
+                            etMobileNumber.text.clear()
+                            etAddress.text.clear()
                         }
                     }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        if (!isAdded) return
-                        btnSaveCustomer.isEnabled = true
-                        context?.let { Toast.makeText(it, "Network Error", Toast.LENGTH_SHORT).show() }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        if (isAdded) {
+                            btnSaveCustomer.isEnabled = true
+                            Toast.makeText(context, "Error saving: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                })
+                }
+            }
         }
 
         return view
     }
 
-    private fun navigateToMeasurements(name: String, mobile: String, id: Int) {
+    private fun navigateToMeasurements(name: String, mobile: String) {
         context?.let { ctx ->
-            val intent = Intent(ctx, AddMeasurementsActivity::class.java)
-            intent.putExtra("CUSTOMER_NAME", name)
-            intent.putExtra("CUSTOMER_MOBILE", mobile)
-            intent.putExtra("CUSTOMER_ID", id)
+            val intent = Intent(ctx, AddMeasurementsActivity::class.java).apply {
+                putExtra("CUSTOMER_NAME", name)
+                putExtra("CUSTOMER_MOBILE", mobile)
+            }
             startActivity(intent)
         }
     }

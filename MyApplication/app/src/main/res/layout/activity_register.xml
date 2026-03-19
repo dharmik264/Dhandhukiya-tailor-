@@ -37,6 +37,10 @@
                         </com.google.android.material.textfield.TextInputLayout>
                         <!-- Create Account Button -->
                         <com.google.android.material.button.MaterialButton android:id="@+id/btnRegister" android:layout_width="match_parent" android:layout_height="52dp" android:layout_marginTop="16dp" android:backgroundTint="@color/red_dark" android:text="Create Account" android:textAllCaps="false" android:textSize="16sp" android:textStyle="bold" app:cornerRadius="12dp" />
+
+                        <!-- Use Offline Button -->
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnSkipRegister" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="match_parent" android:layout_height="52dp" android:layout_marginTop="8dp" android:text="Skip &amp; Use Offline" android:textAllCaps="false" android:textColor="@color/on_surface_variant" app:cornerRadius="12dp" />
+
                         <!-- Login Link -->
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginTop="12dp" android:orientation="horizontal" android:gravity="center">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Already have an account? " android:textColor="#666666" android:textSize="13sp" />

@@ -97,6 +97,23 @@ data class AppVersionResponse(
     @SerializedName("apk_url") val apkUrl: String?
 )
 
+data class BackupRecord(
+    @SerializedName("customer_name") val customerName: String?,
+    @SerializedName("mobile_number") val mobileNumber: String?,
+    @SerializedName("address") val address: String?,
+    @SerializedName("garment_type") val garmentType: String?,
+    @SerializedName("length") val length: String?,
+    @SerializedName("chest") val chest: String?,
+    @SerializedName("waist") val waist: String?,
+    @SerializedName("collar") val collar: String?,
+    @SerializedName("shoulder") val shoulder: String?,
+    @SerializedName("sleeve") val sleeve: String?,
+    @SerializedName("hip") val hip: String?,
+    @SerializedName("rise") val rise: String?,
+    @SerializedName("notes") val notes: String?,
+    @SerializedName("status") val status: String?
+)
+
 interface ApiService {
     @POST("api/register/")
     fun registerUser(@Body user: User): Call<Void>
@@ -145,4 +162,7 @@ interface ApiService {
 
     @GET("app-version/")
     fun getAppVersion(): Call<AppVersionResponse>
+
+    @POST("api/backup-data/")
+    fun backupData(@Body backupList: List<BackupRecord>): Call<Void>
 }

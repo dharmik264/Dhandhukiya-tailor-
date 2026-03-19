@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/update_order_status/', views.update_order_status, name='update_order_status'),
     path('api/check_update/', views.check_update, name='check_update'),
     path('api/export-excel/', views.export_customers_excel, name='export-excel'),
+    path('api/backup-data/', views.backup_data, name='backup-data'),
 ]

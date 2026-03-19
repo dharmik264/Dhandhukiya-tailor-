@@ -14,7 +14,7 @@ import com.google.android.material.chip.Chip
 data class CustomerDisplayModel(
     val id: String,
     val name: String,
-    val mobile: String,
+    val mobileNumber: String,
     val length: String,
     val status: String = "Pending"
 )
@@ -43,7 +43,7 @@ class CustomerAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val customer = customers[position]
         holder.tvName.text = customer.name.ifEmpty { "Unknown Customer" }
-        holder.tvMobile.text = customer.mobile.ifEmpty { "No Number" }
+        holder.tvMobile.text = customer.mobileNumber.ifEmpty { "No Number" }
         
         // Status Binding logic
         val status = customer.status.ifEmpty { "Pending" }
@@ -67,7 +67,7 @@ class CustomerAdapter(
         }
 
         holder.btnDelete.setOnClickListener {
-            onDeleteClick(customer.mobile)
+            onDeleteClick(customer.mobileNumber)
         }
     }
 

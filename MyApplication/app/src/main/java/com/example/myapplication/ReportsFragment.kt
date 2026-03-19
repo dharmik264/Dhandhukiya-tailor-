@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.imageview.ShapeableImageView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ReportsFragment : Fragment() {
 
@@ -33,13 +33,10 @@ class ReportsFragment : Fragment() {
         // Fragments shouldn't show the internal navbar as MainActivity provides one
         view.findViewById<View>(R.id.mainBottomNavigation)?.visibility = View.GONE
         
-
-        // Handle Logo Click as Back (Navigate to Home tab)
         view.findViewById<android.widget.ImageView>(R.id.ivAppLogo)?.setOnClickListener {
             (activity as? MainActivity)?.viewPager?.currentItem = 0
         }
 
-        // Setup Quick Actions
         view.findViewById<MaterialCardView>(R.id.activity_check_order)?.setOnClickListener {
             context?.let { ctx ->
                 startActivity(Intent(ctx, CheckOrderActivity::class.java))
@@ -49,8 +46,6 @@ class ReportsFragment : Fragment() {
         view.findViewById<MaterialCardView>(R.id.cardAddCustomer)?.setOnClickListener {
             (activity as? MainActivity)?.navigateToTab(1)
         }
-
-
 
         view.findViewById<android.widget.FrameLayout>(R.id.ivProfileBtn)?.setOnClickListener {
             context?.let { ctx ->
@@ -63,45 +58,46 @@ class ReportsFragment : Fragment() {
         tvCompleted = view.findViewById(R.id.tvCompletedOrders)
         tvTotalCust = view.findViewById(R.id.tvTotalCustomersCount)
 
-        // Setup Recent Orders RecyclerView
         val rvRecentOrders = view.findViewById<RecyclerView>(R.id.rvRecentOrders)
         val currentContext = context ?: return view
         rvRecentOrders.layoutManager = LinearLayoutManager(currentContext)
         recentOrdersAdapter = CheckOrderAdapter(emptyList()) { order ->
             context?.let { ctx ->
-                val intent = Intent(ctx, CustomerProfileActivity::class.java)
-                intent.putExtra("CUSTOMER_NAME", order.customerName)
-                intent.putExtra("CUSTOMER_MOBILE", order.mobile)
-                intent.putExtra("SELECTED_GARMENT", order.garmentType)
+                val intent = Intent(ctx, CustomerProfileActivity::class.java).apply {
+                    putExtra("CUSTOMER_NAME", order.customerName)
+                    putExtra("CUSTOMER_MOBILE", order.mobileNumber)
+                    putExtra("SELECTED_GARMENT", order.garmentType)
+                }
                 startActivity(intent)
             }
         }
         rvRecentOrders.adapter = recentOrdersAdapter
 
-        // Dashboard Stat Card Clicks
         view.findViewById<View>(R.id.cardPendingOrders)?.setOnClickListener {
             context?.let { ctx ->
-                val intent = Intent(ctx, CheckOrderActivity::class.java)
-                intent.putExtra("ORDER_STATUS", "Pending")
+                val intent = Intent(ctx, CheckOrderActivity::class.java).apply {
+                    putExtra("ORDER_STATUS", "Pending")
+                }
                 startActivity(intent)
             }
         }
         view.findViewById<View>(R.id.cardActiveOrders)?.setOnClickListener {
             context?.let { ctx ->
-                val intent = Intent(ctx, CheckOrderActivity::class.java)
-                intent.putExtra("ORDER_STATUS", "In Progress")
+                val intent = Intent(ctx, CheckOrderActivity::class.java).apply {
+                    putExtra("ORDER_STATUS", "In Progress")
+                }
                 startActivity(intent)
             }
         }
         view.findViewById<View>(R.id.cardCompletedOrders)?.setOnClickListener {
             context?.let { ctx ->
-                val intent = Intent(ctx, CheckOrderActivity::class.java)
-                intent.putExtra("ORDER_STATUS", "Completed")
+                val intent = Intent(ctx, CheckOrderActivity::class.java).apply {
+                    putExtra("ORDER_STATUS", "Completed")
+                }
                 startActivity(intent)
             }
         }
 
-        // View All Recent Orders
         view.findViewById<TextView>(R.id.tvViewAll)?.setOnClickListener {
             context?.let { ctx ->
                 startActivity(Intent(ctx, CheckOrderActivity::class.java))
@@ -121,43 +117,60 @@ class ReportsFragment : Fragment() {
     }
 
     private fun updateStats() {
-        RetrofitClient.instance.getDashboardStats().enqueue(object : Callback<DashboardStatsResponse> {
-            override fun onResponse(call: Call<DashboardStatsResponse>, response: Response<DashboardStatsResponse>) {
-                if (isAdded && response.isSuccessful) {
-                    val stats = response.body()
-                    tvActive.text = stats?.activeOrders.toString()
-                    tvPending.text = stats?.pendingOrders.toString()
-                    tvCompleted.text = stats?.completedOrders.toString()
-                    tvTotalCust.text = stats?.totalCustomers.toString()
+        val currentContext = context ?: return
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val db = AppDatabase.getDatabase(currentContext)
+                val allCustomers = db.customerDao().getAll()
+                val allMeasurements = db.measurementDao().getAllMeasurements()
+                
+                val totalCount = allCustomers.size
+                val pendingCount = allMeasurements.count { it.status.equals("Pending", ignoreCase = true) }
+                val activeCount = allMeasurements.count { it.status.equals("In Progress", ignoreCase = true) }
+                val completedCount = allMeasurements.count { it.status.equals("Completed", ignoreCase = true) }
+
+                withContext(Dispatchers.Main) {
+                    if (isAdded) {
+                        tvTotalCust.text = totalCount.toString()
+                        tvPending.text = pendingCount.toString()
+                        tvActive.text = activeCount.toString()
+                        tvCompleted.text = completedCount.toString()
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("REPORTS_FRAG", "Local stats update error: ${e.message}")
             }
-            override fun onFailure(call: Call<DashboardStatsResponse>, t: Throwable) {
-                Log.e("REPORTS_FRAG", "Network failure: ${t.message}")
-            }
-        })
+        }
     }
 
     private fun loadRecentOrders() {
-        RetrofitClient.instance.getRecentOrders(5).enqueue(object : Callback<List<RecentOrderResponse>> {
-            override fun onResponse(call: Call<List<RecentOrderResponse>>, response: Response<List<RecentOrderResponse>>) {
-                if (isAdded && response.isSuccessful) {
-                    val backendData = response.body() ?: emptyList()
-                    val list = backendData.map {
-                        CheckOrderModel(
-                            id = it.id ?: "0",
-                            customerName = it.customerName ?: "Unknown",
-                            mobile = it.mobileNumber ?: "",
-                            garmentType = it.garmentType ?: "Shirt",
-                            orderDate = it.orderDate ?: "",
-                            status = it.status ?: ""
-                        )
-                    }
-                    recentOrdersAdapter.updateData(list)
+        val currentContext = context ?: return
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val db = AppDatabase.getDatabase(currentContext)
+                val recentMeasurements = db.measurementDao().getRecentMeasurements(5)
+                val allCustomers = db.customerDao().getAll()
+                
+                val list = recentMeasurements.map { m ->
+                    val customer = allCustomers.find { it.mobileNumber == m.customerMobile }
+                    CheckOrderModel(
+                        id = m.id.toString(),
+                        customerName = customer?.name ?: "Unknown",
+                        mobileNumber = m.customerMobile,
+                        garmentType = m.garmentType,
+                        orderDate = java.text.SimpleDateFormat("dd MMM", java.util.Locale.getDefault()).format(java.util.Date(m.updatedAt)),
+                        status = m.status
+                    )
                 }
+
+                withContext(Dispatchers.Main) {
+                    if (isAdded) {
+                        recentOrdersAdapter.updateData(list)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("REPORTS_FRAG", "Local orders loading error: ${e.message}")
             }
-            override fun onFailure(call: Call<List<RecentOrderResponse>>, t: Throwable) {
-                Log.e("REPORTS_FRAG", "Network failure: ${t.message}")
-            }
-        })
+        }
     }
 }

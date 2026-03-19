@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CheckOrderActivity : AppCompatActivity() {
 
@@ -53,16 +57,16 @@ class CheckOrderActivity : AppCompatActivity() {
         }
 
         adapter = CheckOrderAdapter(emptyList()) { order ->
-            val intent = Intent(this, CustomerProfileActivity::class.java)
-            intent.putExtra("CUSTOMER_NAME", order.customerName)
-            intent.putExtra("CUSTOMER_MOBILE", order.mobile)
-            intent.putExtra("SELECTED_GARMENT", order.garmentType)
+            val intent = Intent(this, CustomerProfileActivity::class.java).apply {
+                putExtra("CUSTOMER_NAME", order.customerName)
+                putExtra("CUSTOMER_MOBILE", order.mobileNumber)
+                putExtra("SELECTED_GARMENT", order.garmentType)
+            }
             startActivity(intent)
         }
         rvCheckOrders.adapter = adapter
 
-        val navBar = findViewById<BottomNavigationView>(R.id.mainBottomNavigation)
-        navBar?.setupGlobalNavigation(this, R.id.nav_reports)
+        findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.setupGlobalNavigation(this, R.id.nav_reports)
 
         findViewById<ImageView>(R.id.btnBack)?.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -78,32 +82,36 @@ class CheckOrderActivity : AppCompatActivity() {
     }
 
     private fun loadAllOrders() {
-        RetrofitClient.instance.getRecentOrders(1000, filterStatus).enqueue(object : retrofit2.Callback<List<RecentOrderResponse>> {
-            override fun onResponse(
-                call: retrofit2.Call<List<RecentOrderResponse>>,
-                response: retrofit2.Response<List<RecentOrderResponse>>
-            ) {
-                if (response.isSuccessful) {
-                    val backendData = response.body() ?: emptyList()
-                    val list = backendData.map {
-                        CheckOrderModel(
-                            id = it.id ?: "0",
-                            customerName = it.customerName ?: "Unknown",
-                            mobile = it.mobileNumber ?: "",
-                            garmentType = it.garmentType ?: "Shirt",
-                            orderDate = it.orderDate ?: "",
-                            status = it.status ?: ""
-                        )
-                    }
-                    adapter.updateData(list)
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val db = AppDatabase.getDatabase(this@CheckOrderActivity)
+                val allMeasurements = db.measurementDao().getAllMeasurements()
+                val allCustomers = db.customerDao().getAll()
+                
+                val filteredMeasurements = if (filterStatus == null) {
+                    allMeasurements
                 } else {
-                    Log.e("CHECK_ORDER_ERROR", "Backend orders error: ${response.code()}")
+                    allMeasurements.filter { it.status.equals(filterStatus, ignoreCase = true) }
                 }
-            }
 
-            override fun onFailure(call: retrofit2.Call<List<RecentOrderResponse>>, t: Throwable) {
-                Log.e("CHECK_ORDER_ERROR", "Network failure: ${t.message}")
+                val displayList = filteredMeasurements.map { m ->
+                    val customer = allCustomers.find { it.mobileNumber == m.customerMobile }
+                    CheckOrderModel(
+                        id = m.id.toString(),
+                        customerName = customer?.name ?: "Unknown",
+                        mobileNumber = m.customerMobile,
+                        garmentType = m.garmentType,
+                        orderDate = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault()).format(java.util.Date(m.updatedAt)),
+                        status = m.status
+                    )
+                }
+
+                withContext(Dispatchers.Main) {
+                    adapter.updateData(displayList.sortedByDescending { it.id.toInt() })
+                }
+            } catch (e: Exception) {
+                Log.e("CHECK_ORDER_ERROR", "Local order loading error: ${e.message}")
             }
-        })
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.example.myapplication
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-
 class TailorApp : Application() {
     override fun onCreate() {
         super.onCreate()

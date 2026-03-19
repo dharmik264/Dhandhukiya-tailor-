@@ -8,22 +8,20 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.concurrent.thread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeActivity : AppCompatActivity() {
 
@@ -44,22 +42,22 @@ class HomeActivity : AppCompatActivity() {
 
         rvCustomers.layoutManager = LinearLayoutManager(this)
         adapter = CustomerAdapter(emptyList(), { customer ->
-            val intent = Intent(this, CustomerProfileActivity::class.java)
-            intent.putExtra("CUSTOMER_NAME", customer.name)
-            intent.putExtra("CUSTOMER_MOBILE", customer.mobile)
+            val intent = Intent(this, CustomerProfileActivity::class.java).apply {
+                putExtra("CUSTOMER_NAME", customer.name)
+                putExtra("CUSTOMER_MOBILE", customer.mobileNumber)
+            }
             startActivity(intent)
         }, { customer ->
-            val intent = Intent(this, AddCustomerActivity::class.java)
-            intent.putExtra("CUSTOMER_NAME", customer.name)
-            intent.putExtra("CUSTOMER_MOBILE", customer.mobile)
-            intent.putExtra("IS_EDIT_MODE", true)
+            val intent = Intent(this, AddCustomerActivity::class.java).apply {
+                putExtra("CUSTOMER_NAME", customer.name)
+                putExtra("CUSTOMER_MOBILE", customer.mobileNumber)
+                putExtra("IS_EDIT_MODE", true)
+            }
             startActivity(intent)
         }, { mobile ->
             showDeleteConfirmation(mobile)
         })
         rvCustomers.adapter = adapter
-
-
 
         val navBar = findViewById<BottomNavigationView>(R.id.mainBottomNavigation)
         navBar?.setupGlobalNavigation(this, R.id.nav_home)
@@ -67,15 +65,12 @@ class HomeActivity : AppCompatActivity() {
         setupAlphabetFilters()
         setupSearch()
         
-        // Focus solely on the synced data.
-        // Then try to sync with backend
-        refreshAllData()
+        refreshData()
     }
 
     override fun onResume() {
         super.onResume()
-
-        refreshAllData()
+        refreshData()
         findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.selectedItemId = R.id.nav_home
     }
 
@@ -95,54 +90,35 @@ class HomeActivity : AppCompatActivity() {
         } else {
             allCustomers.filter { 
                 it.name.lowercase().contains(text.lowercase()) || 
-                it.mobile.contains(text) 
+                it.mobileNumber.contains(text) 
             }
         }
         adapter.updateData(filteredList)
         tvCustomerListTitle.text = if (text.isEmpty()) "All Customers" else "Search Results (${filteredList.size})"
     }
 
-    private fun refreshAllData() {
-        RetrofitClient.instance.getAllCustomers().enqueue(object : Callback<List<CustomerResponse>> {
-            override fun onResponse(call: Call<List<CustomerResponse>>, response: Response<List<CustomerResponse>>) {
-                if (response.isSuccessful) {
-                    val backendData = response.body() ?: emptyList()
-                    if (backendData.isNotEmpty()) {
-                        val newList = backendData.map { 
-                            CustomerDisplayModel(
-                                it.id?.toString() ?: "0", 
-                                it.name ?: "Unknown", 
-                                it.mobileNumber ?: "No Number", 
-                                it.length ?: ""
-                            ) 
-                        }
-                        updateUI(newList, " (Synced)")
-                    }
-                } else {
-                    Log.e("HOME_DEBUG", "Backend response error: ${response.code()}")
+    private fun refreshData() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val db = AppDatabase.getDatabase(this@HomeActivity)
+                val localList = db.customerDao().getAll().map {
+                    CustomerDisplayModel(it.id.toString(), it.name, it.mobileNumber, it.length)
                 }
+                withContext(Dispatchers.Main) {
+                    allCustomers = localList.sortedBy { it.name.lowercase() }.toMutableList()
+                    val searchQuery = etSearch.text.toString()
+                    if (searchQuery.isNotEmpty()) {
+                        applyFilter(searchQuery)
+                    } else {
+                        tvCustomerListTitle.text = "All Customers"
+                        adapter.updateData(allCustomers)
+                    }
+                    findViewById<View>(R.id.rvCustomers).visibility = if (allCustomers.isEmpty()) View.GONE else View.VISIBLE
+                }
+            } catch (e: Exception) {
+                Log.e("HOME_DEBUG", "Local refresh failed: ${e.message}")
             }
-
-            override fun onFailure(call: Call<List<CustomerResponse>>, t: Throwable) {
-                Log.e("HOME_DEBUG", "Network failure: ${t.message}")
-                // Fallback is already handled by fetchFromLocal() called in onCreate/onResume
-            }
-        })
-    }
-
-
-    private fun updateUI(list: List<CustomerDisplayModel>, source: String) {
-        allCustomers = list.sortedBy { it.name.lowercase() }.toMutableList()
-        val searchQuery = etSearch.text.toString()
-        if (searchQuery.isNotEmpty()) {
-            applyFilter(searchQuery)
-        } else {
-            tvCustomerListTitle.text = "All Customers$source"
-            adapter.updateData(allCustomers)
         }
-        
-        // Handle empty state
-        findViewById<View>(R.id.rvCustomers).visibility = if (allCustomers.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun setupAlphabetFilters() {
@@ -191,20 +167,24 @@ class HomeActivity : AppCompatActivity() {
     private fun showDeleteConfirmation(mobile: String) {
         AlertDialog.Builder(this)
             .setTitle("Delete Customer")
-            .setMessage("Permanently remove this customer?")
-            .setPositiveButton("Delete") { _, _ -> performFullDelete(mobile) }
+            .setMessage("Permanently remove this customer from your device?")
+            .setPositiveButton("Delete") { _, _ -> 
+                lifecycleScope.launch(Dispatchers.IO) {
+                    try {
+                        val db = AppDatabase.getDatabase(this@HomeActivity)
+                        val customer = db.customerDao().getAll().find { it.mobileNumber == mobile }
+                        if (customer != null) {
+                            db.customerDao().delete(customer)
+                        }
+                        withContext(Dispatchers.Main) {
+                            refreshData()
+                        }
+                    } catch (e: Exception) {
+                        Log.e("DELETE_DEBUG", "Error deleting: ${e.message}")
+                    }
+                }
+            }
             .setNegativeButton("Cancel", null)
             .show()
-    }
-
-    private fun performFullDelete(mobile: String) {
-        RetrofitClient.instance.deleteCustomer(mobile).enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                refreshAllData()
-            }
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                refreshAllData()
-            }
-        })
     }
 }

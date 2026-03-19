@@ -3,143 +3,199 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F8F9FA">
 
-    <!-- Top Bar -->
-    <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/topBar" android:layout_width="match_parent" android:layout_height="110dp" android:background="#D32F2F" app:layout_constraintTop_toTopOf="parent">
+    <!-- Top Bar with Red Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/topBar" android:layout_width="match_parent" android:layout_height="130dp" android:background="#D32F2F" app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.card.MaterialCardView android:id="@+id/btnBackCard" android:layout_width="44dp" android:layout_height="44dp" android:layout_marginStart="16dp" android:layout_marginTop="16dp" app:cardCornerRadius="12dp" app:cardElevation="0dp" app:cardBackgroundColor="#FFFFFF" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
-            <ImageView android:id="@+id/btnBack" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="12dp" android:src="@drawable/ic_back_arrow" app:tint="#333333" />
+        <com.google.android.material.card.MaterialCardView android:id="@+id/btnBackCard" android:layout_width="44dp" android:layout_height="44dp" android:layout_marginStart="16dp" android:layout_marginTop="16dp" app:cardBackgroundColor="#FFFFFF" app:cardCornerRadius="12dp" app:cardElevation="0dp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView android:id="@+id/btnBack" android:layout_width="match_parent" android:layout_height="match_parent" android:contentDescription="Back" android:padding="12dp" android:src="@drawable/ic_back_arrow" app:tint="#333333" />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Customer Details" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@id/btnBackCard" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/btnBackCard" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:fillViewport="true" app:layout_constraintBottom_toTopOf="@id/btnNewOrder" app:layout_constraintTop_toBottomOf="@id/topBar">
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:fillViewport="true" app:layout_constraintBottom_toTopOf="@id/btnNewOrder" app:layout_constraintTop_toBottomOf="@id/topBar" app:layout_constraintVertical_bias="0.0">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="16dp" android:paddingBottom="24dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:clipToPadding="false" android:orientation="vertical" android:paddingHorizontal="16dp" android:paddingBottom="24dp">
 
-            <!-- Profile Info Card (Mapped to cardGarmentMain in code for logic purposes) -->
-            <com.google.android.material.card.MaterialCardView android:id="@+id/cardGarmentMain" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="-20dp" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeWidth="0dp" app:cardBackgroundColor="@android:color/white">
+            <!-- Profile Info Card -->
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardGarmentMain" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="0dp" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="16dp" app:cardElevation="4dp" app:strokeColor="#E5E7EB" app:strokeWidth="1dp">
+
                 <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
 
-                    <FrameLayout android:id="@+id/initialsContainer" android:layout_width="72dp" android:layout_height="72dp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent">
+                    <FrameLayout android:id="@+id/initialsContainer" android:layout_width="72dp" android:layout_height="72dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+
                         <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_circle_black" android:backgroundTint="#FEE2E2" />
+
                         <TextView android:id="@+id/tvInitials" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="JD" android:textColor="#D32F2F" android:textSize="22sp" android:textStyle="bold" />
                     </FrameLayout>
 
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:orientation="vertical" app:layout_constraintStart_toEndOf="@id/initialsContainer" app:layout_constraintEnd_toStartOf="@id/btnEditProfile" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="16dp" android:orientation="vertical" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@id/btnEditProfile" app:layout_constraintStart_toEndOf="@id/initialsContainer" app:layout_constraintTop_toTopOf="parent">
+
                         <TextView android:id="@+id/tvName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="James Dalton" android:textColor="@android:color/black" android:textSize="19sp" android:textStyle="bold" />
-                        <TextView android:id="@+id/tvMobile" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+1 (555) 123-4567" android:textColor="#666666" android:textSize="14sp" android:layout_marginTop="2dp" />
-                        <TextView android:id="@+id/tvAddress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="123 Maple St" android:textColor="#666666" android:textSize="13sp" android:layout_marginTop="2dp" />
-                        <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Status: Pending" android:textColor="#D32F2F" android:textSize="11sp" android:textStyle="bold" android:paddingHorizontal="10dp" android:paddingVertical="4dp" android:layout_marginTop="8dp" android:background="@drawable/bg_badge_rounded" android:backgroundTint="#FEE2E2"/>
+
+                        <TextView android:id="@+id/tvMobile" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="+1 (555) 123-4567" android:textColor="#666666" android:textSize="14sp" />
+
+                        <TextView android:id="@+id/tvAddress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="123 Maple St" android:textColor="#666666" android:textSize="13sp" />
+
+                        <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:background="@drawable/bg_badge_rounded" android:backgroundTint="#FEE2E2" android:paddingHorizontal="10dp" android:paddingVertical="4dp" android:text="Status: Pending" android:textColor="#D32F2F" android:textSize="11sp" android:textStyle="bold" />
                     </LinearLayout>
 
-                    <ImageView android:id="@+id/btnEditProfile" android:layout_width="36dp" android:layout_height="36dp" android:padding="8dp" android:src="@drawable/pencil_7778162" app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent" app:tint="#9CA3AF" />
+                    <ImageView android:id="@+id/btnEditProfile" android:layout_width="36dp" android:layout_height="36dp" android:contentDescription="Edit" android:padding="8dp" android:src="@drawable/pencil_7778162" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" app:tint="#9CA3AF" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Garment Type Section -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Garment Type" android:layout_marginTop="24dp" android:textColor="@android:color/black" android:textStyle="bold" android:textSize="17sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="Garment Type" android:textColor="@android:color/black" android:textSize="17sp" android:textStyle="bold" />
+
             <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:scrollbars="none">
+
                 <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btnShirtProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Shirt" android:textAllCaps="false" android:textSize="13sp" app:cornerRadius="10dp" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:textColor="#666666"/>
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btnPantProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pant" android:textAllCaps="false" android:textSize="13sp" app:cornerRadius="10dp" android:layout_marginEnd="10dp" android:backgroundTint="#D32F2F" android:textColor="#FFFFFF"/>
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btnKotiProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Koti" android:textAllCaps="false" android:textSize="13sp" app:cornerRadius="10dp" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:textColor="#666666"/>
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btnSuitProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Suit" android:textAllCaps="false" android:textSize="13sp" app:cornerRadius="10dp" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:textColor="#666666"/>
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btnJabbhoProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Jabbho" android:textAllCaps="false" android:textSize="13sp" app:cornerRadius="10dp" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:textColor="#666666"/>
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btnLehnghoProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lehngho" android:textAllCaps="false" android:textSize="13sp" app:cornerRadius="10dp" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:textColor="#666666"/>
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btnSafariProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Safari" android:textAllCaps="false" android:textSize="13sp" app:cornerRadius="10dp" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:textColor="#666666"/>
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btnJodhpuriProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Jodhpuri" android:textAllCaps="false" android:textSize="13sp" app:cornerRadius="10dp" android:backgroundTint="#E5E7EB" android:textColor="#666666"/>
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnShirtProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:text="Shirt" android:textAllCaps="false" android:textColor="#666666" android:textSize="12sp" app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnPantProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="10dp" android:backgroundTint="#D32F2F" android:text="Pant" android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="12sp" app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnKotiProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:text="Koti" android:textAllCaps="false" android:textColor="#666666" android:textSize="12sp" app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnSuitProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:text="Suit" android:textAllCaps="false" android:textColor="#666666" android:textSize="12sp" app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnJabbhoProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:text="Jabbho" android:textAllCaps="false" android:textColor="#666666" android:textSize="12sp" app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnLehnghoProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:text="Lehngho" android:textAllCaps="false" android:textColor="#666666" android:textSize="12sp" app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnSafariProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="10dp" android:backgroundTint="#E5E7EB" android:text="Safari" android:textAllCaps="false" android:textColor="#666666" android:textSize="12sp" app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnJodhpuriProfile" style="@style/Widget.MaterialComponents.Button.UnelevatedButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:backgroundTint="#E5E7EB" android:text="Jodhpuri" android:textAllCaps="false" android:textColor="#666666" android:textSize="12sp" app:cornerRadius="10dp" />
                 </LinearLayout>
             </HorizontalScrollView>
 
             <!-- Measurements Card -->
-            <com.google.android.material.card.MaterialCardView android:id="@+id/cardMeasurementDisplay" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" app:cardCornerRadius="16dp" app:cardElevation="2dp" app:strokeWidth="1dp" app:strokeColor="#E5E7EB" app:cardBackgroundColor="@android:color/white">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardMeasurementDisplay" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" app:cardBackgroundColor="@android:color/white" app:cardCornerRadius="16dp" app:cardElevation="2dp" app:strokeColor="#E5E7EB" app:strokeWidth="1dp">
+
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="20dp">
-                        <TextView android:id="@+id/tvUnifiedGarmentTitle" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Garment Measurements" android:textStyle="bold" android:textColor="@android:color/black" android:textSize="17sp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnEditUnified" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="wrap_content" android:layout_height="36dp" android:text="Edit" android:textColor="#D32F2F" android:backgroundTint="#FEE2E2" app:icon="@android:drawable/ic_menu_edit" app:iconTint="#D32F2F" app:iconSize="16dp" app:cornerRadius="8dp" android:textSize="12sp" android:paddingHorizontal="12dp" android:insetTop="0dp" android:insetBottom="0dp"/>
-                    </LinearLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
 
-                    <LinearLayout android:id="@+id/layoutMeasurementsCollapse" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
-                        <GridLayout android:id="@+id/displayGrid" android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2">
-                            <LinearLayout android:id="@+id/container1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
-                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                                    <TextView android:id="@+id/tvLabel1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 1" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
-                                    <TextView android:id="@+id/tvValue1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+                        <TextView android:id="@+id/tvUnifiedGarmentTitle" android:layout_width="0dp" android:layout_height="wrap_content" android:text="Pant Measurements" android:textColor="@android:color/black" android:textSize="17sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@id/tvInchesLabel" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView android:id="@+id/tvInchesLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="8dp" android:text="Inches" android:textColor="#D32F2F" android:textSize="11sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@id/btnEditUnified" app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnEditUnified" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="wrap_content" android:layout_height="32dp" android:backgroundTint="#FFF1F2" android:insetTop="0dp" android:insetBottom="0dp" android:paddingHorizontal="12dp" android:text="Edit" android:textAllCaps="false" android:textColor="#D32F2F" android:textSize="11sp" app:cornerRadius="8dp" app:icon="@drawable/pencil_7778162" app:iconPadding="4dp" app:iconSize="14dp" app:iconTint="#D32F2F" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@id/ivExpandIcon" app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView android:id="@+id/ivExpandIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_marginStart="8dp" android:src="@drawable/ic_back_arrow" android:rotation="90" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" app:tint="#D1D5DB" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout android:id="@+id/layoutMeasurementsCollapse" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="16dp" android:paddingBottom="16dp">
+
+                        <GridLayout android:id="@+id/displayGrid" android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:useDefaultMargins="true">
+
+                            <LinearLayout android:id="@+id/container1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="horizontal" android:paddingVertical="8dp">
+
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" />
+
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+
+                                    <TextView android:id="@+id/tvLabel1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WAIST" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+
+                                    <TextView android:id="@+id/tvValue1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="32 in" android:textColor="@android:color/black" android:textSize="15sp" android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
-                            <LinearLayout android:id="@+id/container2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
-                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                                    <TextView android:id="@+id/tvLabel2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 2" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
-                                    <TextView android:id="@+id/tvValue2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+
+                            <LinearLayout android:id="@+id/container2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="horizontal" android:paddingVertical="8dp">
+
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" />
+
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+
+                                    <TextView android:id="@+id/tvLabel2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HIP" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+
+                                    <TextView android:id="@+id/tvValue2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="38 in" android:textColor="@android:color/black" android:textSize="15sp" android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
-                            <LinearLayout android:id="@+id/container3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
-                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                                    <TextView android:id="@+id/tvLabel3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 3" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
-                                    <TextView android:id="@+id/tvValue3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+
+                            <LinearLayout android:id="@+id/container3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="horizontal" android:paddingVertical="8dp">
+
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" />
+
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+
+                                    <TextView android:id="@+id/tvLabel3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="INSEAM" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+
+                                    <TextView android:id="@+id/tvValue3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="30 in" android:textColor="@android:color/black" android:textSize="15sp" android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
-                            <LinearLayout android:id="@+id/container4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
-                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                                    <TextView android:id="@+id/tvLabel4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 4" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
-                                    <TextView android:id="@+id/tvValue4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+
+                            <LinearLayout android:id="@+id/container4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="horizontal" android:paddingVertical="8dp">
+
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" />
+
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+
+                                    <TextView android:id="@+id/tvLabel4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OUTSEAM" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+
+                                    <TextView android:id="@+id/tvValue4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="40 in" android:textColor="@android:color/black" android:textSize="15sp" android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
-                            <LinearLayout android:id="@+id/container5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
-                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                                    <TextView android:id="@+id/tvLabel5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 5" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
-                                    <TextView android:id="@+id/tvValue5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+
+                            <LinearLayout android:id="@+id/container5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="horizontal" android:paddingVertical="8dp">
+
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" />
+
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+
+                                    <TextView android:id="@+id/tvLabel5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="RISE" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+
+                                    <TextView android:id="@+id/tvValue5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="11 in" android:textColor="@android:color/black" android:textSize="15sp" android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
-                            <LinearLayout android:id="@+id/container6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
-                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                                    <TextView android:id="@+id/tvLabel6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 6" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
-                                    <TextView android:id="@+id/tvValue6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+
+                            <LinearLayout android:id="@+id/container6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="horizontal" android:paddingVertical="8dp" android:visibility="gone">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" />
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 6" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@android:color/black" android:textSize="15sp" android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
-                            <LinearLayout android:id="@+id/container7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
-                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                                    <TextView android:id="@+id/tvLabel7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 7" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
-                                    <TextView android:id="@+id/tvValue7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+
+                            <LinearLayout android:id="@+id/container7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="horizontal" android:paddingVertical="8dp" android:visibility="gone">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" />
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 7" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@android:color/black" android:textSize="15sp" android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
-                            <LinearLayout android:id="@+id/container8" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:padding="10dp" android:orientation="horizontal">
-                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" android:layout_marginEnd="12dp"/>
-                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                                    <TextView android:id="@+id/tvLabel8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 8" android:textSize="11sp" android:textColor="#9CA3AF" android:textStyle="bold" />
-                                    <TextView android:id="@+id/tvValue8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="17sp" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="2dp"/>
+
+                            <LinearLayout android:id="@+id/container8" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="horizontal" android:paddingVertical="8dp" android:visibility="gone">
+                                <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#FEE2E2" />
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:orientation="vertical">
+                                    <TextView android:id="@+id/tvLabel8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LABEL 8" android:textColor="#9CA3AF" android:textSize="10sp" android:textStyle="bold" />
+                                    <TextView android:id="@+id/tvValue8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@android:color/black" android:textSize="15sp" android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
                         </GridLayout>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Notes" android:textStyle="bold" android:textColor="@android:color/black" android:layout_marginTop="16dp" android:textSize="14sp"/>
-                        <TextView android:id="@+id/tvNotesValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="None" android:textColor="#666666" android:layout_marginTop="4dp" android:textSize="13sp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="Notes" android:textColor="@android:color/black" android:textSize="14sp" android:textStyle="bold" />
+
+                        <TextView android:id="@+id/tvNotesValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="None" android:textColor="#666666" android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Status Buttons -->
             <LinearLayout android:id="@+id/layoutOrderActions" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:orientation="horizontal">
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnInProgress" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="In Progress" android:textAllCaps="false" android:backgroundTint="#D97706" android:textColor="#FFFFFF" app:cornerRadius="12dp" app:icon="@android:drawable/ic_menu_recent_history" app:iconTint="#FFFFFF" app:iconSize="20dp" android:textSize="14sp" android:textStyle="bold"/>
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnCompleted" android:layout_width="0dp" android:layout_height="56dp" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Completed" android:textAllCaps="false" android:backgroundTint="#10B981" android:textColor="#FFFFFF" app:cornerRadius="12dp" app:icon="@drawable/ic_tick_arrow" app:iconTint="#FFFFFF" app:iconSize="20dp" android:textSize="14sp" android:textStyle="bold"/>
+
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnInProgress" android:layout_width="0dp" android:layout_height="56dp" android:layout_marginEnd="8dp" android:layout_weight="1" android:backgroundTint="#D97706" android:text="In Progress" android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold" app:cornerRadius="12dp" app:icon="@drawable/ic_clock" app:iconPadding="8dp" app:iconSize="20dp" app:iconTint="#FFFFFF" />
+
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnCompleted" android:layout_width="0dp" android:layout_height="56dp" android:layout_marginStart="8dp" android:layout_weight="1" android:backgroundTint="#10B981" android:text="Completed" android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold" app:cornerRadius="12dp" app:icon="@drawable/ic_check_circle" app:iconPadding="8dp" app:iconSize="20dp" app:iconTint="#FFFFFF" />
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
 
-
-    <com.google.android.material.button.MaterialButton android:id="@+id/btnNewOrder" android:layout_width="match_parent" android:layout_height="56dp" android:layout_margin="16dp" android:text="+ NEW ORDER" android:backgroundTint="#D32F2F" app:cornerRadius="12dp" android:textStyle="bold" app:layout_constraintBottom_toTopOf="@id/mainBottomNavigation" />
-
-    <include layout="@layout/reusable_bottom_navigation" android:id="@+id/mainBottomNavigation" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" />
+    <com.google.android.material.button.MaterialButton android:id="@+id/btnNewOrder" android:layout_width="match_parent" android:layout_height="56dp" android:layout_margin="16dp" android:backgroundTint="#D32F2F" android:text="+ NEW ORDER" android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" app:cornerRadius="12dp" app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

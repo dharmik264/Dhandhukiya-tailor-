@@ -1,7 +1,8 @@
 import json
 from datetime import date
 from django.http import JsonResponse, HttpResponse
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
+import os
 
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -488,3 +489,57 @@ def export_customers_excel(request):
 
     wb.save(response)
     return response
+
+@api_view(['POST'])
+def backup_data(request):
+    """
+    POST /api/backup-data/
+    Receives a list of data objects and appends them to a server-side Excel file.
+    """
+    data_list = request.data
+    if not isinstance(data_list, list):
+        return Response({'error': 'Expected a list of data objects.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    backup_dir = os.path.join('media', 'backups')
+    if not os.path.exists(backup_dir):
+        os.makedirs(backup_dir)
+
+    file_path = os.path.join(backup_dir, 'tailorhub_backup.xlsx')
+    
+    headers = [
+        "Customer Name", "Mobile Number", "Address",
+        "Garment Type", "Length", "Chest", "Waist",
+        "Collar", "Shoulder", "Sleeve", "Hip", "Rise",
+        "Notes", "Status"
+    ]
+
+    if os.path.exists(file_path):
+        wb = load_workbook(file_path)
+        ws = wb.active
+    else:
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Backups"
+        ws.append(headers)
+
+    for item in data_list:
+        row = [
+            item.get('customer_name', ''),
+            item.get('mobile_number', ''),
+            item.get('address', ''),
+            item.get('garment_type', ''),
+            item.get('length', ''),
+            item.get('chest', ''),
+            item.get('waist', ''),
+            item.get('collar', ''),
+            item.get('shoulder', ''),
+            item.get('sleeve', ''),
+            item.get('hip', ''),
+            item.get('rise', ''),
+            item.get('notes', ''),
+            item.get('status', '')
+        ]
+        ws.append(row)
+
+    wb.save(file_path)
+    return Response({'message': f'Backup successful. {len(data_list)} records added to {file_path}.'}, status=status.HTTP_200_OK)

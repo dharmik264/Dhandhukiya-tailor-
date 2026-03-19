@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 data class CheckOrderModel(
     val id: String,
     val customerName: String,
-    val mobile: String,
+    val mobileNumber: String,
     val garmentType: String,
     val orderDate: String = "",
     val status: String = ""
@@ -40,7 +40,7 @@ class CheckOrderAdapter(
 
         val name = order.customerName.ifEmpty { "Unknown" }
         holder.tvCustomerName.text = name
-        holder.tvMobile.text = order.mobile.ifEmpty { "No number" }
+        holder.tvMobile.text = order.mobileNumber.ifEmpty { "No number" }
         holder.tvDate.text = order.orderDate.ifEmpty { "" }
         holder.tvGarmentType.text = order.garmentType.uppercase().ifEmpty { "GENERAL" }
         holder.tvStatus.text = order.status.uppercase().ifEmpty { "PENDING" }

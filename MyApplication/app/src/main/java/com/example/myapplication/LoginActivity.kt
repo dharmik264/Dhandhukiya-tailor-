@@ -41,14 +41,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // 2. Check for App Update
-        var isUpdate = false
         if (currentVersion > lastRunVersion) {
             pref.edit().putInt("LAST_RUN_VERSION", currentVersion).apply()
-            isUpdate = true
+            // We don't force 'isUpdate = true' to block auto-login anymore
+            // to avoid locking out offline users.
         }
 
-        // 3. Auto-login check (skip if it's an update)
-        if (!isUpdate && pref.contains("USER_ID")) {
+        // 3. Auto-login check
+        if (pref.contains("USER_ID")) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             return
@@ -59,6 +59,17 @@ class LoginActivity : AppCompatActivity() {
         val etUsername = findViewById<TextInputEditText>(R.id.etUsername)
         val etPassword = findViewById<TextInputEditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
+        val btnSkipLogin = findViewById<Button>(R.id.btnSkipLogin)
+
+        btnSkipLogin?.setOnClickListener {
+            // Enter offline mode
+            val pref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+            if (!pref.contains("USER_ID")) {
+                pref.edit().putInt("USER_ID", 0).putString("USER_NAME", "Offline User").apply()
+            }
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
 
         btnLogin.setOnClickListener {
             val usernameInput = etUsername.text.toString().trim()

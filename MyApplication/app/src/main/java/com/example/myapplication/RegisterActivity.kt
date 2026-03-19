@@ -31,6 +31,17 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
+        val btnSkipRegister = findViewById<Button>(R.id.btnSkipRegister)
+        btnSkipRegister?.setOnClickListener {
+            // Enter offline mode
+            val pref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+            if (!pref.contains("USER_ID")) {
+                pref.edit().putInt("USER_ID", 0).putString("USER_NAME", "Offline User").apply()
+            }
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
         btnRegister.setOnClickListener {
             val firstName = etFirstName.text.toString().trim()
             val lastName = etLastName.text.toString().trim()

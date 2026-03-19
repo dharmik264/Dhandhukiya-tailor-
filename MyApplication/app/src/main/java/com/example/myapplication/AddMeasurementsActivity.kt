@@ -9,12 +9,13 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddMeasurementsActivity : AppCompatActivity() {
 
@@ -100,14 +101,47 @@ class AddMeasurementsActivity : AppCompatActivity() {
         tilRise = findViewById(R.id.tilRise)
 
         btnSaveMeasurements = findViewById(R.id.btnSaveMeasurements)
+        findViewById<View>(R.id.btnDelete)?.setOnClickListener { 
+            confirmDelete()
+        }
+    }
+
+    private fun confirmDelete() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Delete Measurement")
+            .setMessage("Are you sure you want to delete measurements for $selectedGarment?")
+            .setPositiveButton("Delete") { _, _ -> deleteMeasurement() }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun deleteMeasurement() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val db = AppDatabase.getDatabase(this@AddMeasurementsActivity)
+                val measurement = db.measurementDao().getMeasurement(customerMobile, selectedGarment)
+                if (measurement != null) {
+                    db.measurementDao().delete(measurement)
+                    withContext(Dispatchers.Main) {
+                        clearAllFields()
+                        Toast.makeText(this@AddMeasurementsActivity, "Deleted locally", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@AddMeasurementsActivity, "Delete error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun setupIntentData() {
-        val name = intent.getStringExtra("CUSTOMER_NAME") ?: "Customer"
         customerMobile = intent.getStringExtra("CUSTOMER_MOBILE") ?: ""
         customerId = intent.getIntExtra("CUSTOMER_ID", -1)
         isEditMode = intent.getBooleanExtra("IS_EDIT_MODE", false)
-        tvCustomerName?.text = name
+        selectedGarment = intent.getStringExtra("SELECTED_GARMENT") ?: "Shirt"
+        
+        tvCustomerName?.text = if (isEditMode) "Edit Measurements" else "Add Measurements"
     }
 
     private fun setupListeners() {
@@ -124,9 +158,7 @@ class AddMeasurementsActivity : AppCompatActivity() {
             }
         }
 
-        btnSaveMeasurements?.setOnClickListener { saveAndSyncData() }
-        
-        findViewById<BottomNavigationView>(R.id.mainBottomNavigation)?.setupGlobalNavigation(this, R.id.nav_customers)
+        btnSaveMeasurements?.setOnClickListener { saveLocally() }
     }
 
     private fun clearAllFields() {
@@ -135,7 +167,7 @@ class AddMeasurementsActivity : AppCompatActivity() {
     }
 
     private fun updateMeasurementUI(garmentType: String) {
-        tvMeasurementTitle?.text = "$garmentType Measurements"
+        tvMeasurementTitle?.text = "Measurements"
         
         // 1. Reset field visibility
         val allTils = listOfNotNull(tilLength, tilChest, tilWaist, tilCollar, tilShoulder, tilSleeve, tilHip, tilRise)
@@ -159,7 +191,7 @@ class AddMeasurementsActivity : AppCompatActivity() {
                 tilChest?.hint = "Chest"
                 tilWaist?.hint = "Waist"
                 tilShoulder?.hint = "Shoulder"
-                tilSleeve?.hint = "Armhole" // Use Sleeve field for Armhole in Koti
+                tilSleeve?.hint = "Armhole" 
                 tilCollar?.hint = "Neck"
                 
                 tilHip?.visibility = View.GONE
@@ -199,40 +231,37 @@ class AddMeasurementsActivity : AppCompatActivity() {
             btn.setTextColor(if (isSelected) Color.WHITE else ContextCompat.getColor(this, R.color.on_surface))
         }
 
-        // 4. Load existing data if edit mode
+        // 4. Load existing data locally
         clearAllFields()
-        if (isEditMode) {
-            fetchMeasurementsForEdit(garmentType)
+        loadLocalMeasurements(garmentType)
+    }
+
+    private fun loadLocalMeasurements(type: String) {
+        if (customerMobile.isEmpty()) return
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val db = AppDatabase.getDatabase(this@AddMeasurementsActivity)
+                val m = db.measurementDao().getMeasurement(customerMobile, type)
+                withContext(Dispatchers.Main) {
+                    if (m != null) {
+                        etLength?.setText(m.length)
+                        etChest?.setText(m.chest)
+                        etWaist?.setText(m.waist)
+                        etCollar?.setText(m.collar)
+                        etShoulder?.setText(m.shoulder)
+                        etSleeve?.setText(m.sleeve)
+                        etHip?.setText(m.hip)
+                        etRise?.setText(m.rise)
+                        etNotes?.setText(m.notes)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("ADD_MEAS_LOCAL_FETCH", "Error: ${e.message}")
+            }
         }
     }
 
-    private fun fetchMeasurementsForEdit(type: String) {
-        if (customerMobile.isEmpty()) return
-        
-        RetrofitClient.instance.getCustomerMeasurements(customerMobile, type).enqueue(object : Callback<MeasurementResponse> {
-            override fun onResponse(call: Call<MeasurementResponse>, response: Response<MeasurementResponse>) {
-                if (response.isSuccessful) {
-                    val m = response.body()
-                    if (m != null && m.id != null) {
-                        etLength?.setText(m.length ?: "")
-                        etChest?.setText(m.chest ?: "")
-                        etWaist?.setText(m.waist ?: "")
-                        etCollar?.setText(m.collar ?: "")
-                        etShoulder?.setText(m.shoulder ?: "")
-                        etSleeve?.setText(m.sleeve ?: "")
-                        etHip?.setText(m.hip ?: "")
-                        etRise?.setText(m.rise ?: "")
-                        etNotes?.setText(m.notes ?: "")
-                    }
-                }
-            }
-            override fun onFailure(call: Call<MeasurementResponse>, t: Throwable) {
-                Log.e("ADD_MEAS_EDIT", "Failed to fetch: ${t.message}")
-            }
-        })
-    }
-
-    private fun saveAndSyncData() {
+    private fun saveLocally() {
         val l = etLength?.text?.toString()?.trim() ?: ""
         val c = etChest?.text?.toString()?.trim() ?: ""
         val w = etWaist?.text?.toString()?.trim() ?: ""
@@ -250,31 +279,35 @@ class AddMeasurementsActivity : AppCompatActivity() {
 
         btnSaveMeasurements?.isEnabled = false
         
-        val uid = getSharedPreferences("AppPrefs", MODE_PRIVATE).getInt("USER_ID", 1).toString()
-        val data = mapOf(
-            "user_id" to uid,
-            "mobile_number" to customerMobile,
-            "garment_type" to selectedGarment,
-            "length" to l, "chest" to c, "waist" to w,
-            "collar" to cl, "shoulder" to sh, "sleeve" to sl,
-            "hip" to h, "rise" to r, "notes" to n,
-            "status" to "Pending", "is_update" to isEditMode.toString()
-        )
-
-        RetrofitClient.instance.addMeasurement(data).enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                btnSaveMeasurements?.isEnabled = true
-                if (response.isSuccessful) {
-                    Toast.makeText(this@AddMeasurementsActivity, "Measurements Saved!", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val db = AppDatabase.getDatabase(this@AddMeasurementsActivity)
+                val existing = db.measurementDao().getMeasurement(customerMobile, selectedGarment)
+                
+                val measurement = Measurement(
+                    id = existing?.id ?: 0,
+                    customerMobile = customerMobile,
+                    garmentType = selectedGarment,
+                    length = l, chest = c, waist = w, collar = cl,
+                    shoulder = sh, sleeve = sl, hip = h, rise = r, notes = n,
+                    status = existing?.status ?: "Pending",
+                    updatedAt = System.currentTimeMillis()
+                )
+                
+                db.measurementDao().insert(measurement)
+                
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@AddMeasurementsActivity, "Saved!", Toast.LENGTH_SHORT).show()
+                    btnSaveMeasurements?.isEnabled = true
                     finish()
-                } else {
-                    Toast.makeText(this@AddMeasurementsActivity, "Server Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e("ROOM_MEASUREMENT", "Error: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    btnSaveMeasurements?.isEnabled = true
+                    Toast.makeText(this@AddMeasurementsActivity, "Error saving locally", Toast.LENGTH_SHORT).show()
                 }
             }
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                btnSaveMeasurements?.isEnabled = true
-                Toast.makeText(this@AddMeasurementsActivity, "Connection Error", Toast.LENGTH_SHORT).show()
-            }
-        })
+        }
     }
 }
