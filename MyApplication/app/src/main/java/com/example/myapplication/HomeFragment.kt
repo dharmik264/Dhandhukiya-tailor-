@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.activity_home, container, false)
 
         // Fragments shouldn't show the internal navbar as MainActivity provides one
-        view.findViewById<View>(R.id.mainBottomNavigation)?.visibility = View.GONE
+        view.findViewById<View>(R.id.localBottomNavigation)?.visibility = View.GONE
         
         tvCustomerListTitle = view.findViewById(R.id.tvCustomerListTitle)
         rvCustomers = view.findViewById(R.id.rvCustomers)

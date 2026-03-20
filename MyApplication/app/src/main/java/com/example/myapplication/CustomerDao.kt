@@ -10,7 +10,7 @@ interface CustomerDao {
     @Query("SELECT * FROM customers WHERE isSynced = 0")
     suspend fun getUnsyncedCustomers(): List<Customer>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insert(customer: Customer)
 
     @Update

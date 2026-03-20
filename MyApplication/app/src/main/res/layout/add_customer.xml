@@ -43,7 +43,7 @@
             </LinearLayout>
         </ScrollView>
 
-        <include layout="@layout/reusable_bottom_navigation" android:id="@+id/mainBottomNavigation" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" />
+        <include layout="@layout/reusable_bottom_navigation" android:id="@+id/localBottomNavigation" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

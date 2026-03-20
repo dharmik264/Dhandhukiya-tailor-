@@ -78,11 +78,8 @@ class AddCustomerActivity : AppCompatActivity() {
                     btnSaveCustomer.isEnabled = true
                     androidx.appcompat.app.AlertDialog.Builder(this@AddCustomerActivity)
                         .setTitle("Customer Already Exists")
-                        .setMessage("A customer with this mobile number ($mobile) already exists. Do you want to update their details instead?")
-                        .setPositiveButton("Update") { _, _ -> 
-                            performSave(name, mobile, address)
-                        }
-                        .setNegativeButton("Cancel", null)
+                        .setMessage("A customer with this mobile number ($mobile) already exists. Duplicate entries are not allowed.")
+                        .setPositiveButton("OK", null)
                         .show()
                 } else {
                     performSave(name, mobile, address)

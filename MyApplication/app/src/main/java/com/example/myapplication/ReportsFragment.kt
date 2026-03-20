@@ -31,7 +31,7 @@ class ReportsFragment : Fragment() {
         val view = inflater.inflate(R.layout.activity_dashboard, container, false)
 
         // Fragments shouldn't show the internal navbar as MainActivity provides one
-        view.findViewById<View>(R.id.bottomNavigation)?.visibility = View.GONE
+        view.findViewById<View>(R.id.localBottomNavigation)?.visibility = View.GONE
         
         view.findViewById<android.widget.ImageView>(R.id.ivAppLogo)?.setOnClickListener {
             (activity as? MainActivity)?.viewPager?.currentItem = 0

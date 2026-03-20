@@ -24,7 +24,7 @@ class AddCustomerFragment : Fragment() {
         val view = inflater.inflate(R.layout.add_customer, container, false)
 
         // Fragments shouldn't show the internal navbar as MainActivity provides one
-        view.findViewById<View>(R.id.mainBottomNavigation)?.visibility = View.GONE
+        view.findViewById<View>(R.id.localBottomNavigation)?.visibility = View.GONE
 
         val etCustomerName = view.findViewById<EditText>(R.id.etCustomerName)
         val etMobileNumber = view.findViewById<EditText>(R.id.etMobileNumber)
@@ -55,6 +55,17 @@ class AddCustomerFragment : Fragment() {
                 try {
                     val db = AppDatabase.getDatabase(requireContext())
                     val customerDao = db.customerDao()
+                    
+                    val existing = customerDao.getAll().find { it.mobileNumber == mobile }
+                    if (existing != null) {
+                        withContext(Dispatchers.Main) {
+                            if (isAdded) {
+                                Toast.makeText(context, "Customer with this number already exists!", Toast.LENGTH_LONG).show()
+                                btnSaveCustomer.isEnabled = true
+                            }
+                        }
+                        return@launch
+                    }
                     
                     val newCustomer = Customer(
                         name = name,
