@@ -60,7 +60,7 @@ class ReportsFragment : Fragment() {
 
         val rvRecentOrders = view.findViewById<RecyclerView>(R.id.rvRecentOrders)
         val currentContext = context ?: return view
-        rvRecentOrders.layoutManager = LinearLayoutManager(currentContext)
+        ResponsiveUtils.setupResponsiveRecyclerView(currentContext, rvRecentOrders, 350)
         recentOrdersAdapter = CheckOrderAdapter(emptyList()) { order ->
             context?.let { ctx ->
                 val intent = Intent(ctx, CustomerProfileActivity::class.java).apply {
@@ -101,6 +101,14 @@ class ReportsFragment : Fragment() {
         view.findViewById<TextView>(R.id.tvViewAll)?.setOnClickListener {
             context?.let { ctx ->
                 startActivity(Intent(ctx, CheckOrderActivity::class.java))
+            }
+        }
+
+        view.findViewById<View>(R.id.cardBackupData)?.setOnClickListener {
+            lifecycleScope.launch {
+                context?.let { ctx ->
+                    OfflineBackupUtils.exportDataToCSV(ctx)
+                }
             }
         }
 

@@ -102,7 +102,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
+        // Handle back press to return to home tab if not already there
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (viewPager.currentItem != 0) {
+                    viewPager.currentItem = 0
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
 

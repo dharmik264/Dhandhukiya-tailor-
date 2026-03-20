@@ -18,6 +18,9 @@ object OfflineBackupUtils {
      * Generates a local CSV file in the Downloads folder.
      */
     suspend fun exportDataToCSV(context: Context) {
+        withContext(Dispatchers.Main) {
+            Toast.makeText(context, "Starting Backup...", Toast.LENGTH_SHORT).show()
+        }
         withContext(Dispatchers.IO) {
             try {
                 val db = AppDatabase.getDatabase(context)

@@ -7,16 +7,16 @@
 
         <activity android:name=".HomeActivity" android:exported="false" />
         <activity android:name=".AddMeasurementsActivity" android:exported="false" />
-        <activity android:name=".MainActivity" android:exported="false" />
-        <activity android:name=".CustomerListActivity" android:exported="false" />
-        <activity android:name=".AddCustomerActivity" android:exported="false" />
-        <activity android:name=".CustomerProfileActivity" android:exported="false" />
-        <activity android:name=".DashboardActivity" android:exported="true">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".CustomerListActivity" android:exported="false" />
+        <activity android:name=".AddCustomerActivity" android:exported="false" />
+        <activity android:name=".CustomerProfileActivity" android:exported="false" />
+        <activity android:name=".DashboardActivity" android:exported="false" />
         <activity android:name=".CheckOrderActivity" android:exported="false" />
         <activity android:name=".AdminProfileActivity" android:exported="false" />
 

@@ -26,7 +26,7 @@ class CheckOrderActivity : AppCompatActivity() {
         setContentView(R.layout.activity_check_order)
 
         rvCheckOrders = findViewById(R.id.rvCheckOrders) ?: return
-        rvCheckOrders.layoutManager = LinearLayoutManager(this)
+        ResponsiveUtils.setupResponsiveRecyclerView(this, rvCheckOrders, 350)
         tvTitle = findViewById(R.id.tvCheckOrderTitle) ?: return
 
         filterStatus = intent.getStringExtra("ORDER_STATUS")
